@@ -2,6 +2,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \newcommand*\moveToRight[1]{\hspace*{0em plus 1fill}\makebox{(#1)}}
 \newcommand*\fixindent{ \hspace{1pt}\\}
 %this command below is not my work was used for quality of life
@@ -67,32 +69,124 @@ If we allow empty binary trees (trees with no nodes), then we can simplify the p
 or abstract, as long as it is clear what the base and recursive cases are. \moveToRight{4 marks}\\\\Solution in java:\\
 \hspace*{150pt}public class Tree\textless  data\textgreater\\
 \hspace*{150pt}\{\\
-\hspace*{165pt} public data D;\\
-\hspace*{165pt} Tree Left;\\
-\hspace*{165pt} Tree Right;\\
+\hspace*{165pt} private data D;\\
+\hspace*{165pt} private Tree Root;\\
+\hspace*{165pt} private Tree Left;\\
+\hspace*{165pt} private Tree Right;\\
 \hspace*{150pt}\}\\\\
 For this code, a base case would be \\
 Tree $==$ NULL\\
 The recursive case would be to pass in the attributes that are\\
 Left and Right,which are also trees.\\
 Leaves occur when Left and Right are both null and the Tree is NOT null.\\
-This allows a data structure that can call upon itself to expand through the tree recursively.\\\\\\
+This allows a data structure that can call upon itself to expand through the tree recursively.\\
+The Root node is there to distinguish between a tree that has no nodes, in comparison to empty tree which has a pre-decessor node, (leaf children).\\\\\\
+
+\fixindent{}
+(b) Based on your recursive definition above, define (in code or mathematically) the function leaves(T)
+that counts the number of leaves in a binary tree T. \moveToRight{4 marks}\\\\Solution in java:\\
+\\establishing the tree data type which will be used in our function leaves(T) \\\\
+\hspace*{150pt}public class Tree\textless  data\textgreater\\
+\hspace*{150pt}\{\\
+\hspace*{165pt} private data D;\\
+\hspace*{165pt} private Tree Root;\\
+\hspace*{165pt} private Tree Left;\\
+\hspace*{165pt} private Tree Right;\\
+\hspace*{150pt}\}\\\\
+now we will create our leaves(T) function which will return
+the number of leaves in our tree recursively.\\\\
+\hspace*{150pt}public int leaves(Tree T)\\
+\hspace*{150pt}\{\\
+\hspace*{165pt}// base case 1 for our recursion \\
+\hspace*{165pt}// if tree is empty we return 0 \\
+\hspace*{165pt} if(T == NULL)\\
+\hspace*{180pt} return 0;\\\\
+\hspace*{165pt}// base case 2 for our recursion \\
+\hspace*{165pt}// if both children are empty trees return 1 \\
+\hspace*{165pt} if(T.Left == NULL \&\& T.Right == NULL)\\
+\hspace*{180pt} return 1;\\\\
+\hspace*{165pt}// Recursive Process \\
+\hspace*{165pt}// pass through both children which are also trees \\
+\hspace*{165pt} return leaves(T.Left) + leaves(T.Right);\\
+\hspace*{150pt}\}\\\\
 
 \newpage
 \fixindent{}
-(b) Based on your recursive definition above, define (in code or mathematically) the function leaves(T)
-that counts the number of leaves in a binary tree T. \moveToRight{4 marks}\\\\Solution in java:\\\\
+(c) Based on your recursive definition above, define (in code or mathematically) the function internal(T)
+that counts the number of fully-internal nodes in a binary tree T. Hint: it is acceptable to define an empty
+tree as having -1 fully-internal nodes. \moveToRight{4 marks}\\\\Solution in java:\\
+\\establishing the tree data type which will be used in our function internal(T) \\\\
 \hspace*{150pt}public class Tree\textless  data\textgreater\\
 \hspace*{150pt}\{\\
-\hspace*{165pt} public data D;\\
-\hspace*{165pt} Tree Left;\\
-\hspace*{165pt} Tree Right;\\
+\hspace*{165pt} private data D;\\
+\hspace*{165pt} private Tree Root;\\
+\hspace*{165pt} private Tree Left;\\
+\hspace*{165pt} private Tree Right;\\
+\hspace*{150pt}\}\\\\
+now we will create our internal(T) function which will return
+the number of internal nodes in our tree recursively. Note, we have to perform this in reverse order we search from the leaves up rather than root down.\\\\
+\hspace*{150pt}public int internal(Tree T)\\
+\hspace*{150pt}\{\\
+\hspace*{165pt}// base case 1 for our recursion\\
+\hspace*{165pt}// tree has no nodes at all \\
+\hspace*{165pt}// 0 parents/children nodes (no root)\\
+\hspace*{165pt} if(T.root == NULL)\\
+\hspace*{180pt} return -1;\\\\
+\hspace*{165pt}// base case 2 for our recursion \\
+\hspace*{165pt}// if tree is empty we return 0 \\
+\hspace*{165pt} if(T == NULL)\\
+\hspace*{180pt} return 0;\\\\
+\hspace*{165pt}// base case 3 for our recursion \\
+\hspace*{165pt}// if both children are non-empty trees add 1 to the count \\
+\hspace*{165pt} int count = 0;\\
+\hspace*{165pt} if(T.Left != NULL \&\& T.Right != NULL)\\
+\hspace*{180pt} count++;\\\\
+\hspace*{165pt}// Recursive Process \\
+\hspace*{165pt}// pass through both children which are also trees \\
+\hspace*{165pt}// unwind counter after whole tree processed \\
+\hspace*{165pt} return count += internal(T.Left) + internal(T.Right);\\
 \hspace*{150pt}\}\\\\
 
-
-
-
-
-
+\newpage
+\fixindent{}
+(d) If T is a binary tree, let P(T) be the proposition that leaves(T) = 1 + internal(T). Prove that P(T) holds
+for all binary trees T. \moveToRight{8 marks}\\\\Solution:\\
+To perform this proof we can use structural induction on the Tree structure. A Tree can be defined with the following,\\
+Base: Empty tree (root == null).\\
+else: a tree that contains 2 trees as it's children and potentially data.\\
+first we need to prove it for the minimal object in the set of trees, the empty tree.\\
+let us use the symbol $\tau$ to denote an empty tree leaves.
+\fixindent{}\\
+Base Case 1: P($\tau$) \\
+\hspace*{15pt} show leaves($\tau$) = 1 + internal($\tau$)\\
+we know leaves($\tau$) = 0, as it will return from the first base case from 2(b).\\
+\hspace*{50pt} 0 = 1 + internal($\tau$)\moveToRight{base case 2(b)}\\ 
+internal($\tau$) = -1, as the root specifically is null in an empty tree, this is the first base case from 2(c).\\
+\hspace*{50pt} 0 = 1 + (-1)\moveToRight{base case 2(c)}\\\\
+Base Case 2: let T be a tree with a single node, P(T)\\
+\hspace*{15pt} show leaves(T) = 1 + internal(T)\\
+we know leaves(T) = 1 as a tree with one node is a leaf itself since it has no children\\
+\hspace*{50pt} 1 = 1 + internal($\tau$)\moveToRight{base case 2(b)}\\ 
+internal(T) = 0, as a tree consisting of only one node cannot be an internal node since it has no children\\
+\hspace*{50pt} 1 = 1 + 0\moveToRight{base case 2(c)}\\
+\fixindent{}
+hence our base cases holds.\\
+\fixindent{}
+Inductive Hypothesis: Let us assume that for every tree T with n nodes, where n \textgreater 1,, P(T) holds, so that the number of leaves l, is equal to the number of internal nodes i increased by 1, so l = i + 1.   \\\\
+Inductive Case: prove P(T$^\prime$) holds where T$^\prime$ is an extension or reverse extension of a Tree T. Assume T is a tree with l+1 leaves, and l+2 internal nodes.\\
+now let us inspect the deepest possible fully-internal node 'N' of T. By definition of being the deepest possible fully internal node, the number of leaves from the sub-trees of 'N' is 2.
+\\We can create a new tree T$^\prime$ from T by removing the children of 'N', 'N' no longer is a fully-internal node and is now a leaf,\\
+By doing this our tree T$^\prime$ has now had an internal node removed, two leaves removed however the internal node that was removed has now become a leaf since we removed it's sub tree.
+our tree T$^\prime$ now has (l - 2 + 1) leaves    \moveToRight{removed 2 leaves, internal node became leaf}\\
+Our induction Hypothesis states that the number of leaves is always 1 more than the number of internal nodes, so\\
+T$^\prime$ also has (l - 2 +1) - 1 internal nodes \moveToRight{Induction Hypothesis}\\
+\hspace*{32pt}leaves(T$^\prime$) = l - 2 + 1 \moveToRight{number of leaves in T$^\prime$}\\
+now we have to prove the proposition P(T$^\prime$): leaves(T$^\prime$) = internal(T$^\prime$) + 1.\\
+\hspace*{30pt} l - 2 + 1 = internal(T$^\prime$) + 1 \moveToRight{Induction Hypothesis}\\
+\hspace*{30pt} internal(T$^\prime$) = (l - 2) + 1 - 1 \moveToRight{substitution from induction hypothesis}\\
+by substituting internal(T$^\prime$) and leaves(T$^\prime$) we can prove our proposition.\\
+\hspace*{30pt} (l - 2 + 1) = ((l -2 +1) - 1) + 1\\
+\hspace*{30pt} l - 1 = l - 1 \moveToRight{arithmetic}\\
+\\this expression equates to true, so P(T$^\prime$) holds.\\\\ We have proven both base cases for an empty tree, and a tree with a single node, which is also the base of our recursive structure. we have also made the hypothesis that for some tree T, P(T) holds and have proven on the extension of our recursive structure that P(T$^\prime$) holds, P(T) $\implies$ P(T$^\prime$). Therefore by the principle of mathematical induction, since P holds for the base cases, and P(T) $\implies$ P(T$^\prime$) for any tree T, P is true for any tree.
 
 \end{document}
