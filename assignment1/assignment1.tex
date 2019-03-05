@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{enumerate}
 \newcommand*\moveToRight[1]{\hspace*{0em plus 1fill}\makebox{(#1)}}
 \newcommand*\fixindent{ \hspace{1pt}\\}
 %this command below is not my work was used for quality of life
@@ -188,5 +189,35 @@ by substituting internal(T$^\prime$) and leaves(T$^\prime$) we can prove our pro
 \hspace*{30pt} (l - 2 + 1) = ((l -2 +1) - 1) + 1\\
 \hspace*{30pt} l - 1 = l - 1 \moveToRight{arithmetic}\\
 \\this expression equates to true, so P(T$^\prime$) holds.\\\\ We have proven both base cases for an empty tree, and a tree with a single node, which is also the base of our recursive structure. we have also made the hypothesis that for some tree T, P(T) holds and have proven on the extension of our recursive structure that P(T$^\prime$) holds, P(T) $\implies$ P(T$^\prime$). Therefore by the principle of mathematical induction, since P holds for the base cases, and P(T) $\implies$ P(T$^\prime$) for any tree T, P is true for any tree.
+
+\newpage
+\section{Problem 3}
+Four wifi networks, Alpha, Bravo, Charlie and Delta, all exist within close proximity to one another as shown below.\\
+\begin{centering}\hspace*{70pt}\includegraphics{network.png}\end{centering}\\
+Networks connected with an edge in the diagram above can interfere with each other. To avoid interference networks can operate on one of two channels, hi and lo. Networks operating on different channels will not interfere; and neither will networks that are not connected with an edge.\\\\
+Our goal is to determine (algorithmically) whether there is an assignment of channels to networks so that there is no interference. To do this we will transform the problem into a problem of determining if a propositional formula can be satisfied.\\\\\\
+\begin{enumerate}[(a)]
+  \item Carefully defining the propositional variables you are using, write propositional formulas for each of the following requirements: \moveToRight{12 marks}
+  let A$_L$ be the propositional variable that A uses channel lo\\
+  let A$_H$ be the propositional variable that A uses channel hi\\
+  let B$_L$ be the propositional variable that B uses channel lo\\
+  let B$_H$ be the propositional variable that B uses channel hi\\
+  let C$_L$ be the propositional variable that C uses channel lo\\
+  let C$_H$ be the propositional variable that C uses channel hi\\
+  let D$_L$ be the propositional variable that D uses channel lo\\
+  let D$_H$ be the propositional variable that D uses channel hi
+  \begin{enumerate}[(i)]
+  \item $\psi_1$: Alpha uses channel hi or channel lo; and so does Bravo, Charlie and Delta. \moveToRight{4 marks}\\\\
+  Solution: \\
+   $\psi_1 = (A_L \vee A_H) \wedge  (B_L \vee B_H) \wedge  (C_L \vee C_H) \wedge  (D_L \vee D_H$)
+  \item $\psi_1$: Alpha does not use both channel hi and lo; and the same for Bravo, Charlie and Delta.\moveToRight{4 marks}\\\\
+  Solution: \\
+  $\psi_2 = \neg(A_L \wedge A_H)\wedge \neg(B_L \wedge B_H)\wedge \neg(C_L \wedge C_H)\wedge \neg(S_L \wedge S_H)$ 
+  \item $\psi_3$: Alpha and Bravo do not use the same channel; and the same applies for all other pairs of networks connected with an edge.\moveToRight{4 marks}\\\\
+  Solution: \\
+  $\psi_3 = (\neg(A_L \wedge B_L) \vee \neg(A_H \wedge B_H)) \wedge (\neg(B_L \wedge C_L) \vee \neg(B_H \wedge C_H)) \wedge (\neg(C_L \wedge D_L) \vee \neg(C_H \wedge D_H))$
+  \end{enumerate}
+  \item The numbers starts at 1 with every call to the enumerate environment.
+\end{enumerate}
 
 \end{document}
