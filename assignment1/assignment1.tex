@@ -4,7 +4,11 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{booktabs} % for "\midrule" macro
+\usepackage{lipsum} % for filler text
 \usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{array}
 \newcommand*\moveToRight[1]{\hspace*{0em plus 1fill}\makebox{(#1)}}
 \newcommand*\fixindent{ \hspace{1pt}\\}
 %this command below is not my work was used for quality of life
@@ -197,7 +201,7 @@ Four wifi networks, Alpha, Bravo, Charlie and Delta, all exist within close prox
 Networks connected with an edge in the diagram above can interfere with each other. To avoid interference networks can operate on one of two channels, hi and lo. Networks operating on different channels will not interfere; and neither will networks that are not connected with an edge.\\\\
 Our goal is to determine (algorithmically) whether there is an assignment of channels to networks so that there is no interference. To do this we will transform the problem into a problem of determining if a propositional formula can be satisfied.\\\\\\
 \begin{enumerate}[(a)]
-  \item Carefully defining the propositional variables you are using, write propositional formulas for each of the following requirements: \moveToRight{12 marks}
+  \item Carefully defining the propositional variables you are using, write propositional formulas for each of the following requirements: \moveToRight{12 marks}\\
   let A$_L$ be the propositional variable that A uses channel lo\\
   let A$_H$ be the propositional variable that A uses channel hi\\
   let B$_L$ be the propositional variable that B uses channel lo\\
@@ -212,12 +216,106 @@ Our goal is to determine (algorithmically) whether there is an assignment of cha
    $\psi_1 = (A_L \vee A_H) \wedge  (B_L \vee B_H) \wedge  (C_L \vee C_H) \wedge  (D_L \vee D_H$)
   \item $\psi_1$: Alpha does not use both channel hi and lo; and the same for Bravo, Charlie and Delta.\moveToRight{4 marks}\\\\
   Solution: \\
-  $\psi_2 = \neg(A_L \wedge A_H)\wedge \neg(B_L \wedge B_H)\wedge \neg(C_L \wedge C_H)\wedge \neg(S_L \wedge S_H)$ 
+  $\psi_2 = \neg(A_L \wedge A_H)\wedge \neg(B_L \wedge B_H)\wedge \neg(C_L \wedge C_H)\wedge \neg(D_L \wedge D_H)$ 
   \item $\psi_3$: Alpha and Bravo do not use the same channel; and the same applies for all other pairs of networks connected with an edge.\moveToRight{4 marks}\\\\
   Solution: \\
   $\psi_3 = (\neg(A_L \wedge B_L) \vee \neg(A_H \wedge B_H)) \wedge (\neg(B_L \wedge C_L) \vee \neg(B_H \wedge C_H)) \wedge (\neg(C_L \wedge D_L) \vee \neg(C_H \wedge D_H))$
   \end{enumerate}
-  \item The numbers starts at 1 with every call to the enumerate environment.
+  \newpage
+  \item note for this part of the question we will use the following truths for propositional logic:\\
+  using the assignments T = true and F = false\\
+  $(T \vee F) = T$\\
+  $(T \vee T) = T$\\
+  $(F \vee F) = F$\\
+  $(T \wedge F) = F$\\
+  $(T \wedge T) = T$\\
+  $(F \wedge F) = F$\\
+  $\neg (T) = F$\\
+  $\neg (F) = T$
+  \begin{enumerate}[(i)]
+  \item Show that $\psi_1 \wedge \psi_2 \wedge \psi_3$ is satisfiable; so the requirements can all be met. Note that it is sufficient to give a satisfying truth assignment, you do not have to list all possible combinations. \moveToRight{4 marks}\\
+  Solution: \\
+  $\psi_1 \wedge \psi_2 \wedge \psi_3$ is satisfiable with the following truth assignment\\
+  A$_L$ = T\\
+  A$_H$ = F\\
+  B$_L$ = F\\
+  B$_H$ = T\\
+  C$_L$ = T\\
+  C$_H$ = F\\
+  D$_L$ = F\\
+  D$_H$ = T\\
+  using our answers from (a)\\
+  $\psi_1 = (A_L \vee A_H) \wedge  (B_L \vee B_H) \wedge  (C_L \vee C_H) \wedge  (D_L \vee D_H)$\\
+  \hspace*{11pt} $ = (T \vee F) \wedge  (F \vee T) \wedge  (T \vee F) \wedge  (F \vee T)$ \moveToRight{substitution}\\
+  \hspace*{11pt} $= T \wedge  T \wedge  T \wedge T$ \moveToRight{using rules of propositional logic above}\\
+  \hspace*{11pt} $= (T \wedge  T) \wedge  (T \wedge T$) \moveToRight{grouping left association}\\
+  \hspace*{11pt} $= T \wedge T $ \moveToRight{using rules of propositional logic above}\\
+  \hspace*{11pt} $= T$ \moveToRight{using rules of propositional logic above}
+  
+  $\psi_2 = \neg(A_L \wedge A_H)\wedge \neg(B_L \wedge B_H)\wedge \neg(C_L \wedge C_H)\wedge \neg(D_L \wedge D_H)$\\
+  \hspace*{11pt} $= \neg(T \wedge F)\wedge \neg(F \wedge T)\wedge \neg(T \wedge F)\wedge \neg(F \wedge T)$ \moveToRight{substitution}\\
+  \hspace*{11pt} $= \neg(F)\wedge \neg(F)\wedge \neg(F)\wedge \neg(F)$ \moveToRight{using rules of propositional logic above}\\  
+  \hspace*{11pt} $= T \wedge  T \wedge  T \wedge T$ \moveToRight{using rules of propositional logic above}\\
+  \hspace*{11pt} $= (T \wedge  T) \wedge  (T \wedge T$) \moveToRight{grouping left association}\\
+  \hspace*{11pt} $= T \wedge T $ \moveToRight{using rules of propositional logic above}\\
+  \hspace*{11pt} $= T$ \moveToRight{using rules of propositional logic above}
+  
+  $\psi_3 = (\neg(A_L \wedge B_L) \vee \neg(A_H \wedge B_H)) \wedge (\neg(B_L \wedge C_L) \vee \neg(B_H \wedge C_H)) \wedge (\neg(C_L \wedge D_L) \vee \neg(C_H \wedge D_H))$\\
+  \hspace*{11pt} $= (\neg(T \wedge F) \vee \neg(F \wedge T)) \wedge (\neg(F \wedge T) \vee \neg(T \wedge F)) \wedge (\neg(T \wedge F) \vee \neg(F \wedge T))$ \moveToRight{substitution}\\ 
+  \hspace*{11pt} $= (\neg(F) \vee \neg(F)) \wedge (\neg(F) \vee \neg(F)) \wedge (\neg(F) \vee \neg(F))$ \moveToRight{using rules of propositional logic above}\\ 
+  \hspace*{11pt} $= (T \vee T) \wedge (T \vee T) \wedge (T \vee T)$ \moveToRight{using rules of propositional logic above}\\   
+  \hspace*{11pt} $= T \wedge T \wedge T$ \moveToRight{using rules of propositional logic above}\\   
+  \hspace*{11pt} $= (T \wedge T) \wedge T$ \moveToRight{grouping left association}\\
+  \hspace*{11pt} $= T \wedge T$ \moveToRight{using rules of propositional logic above}\\
+  \hspace*{11pt} $= T$ \moveToRight{using rules of propositional logic above}\\
+  we have shown with these assignments that $\psi_1$ = $\psi_2$ = $\psi_3$ = T\\
+  hence to show $\psi_1 \wedge \psi2 \wedge \psi3$ is satisfiable we need to show $\psi_1 \wedge \psi2 \wedge \psi3$ = T\\
+  $\psi_1 \wedge \psi_2 \wedge \psi_3 = T \wedge T \wedge T$\\
+  \hspace*{55pt} $= (T \wedge T) \wedge T$ \moveToRight{grouping left association}\\
+  \hspace*{55pt} $= T \wedge T$ \moveToRight{using rules of propositional logic above}\\ 
+  \hspace*{55pt} $= T$ \moveToRight{using rules of propositional logic above}\\ 
+  hence $\psi_1 \wedge \psi_2 \wedge \psi_3$ is satisfiable as it equates to true with the following propositional variables (A$_L$ = T,
+  A$_H$ = F,
+  B$_L$ = F,
+  B$_H$ = T,
+  C$_L$ = T,
+  C$_H$ = F,
+  D$_L$ = F,
+  D$_H$ = T) 
+  \item Based on your answer to the previous question, which channels should each network use in order to avoid interference? \moveToRight{4 marks}\\
+  Solution: \\
+  a configuration in which no interference occurs when all the following conditions are met:
+      \begin{itemize}
+      \item a network is connected to either a channel lo or hi: $\psi_1$
+      \item a network is connected to only one channel: $\psi_2$
+      \item a connected network don't run on the same channel: $\psi_3$
+      \end{itemize}
+  this can be simplified to, find a configuration where the following holds, $\psi_1 \wedge \psi_2 \wedge \psi_3 = T$\\
+  as seen from (i), this occurs when:
+      \begin{itemize}
+      \item A$_L$ = T
+      \item A$_H$ = F
+      \item B$_L$ = F
+      \item B$_H$ = T
+      \item C$_L$ = T
+      \item C$_H$ = F
+      \item D$_L$ = F
+      \item D$_H$ = T
+      \end{itemize}
+  therefore a configuration in which no interference occurs would be the following:
+      \begin{itemize}
+      \item A uses channel low \moveToRight{A$_L$ = T and A$_H$ = F}
+      \item B uses channel high \moveToRight{B$_L$ = F and B$_H$ = T}
+      \item C uses channel low \moveToRight{C$_L$ = T and C$_H$ = F}
+      \item D uses channel high \moveToRight{D$_L$ = F and D$_H$ = T}
+      \end{itemize}
+  \end{enumerate}
 \end{enumerate}
 
+\newpage
+\section{Problem 4}
+Prove the following arguments are valid using Natural Deduction: \moveToRight{20 marks}
+    \begin{enumerate}[(a)]
+        \item $A \wedge (B \vee C), A \implies C \vdash C$
+    \end{enumerate}
 \end{document}
