@@ -9,6 +9,10 @@
 \usepackage{enumerate}
 \usepackage{amsmath}
 \usepackage{array}
+\usepackage{lplfitch}
+\usepackage{hyperref}
+\usepackage{caption}
+
 \newcommand*\moveToRight[1]{\hspace*{0em plus 1fill}\makebox{(#1)}}
 \newcommand*\fixindent{ \hspace{1pt}\\}
 %this command below is not my work was used for quality of life
@@ -64,10 +68,11 @@ So finally, $(A * A) * (B * B)  = A \cup B$, using only $A, B, *$ and parenthesi
 \newpage
 \section{Problem 2}
 A binary tree is a data structure where each node is linked to at most two successor nodes:\\\\
-\begin{centering}\includegraphics{tree.png}\end{centering}
+\begin{centering}\includegraphics{tree.png}\captionof{figure}{A visual representation of a binary tree}
+\end{centering}
 
 \fixindent{}
-If we allow empty binary trees (trees with no nodes), then we can simplify the possibilities of zero, one, or two successors by saying a node has exactly two children which are binary trees\\\\
+If we allow empty binary trees (trees with no nodes), then we can simplify the possibilities of zero, one, or two successors by saying a node has exactly two children which are binary trees
 
 \fixindent{}
 (a) Give a recursive definition of the binary tree data structure. Your definition may be concrete (i.e. code)
@@ -196,8 +201,12 @@ by substituting internal(T$^\prime$) and leaves(T$^\prime$) we can prove our pro
 
 \newpage
 \section{Problem 3}
-Four wifi networks, Alpha, Bravo, Charlie and Delta, all exist within close proximity to one another as shown below.\\
-\begin{centering}\hspace*{70pt}\includegraphics{network.png}\end{centering}\\
+\begin{flushleft}
+Our WiFi networks, Alpha, Bravo, Charlie and Delta, all exist within close proximity to one another as shown below.\\
+\end{flushleft}
+\begin{centering}\includegraphics{network.png}\captionof{figure}{An example of a WiFi network}
+\end{centering}
+\fixindent{}
 Networks connected with an edge in the diagram above can interfere with each other. To avoid interference networks can operate on one of two channels, hi and lo. Networks operating on different channels will not interfere; and neither will networks that are not connected with an edge.\\\\
 Our goal is to determine (algorithmically) whether there is an assignment of channels to networks so that there is no interference. To do this we will transform the problem into a problem of determining if a propositional formula can be satisfied.\\\\\\
 \begin{enumerate}[(a)]
@@ -316,6 +325,64 @@ Our goal is to determine (algorithmically) whether there is an assignment of cha
 \section{Problem 4}
 Prove the following arguments are valid using Natural Deduction: \moveToRight{20 marks}
     \begin{enumerate}[(a)]
-        \item $A \wedge (B \vee C), A \implies C \vdash C$
+        \item $A \vee (B \wedge C), A \to C \vdash C$\moveToRight{10 marks}\\
+        Solution:\\
+        \fitchprf{\pline[1.]{A \to C}\\\pline[2.]{$A \vee (B \wedge C)$}}{
+            \subproof{\pline[3.]{B \wedge C}}{
+                \pline[4.]{B}\lande{3}\\
+                \pline[5.]{C}\lande{3}
+            }
+            \subproof{\pline[6.]{A}}{
+                \pline[7.]{C}\life{1}{6}
+            }
+            \pline[8.]{C}\lore{2}{3--5}{6--7}\\
+        }\\
+        Explanation of the proof:\\
+        Our goal is to prove the first two antecedents 1 and 2 equate to C, to do this first we need to breakdown each antecedent. 
+        \\2. must be broken down by a logical or elimination, to do this we make an assumption on both sides of the or statement, and prove that they both yield the same result. 
+        \\\\we first assumed B $\wedge$ C and by using and elimination we reduce to C, since B and C are true that means C is true.
+        \\\\next we assume A, and by using our statement 1. A $\to$ C this is a modus ponen or ($\to$ elimination) (if our antecedent A is true that implies the consequence C is also true), that means C is true.
+        \\\\since both sides of the if statement equate to C we can then say C is true by using $\vee$ elimination.
+        \\\\Therefore $A \vee (B \wedge C), A \to C \vdash C$.        
+        \newpage
+        
+        \item $\neg(P \to Q)\vdash P$\moveToRight{10 marks}\\
+        Solution:\\
+        \fitchprf{\pline[1.]{$\neg(P \to Q)$}}{
+            \subproof{\pline[2.]{$\neg$P}}{
+                \subproof{\pline[3.]{P}}{
+                    \pline[4.]{$\bot$}\lfalsei{2}{3}\\
+                    \pline[5.]{Q} \lfalsee{4}
+                }
+                \pline[6.]{P $\to$ Q}\lifi{3--5}\\
+                \pline[7.]{$\bot$}\lfalsei{1}{6}
+            }
+            \pline[9.]{P} \lnoti{2--7}
+        }\\
+        Explanation of the proof:\\
+        This proof is alot different to part (a) as we have to use RAA (reduction to absurdity) by first making a contradiction from an assumption allowing us to assume anything, for example, \\"If January has 1000 days, then the moon doesn't exist" since our antecedent will always be false the consequence is true. by doing this we can perform an indirect proof.
+        \\\\An indirect proof works by first making an assumption, and then proving $\bot$ from that assumption, if we can prove $\bot$ from our assumption that means the negation of the assumption is true (proof by contradiction), for example if we assume A and the sub proof equates to $\bot$, then that means $\neg$ A is true.
+        \\\\First we assume the opposite of what we want to prove ($\neg$ P), because if that proof leads to $\bot$ that means the negation is true (P). 
+        \\\\Under the assumption of $\neg$P we can also assume P.
+        \\\\By assuming P and $\neg$P the second assumption equates to $\bot$
+        \\\\Since we have $\bot$, we can use RAA to introduce Q, because since we have $\bot$ we can assume anything else falls to true.
+        \\\\Since our assumption on line 3 leads to Q we can use modus ponen again, as our assumption P has led to the conclusion Q meaning from our first assumption on line 2 we have P $\to$ Q
+        \\\\P $\to$ Q is a direct contradiction to line 1 which was our given so that means our initial assumption falls to $\bot$
+        \\\\Since our assumption $\neg$P is a contradiction and leads to $\bot$, that means the negation of our assumption is true, $\neg\neg$P
+        \\\\$\neg\neg$P = P from the indirect proof from 2-7
+        \\\\Therefore $\neg(P \to Q)\vdash P$.
     \end{enumerate}
-\end{document} 
+\newpage
+\begin{flushleft}
+The following images below were taken from the following natural deduction verification tool,  \href{https://proofs.openlogicproject.org/}{https://proofs.openlogicproject.org/}, which was used to validate the following natural deductions that was performed in (a) and (b). Note that the justification semantics are slightly different in (b) as IP is the same as negation intro from the LaTeX package that was used, similarly for $\bot$ and $\top$ introduction/elimination, below is the image showing the proof for part (a) was correct according to the verification tool\\
+\end{flushleft}
+\begin{centering}\hspace*{1pt}\includegraphics[width=300px, height = 300px]{3a.png}\captionof{figure}{Verification tool returning that my proof is correct for part (a)}\end{centering}
+\newpage
+\begin{flushleft}
+below is the image showing the proof for part (b) was correct according to the verification tool
+\begin{centering}\hspace*{1pt}\includegraphics[width=300px, height = 300px]{3b.png}\captionof{figure}{Verification tool returning that my proof is correct for part (a)}\end{centering}
+\end{flushleft}
+\fixindent{}
+%\\\\\\To view the LaTeX code for this PDF file, use the following link\\
+%\href{https://www.overleaf.com/project/5c7aedc946f24d75ad2f52c5}{https://www.overleaf.com/project/5c7aedc946f24d75ad2f52c5}
+\end{document}
