@@ -29,8 +29,7 @@
 \section{Problem 1}
 Given two sets A and B, we define the operation * as follows:
 \begin{center} A * B := $(A \cap B)^c$ \end{center} \\
-Answer the following questions using the Laws of Set Operations (and any related results proven in lectures or tutorials) to justify your answer:\\\\
-
+Answer the following questions using the Laws of Set Operations (and any related results proven in lectures or tutorials) to justify your answer:\\
 \fixindent{}
 (a) What is  (A * B) * (A * B)?\moveToRight{5 marks}\\\\Solution:\\
 from using the supplied definition of the * operator\\\\
@@ -41,7 +40,7 @@ from using the supplied definition of the * operator\\\\
 \hspace*{110pt} = $( C \cap C)^c$ \moveToRight{using our substitution C = $(A \cap B)^c$}\\
 \hspace*{110pt} = $C^c$ \moveToRight{using law of idempotence}\\
 \hspace*{110pt} = $((A \cap  B)^c)^c$ \moveToRight{substituting C}\\
-\hspace*{110pt} = $A \cap B$ \moveToRight{using double complementation}\\\\\\
+\hspace*{110pt} = $A \cap B$ \moveToRight{using double complementation}\\\\
 So finally, $(A * B) * (A * B) = A \cap B$\\
 \newpage
 
@@ -52,22 +51,24 @@ using this fact, i will make the claim $A^c$ = $ A * A$\\\\
 \hspace*{30pt}A * A = $(A \cap A)^c$ \moveToRight{Supplied definition of *}\\
 \hspace*{57pt} = $(A)^c$ \moveToRight{law of idempotence}\\
 \hspace*{57pt} = $A^c$ \moveToRight{removing parenthesis}\\
-So finally, A * A  = $A^c$, using only A, * and parenthesis.\\\\\\\\
+So finally, A * A  = $A^c$, using only A, * and parenthesis.\\
 
 \fixindent{}
 (c) Express $A \cup B$ using only $A, B, *$ and parenthesis (if necessary).\moveToRight{10 marks}\\\\Solution:\\
 One way to express $A \cup B$ is $(A^c \cap B^c)^c$ \moveToRight{de Morgan's Law and double complementation}\\
 using this fact, i will make the claim $A \cup B =  (A * A) * (B * B)$\\\\
 \hspace*{30pt}$(A * A) * (B * B) = ((A \cap A)^c \cap (B \cap B)^c)$ \moveToRight{Supplied definition of *}\\
-\hspace*{110pt} = $((A)^c \cap (B)^c)^c$ \moveToRight{law of idempotence}\\
-\hspace*{110pt} = $(A^c \cap B^c)^c$ \moveToRight{removing parenthesis}\\
-\hspace*{110pt} = $(A^c)^c \cup (B^c)^c$ \moveToRight{de Morgan's Law}\\
-\hspace*{110pt} = $A \cup B$ \moveToRight{using double complementation}\\
+\hspace*{105pt} = $((A)^c \cap (B)^c)^c$ \moveToRight{law of idempotence}\\
+\hspace*{105pt} = $(A^c \cap B^c)^c$ \moveToRight{removing parenthesis}\\
+\hspace*{105pt} = $(A^c)^c \cup (B^c)^c$ \moveToRight{de Morgan's Law}\\
+\hspace*{105pt} = $A \cup B$ \moveToRight{using double complementation}\\
 So finally, $(A * A) * (B * B)  = A \cup B$, using only $A, B, *$ and parenthesis.\\\\\\\\
 
 \newpage
 \section{Problem 2}
-A binary tree is a data structure where each node is linked to at most two successor nodes:\\\\
+\begin{flushleft}
+A binary tree is a data structure where each node is linked to at most two successor nodes:\\
+\end{flushleft}
 \begin{centering}\includegraphics{tree.png}\captionof{figure}{A visual representation of a binary tree}
 \end{centering}
 
@@ -76,49 +77,47 @@ If we allow empty binary trees (trees with no nodes), then we can simplify the p
 
 \fixindent{}
 (a) Give a recursive definition of the binary tree data structure. Your definition may be concrete (i.e. code)
-or abstract, as long as it is clear what the base and recursive cases are. \moveToRight{4 marks}\\\\Solution in java:\\
-\hspace*{150pt}public class Tree\textless  data\textgreater\\
-\hspace*{150pt}\{\\
-\hspace*{165pt} private data D;\\
-\hspace*{165pt} private Tree Root;\\
-\hspace*{165pt} private Tree Left;\\
-\hspace*{165pt} private Tree Right;\\
-\hspace*{150pt}\}\\\\
-For this code, a base case would be \\
-Tree $==$ NULL\\
-The recursive case would be to pass in the attributes that are\\
-Left and Right,which are also trees.\\
-Leaves occur when Left and Right are both null and the Tree is NOT null.\\
-This allows a data structure that can call upon itself to expand through the tree recursively.\\
-The Root node is there to distinguish between a tree that has no nodes, in comparison to empty tree which has a pre-decessor node, (leaf children).\\\\\\
+or abstract, as long as it is clear what the base and recursive cases are. \moveToRight{4 marks}\\Solution in java:\\\\
+\hspace*{50pt}public class Tree\textless  data\textgreater\\
+\hspace*{50pt}\{\\
+\hspace*{65pt} private data D;\\
+\hspace*{65pt} private Tree Root;\\
+\hspace*{65pt} private Tree Left;\\
+\hspace*{65pt} private Tree Right;\\
+\hspace*{50pt}\}\\\\
+For this code, a base case would be the following: Tree $==$ null. This means every aspect of the tree is null and there is no root, non existant tree.\\\\
+The recursive case would be to pass the following attributes: Left and Right, which are also trees.\\\\
+Leaves occur when Left and Right are both null and root is NOT null.\\\\
+The Root node is there to distinguish between a tree that has no nodes, in comparison to an empty tree which has a parent node (leaves).\\\\
+This allows for a data structure that can call upon itself to expand through the tree recursively.\\
 
 \fixindent{}
 (b) Based on your recursive definition above, define (in code or mathematically) the function leaves(T)
 that counts the number of leaves in a binary tree T. \moveToRight{4 marks}\\\\Solution in java:\\
 \\establishing the tree data type which will be used in our function leaves(T) \\\\
-\hspace*{150pt}public class Tree\textless  data\textgreater\\
-\hspace*{150pt}\{\\
-\hspace*{165pt} private data D;\\
-\hspace*{165pt} private Tree Root;\\
-\hspace*{165pt} private Tree Left;\\
-\hspace*{165pt} private Tree Right;\\
-\hspace*{150pt}\}\\\\
+\hspace*{50pt}public class Tree\textless  data\textgreater\\
+\hspace*{50pt}\{\\
+\hspace*{65pt} private data D;\\
+\hspace*{65pt} private Tree Root;\\
+\hspace*{65pt} private Tree Left;\\
+\hspace*{65pt} private Tree Right;\\
+\hspace*{50pt}\}\\\\
 now we will create our leaves(T) function which will return
 the number of leaves in our tree recursively.\\\\
-\hspace*{150pt}public int leaves(Tree T)\\
-\hspace*{150pt}\{\\
-\hspace*{165pt}// base case 1 for our recursion \\
-\hspace*{165pt}// if tree is empty we return 0 \\
-\hspace*{165pt} if(T == NULL)\\
-\hspace*{180pt} return 0;\\\\
-\hspace*{165pt}// base case 2 for our recursion \\
-\hspace*{165pt}// if both children are empty trees return 1 \\
-\hspace*{165pt} if(T.Left == NULL \&\& T.Right == NULL)\\
-\hspace*{180pt} return 1;\\\\
-\hspace*{165pt}// Recursive Process \\
-\hspace*{165pt}// pass through both children which are also trees \\
-\hspace*{165pt} return leaves(T.Left) + leaves(T.Right);\\
-\hspace*{150pt}\}\\\\
+\hspace*{50pt}public int leaves(Tree T)\\
+\hspace*{50pt}\{\\
+\hspace*{65pt}// base case 1 for our recursion \\
+\hspace*{65pt}// if tree is empty we return 0 \\
+\hspace*{65pt} if(T == NULL)\\
+\hspace*{80pt} return 0;\\\\
+\hspace*{65pt}// base case 2 for our recursion \\
+\hspace*{65pt}// if both children are empty trees return 1 \\
+\hspace*{65pt} if(T.Left == NULL \&\& T.Right == NULL)\\
+\hspace*{80pt} return 1;\\\\
+\hspace*{65pt}// Recursive Process \\
+\hspace*{65pt}// pass through both children which are also trees \\
+\hspace*{65pt} return leaves(T.Left) + leaves(T.Right);\\
+\hspace*{50pt}\}\\\\
 
 \newpage
 \fixindent{}
@@ -126,78 +125,82 @@ the number of leaves in our tree recursively.\\\\
 that counts the number of fully-internal nodes in a binary tree T. Hint: it is acceptable to define an empty
 tree as having -1 fully-internal nodes. \moveToRight{4 marks}\\\\Solution in java:\\
 \\establishing the tree data type which will be used in our function internal(T) \\\\
-\hspace*{150pt}public class Tree\textless  data\textgreater\\
-\hspace*{150pt}\{\\
-\hspace*{165pt} private data D;\\
-\hspace*{165pt} private Tree Root;\\
-\hspace*{165pt} private Tree Left;\\
-\hspace*{165pt} private Tree Right;\\
-\hspace*{150pt}\}\\\\
+\hspace*{50pt}public class Tree\textless  data\textgreater\\
+\hspace*{50pt}\{\\
+\hspace*{65pt} private data D;\\
+\hspace*{65pt} private Tree Root;\\
+\hspace*{65pt} private Tree Left;\\
+\hspace*{65pt} private Tree Right;\\
+\hspace*{50pt}\}\\\\
 now we will create our internal(T) function which will return
-the number of internal nodes in our tree recursively. Note, we have to perform this in reverse order we search from the leaves up rather than root down.\\\\
-\hspace*{150pt}public int internal(Tree T)\\
-\hspace*{150pt}\{\\
-\hspace*{165pt}// base case 1 for our recursion\\
-\hspace*{165pt}// tree has no nodes at all \\
-\hspace*{165pt}// 0 parents/children nodes (no root)\\
-\hspace*{165pt} if(T.root == NULL)\\
-\hspace*{180pt} return -1;\\\\
-\hspace*{165pt}// base case 2 for our recursion \\
-\hspace*{165pt}// if tree is empty we return 0 \\
-\hspace*{165pt} if(T == NULL)\\
-\hspace*{180pt} return 0;\\\\
-\hspace*{165pt}// base case 3 for our recursion \\
-\hspace*{165pt}// if both children are non-empty trees add 1 to the count \\
-\hspace*{165pt} int count = 0;\\
-\hspace*{165pt} if(T.Left != NULL \&\& T.Right != NULL)\\
-\hspace*{180pt} count++;\\\\
-\hspace*{165pt}// Recursive Process \\
-\hspace*{165pt}// pass through both children which are also trees \\
-\hspace*{165pt}// unwind counter after whole tree processed \\
-\hspace*{165pt} return count += internal(T.Left) + internal(T.Right);\\
-\hspace*{150pt}\}\\\\
+the number of fully-internal nodes in our tree recursively. Note, we have to perform this in reverse order we search from the leaves up rather than root down.\\\\
+\hspace*{50pt}public int internal(Tree T)\\
+\hspace*{50pt}\{\\
+\hspace*{65pt}// base case 1 for our recursion\\
+\hspace*{65pt}// tree has no nodes at all \\
+\hspace*{65pt}// 0 parents/children nodes (no root)\\
+\hspace*{65pt} if(T.root == NULL)\\
+\hspace*{80pt} return -1;\\\\
+\hspace*{65pt}// base case 2 for our recursion \\
+\hspace*{65pt}// if tree is empty we return 0 \\
+\hspace*{65pt} if(T == NULL)\\
+\hspace*{80pt} return 0;\\\\
+\hspace*{65pt}// base case 3 for our recursion \\
+\hspace*{65pt}// if both children are non-empty trees add 1 to the count \\
+\hspace*{65pt} int count = 0;\\
+\hspace*{65pt} if(T.Left != NULL \&\& T.Right != NULL)\\
+\hspace*{80pt} count++;\\\\
+\hspace*{65pt}// Recursive Process \\
+\hspace*{65pt}// pass through both children which are also trees \\
+\hspace*{65pt}// unwind counter after whole tree processed \\
+\hspace*{65pt} return count += internal(T.Left) + internal(T.Right);\\
+\hspace*{50pt}\}\\\\
 
 \newpage
 \fixindent{}
 (d) If T is a binary tree, let P(T) be the proposition that leaves(T) = 1 + internal(T). Prove that P(T) holds
 for all binary trees T. \moveToRight{8 marks}\\\\Solution:\\
-To perform this proof we can use structural induction on the Tree structure. A Tree can be defined with the following,\\
+To perform this proof we can use structural induction on the Tree structure. Let S be the set of all Trees. A Tree can be defined with the following,\\
 Base: Empty tree (root == null).\\
 else: a tree that contains 2 trees as it's children and potentially data.\\
-first we need to prove it for the minimal object in the set of trees, the empty tree.\\
-let us use the symbol $\tau$ to denote an empty tree leaves.
-\fixindent{}\\
+First we need to prove it for the minimal object in the set of trees, S, the empty tree.\\
+Let us use the symbol $\tau$ to denote an empty tree leaves.\\
+\fixindent{}
 Base Case 1: P($\tau$) \\
 \hspace*{15pt} show leaves($\tau$) = 1 + internal($\tau$)\\
-we know leaves($\tau$) = 0, as it will return from the first base case from 2(b).\\
+We know leaves($\tau$) = 0, as it will return from the first base case from 2(b).\\
 \hspace*{50pt} 0 = 1 + internal($\tau$)\moveToRight{base case 2(b)}\\ 
 internal($\tau$) = -1, as the root specifically is null in an empty tree, this is the first base case from 2(c).\\
 \hspace*{50pt} 0 = 1 + (-1)\moveToRight{base case 2(c)}\\\\
-Base Case 2: let T be a tree with a single node, P(T)\\
+Base Case 2: let T be a tree with a single node, where T $\in$ S\\
 \hspace*{15pt} show leaves(T) = 1 + internal(T)\\
-we know leaves(T) = 1 as a tree with one node is a leaf itself since it has no children\\
+We know leaves(T) = 1 as a tree with one node is a leaf itself since it has no children\\
 \hspace*{50pt} 1 = 1 + internal($\tau$)\moveToRight{base case 2(b)}\\ 
 internal(T) = 0, as a tree consisting of only one node cannot be an internal node since it has no children\\
 \hspace*{50pt} 1 = 1 + 0\moveToRight{base case 2(c)}\\
 \fixindent{}
-hence our base cases holds.\\
+Hence our base cases holds for the minimal objects in our set S.\\
 \fixindent{}
-Inductive Hypothesis: Let us assume that for every tree T with n nodes, where n \textgreater 1,, P(T) holds, so that the number of leaves l, is equal to the number of internal nodes i increased by 1, so l = i + 1.   \\\\
-Inductive Case: prove P(T$^\prime$) holds where T$^\prime$ is an extension or reverse extension of a Tree T. Assume T is a tree with l+1 leaves, and l+2 internal nodes.\\
-now let us inspect the deepest possible fully-internal node 'N' of T. By definition of being the deepest possible fully internal node, the number of leaves from the sub-trees of 'N' is 2.
-\\We can create a new tree T$^\prime$ from T by removing the children of 'N', 'N' no longer is a fully-internal node and is now a leaf,\\
-By doing this our tree T$^\prime$ has now had an internal node removed, two leaves removed however the internal node that was removed has now become a leaf since we removed it's sub tree.
-our tree T$^\prime$ now has (l - 2 + 1) leaves    \moveToRight{removed 2 leaves, internal node became leaf}\\
+Inductive Hypothesis: Let us assume that for every tree T $\in$ S with n nodes, where n \textgreater 1, P(T) holds, so that the number of leaves l, is equal to the number of internal nodes i increased by 1, in other words l = i + 1.   \\\\
+Inductive Case: prove P(T$^\prime$) holds where T$^\prime \in$ S  is an extension or reverse extension of a tree T $\in$ S. 
+\\Assume T is a tree with l leaves, and i internal nodes.\\\\
+Let us inspect the deepest possible fully-internal node 'N' of T. By definition of being the deepest possible fully internal node, the number of leaves from the sub-trees of 'N' is 2.\\
+\\We can create a new tree T$^\prime$ from T by removing the children of 'N'. 'N' no longer is a fully-internal node and is now a leaf.\\\\
+By doing this our new tree T$^\prime$ has one less fully-internal node and two less leaves, however the fully-internal node that was removed has now become a leaf since we removed it's sub tree.\\\\
+Our tree T$^\prime$ now has (l - 2 + 1 ) leaves    \moveToRight{removed 2 sub-trees, internal node became leaf}\\\\
 Our induction Hypothesis states that the number of leaves is always 1 more than the number of internal nodes, so\\
 T$^\prime$ also has (l - 2 +1) - 1 internal nodes \moveToRight{Induction Hypothesis}\\
 \hspace*{32pt}leaves(T$^\prime$) = l - 2 + 1 \moveToRight{number of leaves in T$^\prime$}\\
-now we have to prove the proposition P(T$^\prime$): leaves(T$^\prime$) = internal(T$^\prime$) + 1.\\
+Now we have to prove the proposition P(T$^\prime$): leaves(T$^\prime$) = internal(T$^\prime$) + 1.\\
 \hspace*{30pt} l - 2 + 1 = internal(T$^\prime$) + 1 \moveToRight{Induction Hypothesis}\\
-\hspace*{30pt} internal(T$^\prime$) = (l - 2) + 1 - 1 \moveToRight{substitution from induction hypothesis}\\
-by substituting internal(T$^\prime$) and leaves(T$^\prime$) we can prove our proposition.\\
-\hspace*{30pt} (l - 2 + 1) = ((l -2 +1) - 1) + 1\\
-\hspace*{30pt} l - 1 = l - 1 \moveToRight{arithmetic}\\
-\\this expression equates to true, so P(T$^\prime$) holds.\\\\ We have proven both base cases for an empty tree, and a tree with a single node, which is also the base of our recursive structure. we have also made the hypothesis that for some tree T, P(T) holds and have proven on the extension of our recursive structure that P(T$^\prime$) holds, P(T) $\implies$ P(T$^\prime$). Therefore by the principle of mathematical induction, since P holds for the base cases, and P(T) $\implies$ P(T$^\prime$) for any tree T, P is true for any tree.
+\hspace*{30pt} internal(T$^\prime$) = (l - 2) + 1 - 1 \moveToRight{substitution from Induction Hypothesis}\\
+By substituting internal(T$^\prime$) and leaves(T$^\prime$) we can prove our proposition.\\
+\hspace*{30pt} (l - 2 + 1) = (l -2 +1) - 1) + 1\moveToRight{substitution}\\
+\hspace*{30pt} l - 1  = l - 1  \moveToRight{arithmetic}\\
+\\This expression equates to true, so P(T$^\prime$) holds.\\
+\fixindent{}
+We have proven both base cases for an empty tree, and a tree with a single node, which is also the base of our recursive structure.\\ We have also made the hypothesis that for some tree T $\in$ S, P(T) holds and have proven on the extension of our recursive structure that P(T$^\prime$) holds where the tree T$^\prime \in$ S, P(T) $\to$ P(T$^\prime$).
+\\Therefore by the principle of mathematical induction, since P holds for the base cases, and P(T) $\to$ P(T$^\prime$), P is true for any tree in the set of all trees S.
 
 \newpage
 \section{Problem 3}
@@ -208,17 +211,17 @@ Our WiFi networks, Alpha, Bravo, Charlie and Delta, all exist within close proxi
 \end{centering}
 \fixindent{}
 Networks connected with an edge in the diagram above can interfere with each other. To avoid interference networks can operate on one of two channels, hi and lo. Networks operating on different channels will not interfere; and neither will networks that are not connected with an edge.\\\\
-Our goal is to determine (algorithmically) whether there is an assignment of channels to networks so that there is no interference. To do this we will transform the problem into a problem of determining if a propositional formula can be satisfied.\\\\\\
+Our goal is to determine (algorithmically) whether there is an assignment of channels to networks so that there is no interference. To do this we will transform the problem into a problem of determining if a propositional formula can be satisfied.\\
 \begin{enumerate}[(a)]
   \item Carefully defining the propositional variables you are using, write propositional formulas for each of the following requirements: \moveToRight{12 marks}\\
-  let A$_L$ be the propositional variable that A uses channel lo\\
-  let A$_H$ be the propositional variable that A uses channel hi\\
-  let B$_L$ be the propositional variable that B uses channel lo\\
-  let B$_H$ be the propositional variable that B uses channel hi\\
-  let C$_L$ be the propositional variable that C uses channel lo\\
-  let C$_H$ be the propositional variable that C uses channel hi\\
-  let D$_L$ be the propositional variable that D uses channel lo\\
-  let D$_H$ be the propositional variable that D uses channel hi
+  Let A$_L$ be the propositional variable that A uses channel lo\\
+  Let A$_H$ be the propositional variable that A uses channel hi\\
+  Let B$_L$ be the propositional variable that B uses channel lo\\
+  Let B$_H$ be the propositional variable that B uses channel hi\\
+  Let C$_L$ be the propositional variable that C uses channel lo\\
+  Let C$_H$ be the propositional variable that C uses channel hi\\
+  Let D$_L$ be the propositional variable that D uses channel lo\\
+  Let D$_H$ be the propositional variable that D uses channel hi
   \begin{enumerate}[(i)]
   \item $\psi_1$: Alpha uses channel hi or channel lo; and so does Bravo, Charlie and Delta. \moveToRight{4 marks}\\\\
   Solution: \\
@@ -231,8 +234,8 @@ Our goal is to determine (algorithmically) whether there is an assignment of cha
   $\psi_3 = (\neg(A_L \wedge B_L) \vee \neg(A_H \wedge B_H)) \wedge (\neg(B_L \wedge C_L) \vee \neg(B_H \wedge C_H)) \wedge (\neg(C_L \wedge D_L) \vee \neg(C_H \wedge D_H))$
   \end{enumerate}
   \newpage
-  \item note for this part of the question we will use the following truths for propositional logic:\\
-  using the assignments T = true and F = false\\
+  \item Note for this part of the question we will use the following truths for propositional logic:\\
+  using the assignments T = true and F = false:\\
   $(T \vee F) = T$\\
   $(T \vee T) = T$\\
   $(F \vee F) = F$\\
@@ -242,8 +245,7 @@ Our goal is to determine (algorithmically) whether there is an assignment of cha
   $\neg (T) = F$\\
   $\neg (F) = T$
   \begin{enumerate}[(i)]
-  \item Show that $\psi_1 \wedge \psi_2 \wedge \psi_3$ is satisfiable; so the requirements can all be met. Note that it is sufficient to give a satisfying truth assignment, you do not have to list all possible combinations. \moveToRight{4 marks}\\
-  Solution: \\
+  \item Show that $\psi_1 \wedge \psi_2 \wedge \psi_3$ is satisfiable; so the requirements can all be met. Note that it is sufficient to give a satisfying truth assignment, you do not have to list all possible combinations. \moveToRight{4 marks}\\\\  Solution: \\
   $\psi_1 \wedge \psi_2 \wedge \psi_3$ is satisfiable with the following truth assignment\\
   A$_L$ = T\\
   A$_H$ = F\\
@@ -277,21 +279,21 @@ Our goal is to determine (algorithmically) whether there is an assignment of cha
   \hspace*{11pt} $= (T \wedge T) \wedge T$ \moveToRight{grouping left association}\\
   \hspace*{11pt} $= T \wedge T$ \moveToRight{using rules of propositional logic above}\\
   \hspace*{11pt} $= T$ \moveToRight{using rules of propositional logic above}\\
-  we have shown with these assignments that $\psi_1$ = $\psi_2$ = $\psi_3$ = T\\
-  hence to show $\psi_1 \wedge \psi2 \wedge \psi3$ is satisfiable we need to show $\psi_1 \wedge \psi2 \wedge \psi3$ = T\\
+  we have shown with these truth assignments that $\psi_1$ = $\psi_2$ = $\psi_3$ = T\\
+  Hence to show $\psi_1 \wedge \psi2 \wedge \psi3$ is satisfiable we need to show $\psi_1 \wedge \psi2 \wedge \psi3$ = T\\
   $\psi_1 \wedge \psi_2 \wedge \psi_3 = T \wedge T \wedge T$\\
   \hspace*{55pt} $= (T \wedge T) \wedge T$ \moveToRight{grouping left association}\\
   \hspace*{55pt} $= T \wedge T$ \moveToRight{using rules of propositional logic above}\\ 
   \hspace*{55pt} $= T$ \moveToRight{using rules of propositional logic above}\\ 
-  hence $\psi_1 \wedge \psi_2 \wedge \psi_3$ is satisfiable as it equates to true with the following propositional variables (A$_L$ = T,
+  Therefore $\psi_1 \wedge \psi_2 \wedge \psi_3$ is satisfiable as it equates to true with the following propositional variables (A$_L$ = T,
   A$_H$ = F,
   B$_L$ = F,
   B$_H$ = T,
   C$_L$ = T,
   C$_H$ = F,
   D$_L$ = F,
-  D$_H$ = T) 
-  \item Based on your answer to the previous question, which channels should each network use in order to avoid interference? \moveToRight{4 marks}\\
+  D$_H$ = T). 
+  \item Based on your answer to the previous question, which channels should each network use in order to avoid interference? \moveToRight{4 marks}\\\\
   Solution: \\
   a configuration in which no interference occurs when all the following conditions are met:
       \begin{itemize}
@@ -299,8 +301,8 @@ Our goal is to determine (algorithmically) whether there is an assignment of cha
       \item a network is connected to only one channel: $\psi_2$
       \item a connected network don't run on the same channel: $\psi_3$
       \end{itemize}
-  this can be simplified to, find a configuration where the following holds, $\psi_1 \wedge \psi_2 \wedge \psi_3 = T$\\
-  as seen from (i), this occurs when:
+  This can be simplified to find a configuration where the following holds, $\psi_1 \wedge \psi_2 \wedge \psi_3 = T$.\\
+  As seen from (i), this occurs when:
       \begin{itemize}
       \item A$_L$ = T
       \item A$_H$ = F
@@ -311,7 +313,7 @@ Our goal is to determine (algorithmically) whether there is an assignment of cha
       \item D$_L$ = F
       \item D$_H$ = T
       \end{itemize}
-  therefore a configuration in which no interference occurs would be the following:
+  Therefore a configuration in which no interference occurs would be the following:
       \begin{itemize}
       \item A uses channel low \moveToRight{A$_L$ = T and A$_H$ = F}
       \item B uses channel high \moveToRight{B$_L$ = F and B$_H$ = T}
@@ -325,7 +327,7 @@ Our goal is to determine (algorithmically) whether there is an assignment of cha
 \section{Problem 4}
 Prove the following arguments are valid using Natural Deduction: \moveToRight{20 marks}
     \begin{enumerate}[(a)]
-        \item $A \vee (B \wedge C), A \to C \vdash C$\moveToRight{10 marks}\\
+        \item $A \vee (B \wedge C), A \to C \vdash C$\moveToRight{10 marks}\\\\
         Solution:\\
         \fitchprf{\pline[1.]{A \to C}\\\pline[2.]{$A \vee (B \wedge C)$}}{
             \subproof{\pline[3.]{B \wedge C}}{
@@ -335,18 +337,18 @@ Prove the following arguments are valid using Natural Deduction: \moveToRight{20
             \subproof{\pline[6.]{A}}{
                 \pline[7.]{C}\life{1}{6}
             }
-            \pline[8.]{C}\lore{2}{3--5}{6--7}\\
-        }\\
+            \pline[8.]{C}\lore{2}{3--5}{6--7}
+        }\\\\
         Explanation of the proof:\\
-        Our goal is to prove the first two antecedents 1 and 2 equate to C, to do this first we need to breakdown each antecedent. 
-        \\2. must be broken down by a logical or elimination, to do this we make an assumption on both sides of the or statement, and prove that they both yield the same result. 
-        \\\\we first assumed B $\wedge$ C and by using and elimination we reduce to C, since B and C are true that means C is true.
-        \\\\next we assume A, and by using our statement 1. A $\to$ C this is a modus ponen or ($\to$ elimination) (if our antecedent A is true that implies the consequence C is also true), that means C is true.
-        \\\\since both sides of the if statement equate to C we can then say C is true by using $\vee$ elimination.
+        Our goal is to prove the first two antecedents 1 and 2 have the conclusion C. To do this first we need to breakdown each antecedent. 
+        \\\\2 must be broken down by a logical or elimination. To do this we make an assumption on both sides of the $\vee$ antecedent, and prove that they both yield the same conclusion. 
+        \\\\We first assumed B $\wedge$ C. By using and elimination we reduce to C, since B $\wedge$ C is true, that means C is true.
+        \\\\Next we assume A. By using statement 1, A $\to$ C, this is a modus ponen or otherwise known as $\to$ elimination on 1 and 6 (if our antecedent A is true that implies the consequence C is also true). This means that C is true.
+        \\\\Since both sides of the $\vee$ for 2, have the same consequence, C we can then say that under 1 and 2, C is the consequence by using $\vee$ elimination.
         \\\\Therefore $A \vee (B \wedge C), A \to C \vdash C$.        
         \newpage
         
-        \item $\neg(P \to Q)\vdash P$\moveToRight{10 marks}\\
+        \item $\neg(P \to Q)\vdash P$\moveToRight{10 marks}\\\\
         Solution:\\
         \fitchprf{\pline[1.]{$\neg(P \to Q)$}}{
             \subproof{\pline[2.]{$\neg$P}}{
@@ -358,13 +360,13 @@ Prove the following arguments are valid using Natural Deduction: \moveToRight{20
                 \pline[7.]{$\bot$}\lfalsei{1}{6}
             }
             \pline[9.]{P} \lnoti{2--7}
-        }\\
+        }\\\\
         Explanation of the proof:\\
-        This proof is alot different to part (a) as we have to use RAA (reduction to absurdity) by first making a contradiction from an assumption allowing us to assume anything, for example, \\"If January has 1000 days, then the moon doesn't exist" since our antecedent will always be false the consequence is true. by doing this we can perform an indirect proof.
-        \\\\An indirect proof works by first making an assumption, and then proving $\bot$ from that assumption, if we can prove $\bot$ from our assumption that means the negation of the assumption is true (proof by contradiction), for example if we assume A and the sub proof equates to $\bot$, then that means $\neg$ A is true.
-        \\\\First we assume the opposite of what we want to prove ($\neg$ P), because if that proof leads to $\bot$ that means the negation is true (P). 
+        This proof is different to part (a) as we have to use RAA (reduction to absurdity) by first making a contradiction from an assumption allowing us to assume anything, for example, "If January has 1000 days, then the moon doesn't exist". Since our antecedent will always be false the consequence is true. By doing this we can perform an indirect proof.
+        \\\\An indirect proof works by first making an assumption, and then proving $\bot$ from that assumption. If we can prove $\bot$ from our assumption that means the negation of the assumption is true (proof by contradiction). For example if we assume A and the sub proof equates to $\bot$, then that means $\neg$ A is true.
+        \\\\First we assume the opposite of what we want to prove ($\neg$P), because if that proof leads to $\bot$ that means the negation is true (P). 
         \\\\Under the assumption of $\neg$P we can also assume P.
-        \\\\By assuming P and $\neg$P the second assumption equates to $\bot$
+        \\\\By assuming P and $\neg$P the second assumption equates to $\bot$.
         \\\\Since we have $\bot$, we can use RAA to introduce Q, because since we have $\bot$ we can assume anything else falls to true.
         \\\\Since our assumption on line 3 leads to Q we can use modus ponen again, as our assumption P has led to the conclusion Q meaning from our first assumption on line 2 we have P $\to$ Q
         \\\\P $\to$ Q is a direct contradiction to line 1 which was our given so that means our initial assumption falls to $\bot$
@@ -374,13 +376,13 @@ Prove the following arguments are valid using Natural Deduction: \moveToRight{20
     \end{enumerate}
 \newpage
 \begin{flushleft}
-The following images below were taken from the following natural deduction verification tool,  \href{https://proofs.openlogicproject.org/}{https://proofs.openlogicproject.org/}, which was used to validate the following natural deductions that was performed in (a) and (b). Note that the justification semantics are slightly different in (b) as IP is the same as negation intro from the LaTeX package that was used, similarly for $\bot$ and $\top$ introduction/elimination, below is the image showing the proof for part (a) was correct according to the verification tool\\
+The following images below were taken from the following natural deduction verification tool,  \href{https://proofs.openlogicproject.org/}{https://proofs.openlogicproject.org/}, which was used to validate the following natural deductions that was performed in (a) and (b). Note that the justification semantics are slightly different in (b) as IP is the same as negation introduction from the LaTeX package that was used, similarly for $\bot$ and $\top$ introduction/elimination. \\Below is the image showing the proof for part (a) was correct according to the verification tool.\\
 \end{flushleft}
 \begin{centering}\hspace*{1pt}\includegraphics[width=300px, height = 300px]{3a.png}\captionof{figure}{Verification tool returning that my proof is correct for part (a)}\end{centering}
 \newpage
 \begin{flushleft}
-below is the image showing the proof for part (b) was correct according to the verification tool
-\begin{centering}\hspace*{1pt}\includegraphics[width=300px, height = 300px]{3b.png}\captionof{figure}{Verification tool returning that my proof is correct for part (a)}\end{centering}
+Below is the image showing the proof for part (b) was correct according to the verification tool.\\
+\begin{centering}\hspace*{1pt}\includegraphics[width=300px, height = 300px]{3b.png}\captionof{figure}{Verification tool returning that my proof is correct for part (b)}\end{centering}
 \end{flushleft}
 \fixindent{}
 %\\\\\\To view the LaTeX code for this PDF file, use the following link\\
