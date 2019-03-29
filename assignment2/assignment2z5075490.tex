@@ -655,9 +655,9 @@ public class test {
         \newpage
         \textbf{Bonus:} Implement your solution to the previous question in a SAT-solver to show that in any model satisfying the requirements, Alpha and Charlie use the same channel. Either include a link to your solution or provide the code so it can be easily copy-pasted and run. \moveToRight{10* marks}\\\\
         Solution:\\
-        \z3{
-            (assert)
-        }
+        \lstinputlisting[language=z3,firstnumber=1]{z3.txt}
+        As can be seen in the following output from the SAT solver Z3, all models that solve the configuration in Figure 3 have alpha and charlie using the same channel.
+
         
 \end{enumerate}
 
