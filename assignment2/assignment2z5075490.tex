@@ -277,7 +277,7 @@ general setting: i.e. with more than two channels and a wider variety of proximi
         
                     public boolean is_close_proximity(Network n1, Network n2){
                         //if the network name is apart of the other networks close proximity network list then return true
-                        if(n1.get_close_proximity_networks.contains(n2.name)){
+                        if(n1.get_close_proximity_networks.contains(n2.get_name())){
                             return true;
                         }
                         //return false otherwise
@@ -314,15 +314,83 @@ general setting: i.e. with more than two channels and a wider variety of proximi
                     }
                 }
                 \end{lstlisting}\\
-            Note the following predicates for the vocabulary have been defined in the java code above.    
-            \\\\
+            Note the following predicates for the vocabulary have been defined in the java code above.\\\\
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             \item “Close proximity” is an anti-reflexive, symmetric relation. \moveToRight{2 marks}\\\\
             Solution: \\
-            "Close proximity" must be an anti-reflexive and symmetric relation in order for valid configurations.
+            $\psi_3 = \forall x1 \in X(\forall x2 \in X(\neg is\_close\_proximity(x1,x1))$\\
+            $\psi_4 = \forall x1 \in X(\forall x2 \in X(is\_close\_proximity(x1,x2) \to is\_close\_proximity(x2,x1))$\\\\
+            $\psi_3$ is the logical formula which states for all networks inside our network domain, they cannot be in close proximity with themselves which is an anti-reflexive relation.\\\\
+            $\psi_4$ is the logical formula which states for all networks if network A is in close proximity to network B, then that also implies network B is in close proximity with network A which a symmetric relation.\\\\
+            "Close proximity" must be an anti-reflexive and symmetric relation in order for valid configurations. This is because if a Network can be in close proximity with itself that means the valid\_configuration would return false since it will show up as both networks using the same channel even though its the same network. "close proximity" must also be a symmetric relation, since if A is in close proximity with B, that means B must be in close proximity with A. The above formulas slightly modify the code we have written above the following\\
+            re-defining the code to allow close\_proximity to be an anti-reflexive and symmetric. Please also anti-reflexive was implemented in the above code in the all\_valid\_
+            \begin{lstlisting}
+                    public boolean is_close_proximity(Network n1, Network n2){
+                        //anti-reflexive property by not letting n1 = n2 be true
+                        //i.e. if the two networks are the same return false!
+                        if(n1 == n2){
+                            return false;
+                        }
+                        //adding the symmetric relation by making n1 close proximity to n2
+                        if(n2.get_close_proximity_networks.contains(n1.get_name())){
+                            return true;
+                        }
+                        //if the network name is apart of the other networks close proximity network list then return true
+                        if(n1.get_close_proximity_networks.contains(n2.get_name())){
+                            return true;
+                        }
+                        //return false otherwise
+                        return false;
+                    }
+            
+            
+            
+            
+            
+            //this allows use to now modify all_valid configuration to the following
+            //since we now have anti-reflexive inside our close proximity rather than in the predicate all_configurations_valid we can just simply call valid_configuration(n1,n2)
+                public boolean all_configurations_valid(){
+                        //we want to check all possible configurations
+                        for(Network n1 : all_networks){
+                            for(Network n2 : all_networks){
+                                //if ANY configuration is invalid we return false as the setup is invalid
+                                if(!valid_configuration(n1, n2){
+                                    return false;
+                                }
+                            }
+                        }
+                        //return true if it does not exit the loop with return false
+                        return true;
+                }
+            \end{lstlisting}
+            
         \end{enumerate}
+        Note that since we have "close proximity" as a symmetric relation, that means if network A is inside of network B's close proximity list, that also means that network B is also inside of network A's close proximity list, this can be shown in code with the following to truly show the symmetric property.
+        
+        \begin{lstlisting}
+            //suppose this is the method for making two networks within close proximity
+            public void make_close_proximity(Network A, Network B){
+                //this shows the symmetry since A is close proximity to B
+                //also means B is close proximity to A
+                //since we make them BOTH close proximity to each other.
+                A.get_close_proximity_networks.add(B.get_name());
+                B.get_close_proximity_networks().add(A.get_name());
+                
+            }
+        \end{lstlisting}.
+        \newpage
+        \begin{flushleft}
+            Consider the following set-up: we have exactly three channels: hi, med, lo; and (at least) four networks Alpha, Bravo, Charlie, Delta with close proximity as defined in the following diagram:
+        \end{flushleft}
 
+        \begin{centering}\hspace*{1pt}\\\includegraphics[width=100px, height = 100px]{network2.png}\captionof{figure}{Network configuration between all four networks and three channels}\end{centering}
+        We now want to refine our specification (i.e. add requirements) so that any model which satisfies all the requirements will necessarily have the structure detailed here.
+        
+        \item  Extending your specification language if necessary, provide a set of requirements which, together with your answer to (b), ensures any satisfying model has the structure detailed here. \moveToRight{10 marks}\\\\
+        Solution: \\
+        
 
+        
 \end{enumerate}
 
 \end{document}
