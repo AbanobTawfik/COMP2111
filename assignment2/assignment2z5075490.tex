@@ -40,7 +40,33 @@
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%note this LaTeX package was not written by me and taken from stackexchange forums to be used to write z3 code formatted
+%link to original page https://github.com/mewmew/latex/blob/master/z3/lang.sty
+\lstdefinelanguage{z3}{
+	sensitive=true,
+	alsoletter={\-},
+	% comments.
+	%    ; line comment
+	comment=[l]{;},
+	% Z3 keywords.
+	keywords=[1]{
+apply, assert, assert-soft, check-sat, check-sat-using, compute-interpolant,
+declare-const, declare-datatypes, declare-fun, declare-map, declare-rel,
+declare-sort, declare-tactic, define-sort, display, echo, eval, exit,
+fixedpoint-pop, fixedpoint-push, get-assertions, get-assignment, get-info, get-
+interpolant, get-model, get-option, get-proof, get-unsat-core, get-user-tactics,
+get-value, help, help-tactic, labels, maximize, minimize, pop, push, query,
+reset, rule, set-info, set-logic, set-option, simplify
+	},
+	% Z3 built-ins
+	morekeywords=[2]{
+check-sat-using, declare-var, declare-rel, rule, query, set-predicate-
+representation, maximize, minimize, assert-soft, assert-weighted, compute-
+interpolant
+	},
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand*\moveToRight[1]{\hspace*{0em plus 1fill}\makebox{(#1)}}
 \newcommand*\fixindent{ \hspace{1pt}\\}
 %this command below is not my work was used for quality of life
@@ -601,6 +627,37 @@ public class test {
         \begin{centering}\hspace*{1pt}\\\includegraphics[width=400px, height = 200px]{output3.png}\captionof{figure}{code output with the configuration above with same structure in Figure 3}\end{centering}
         
         Note this code produces the correct output and can be copied and pasted from above, and tested with different values, i did not use the predicate make\_close\_proximity in my testing as i already made close proximity with the symmetric nature by adding both networks in close proximity to each other's close proximity list.
+        \newpage
+        \item How would you use a SAT-solver (for First Order Logic) such as Z3 or IDP to show that in any model satisfying your requirements, Alpha and Charlie use the same channel? \moveToRight{5 marks}\\\\
+        Solution:\\
+        Similair to the lecture example for solving a simpler version of the zebra puzzle, i would load each of my variables in, so each channel will be loaded in as integers, and i would set these channels to set values, so high = 2, medium = 1 and low = 0. Then i would load in my Networks as integers which range from 0-2 (indicating their channels). Then i would assert the conditions that for my defined close proximity networks that they cannot have equal values. So in the defined model above, we have the following:\\
+        \begin{itemize}
+            \item Alpha != Bravo
+            \item Alpha != Delta
+            \item Bravo != Alpha
+            \item Bravo != Charlie
+            \item Bravo != Delta
+            \item Charlie != Bravo
+            \item Charlie != Delta
+            \item Delta != Alpha
+            \item Delta != Bravo
+            \item Delta != Charlie
+        \end{itemize}
+        all these conditions enforce the close proximity in the given
+        \begin{itemize}
+            \item Alpha is in close proximity to Bravo and Delta
+            \item Bravo is in close proximity to Alpha, Charlie and Delta
+            \item Charlie is in close proximity to Bravo and Delta
+            \item Delta is in close proximity to Alpha, Bravo and Charlie
+        \end{itemize}
+        which follows our structure in Figure 3 as we are also using 3 channels low, medium and high. 
+        after we would try to get all models by adding more conditions and exhausting all possibilities to verify that all satisfying models have Alpha and Charlie on the same Network.\\\\ to get all models i would first run it with those conditions in place, then after i check satisfiability and get the model, we will now make it so alpha cannot be channel 0 and repeat till we have exhausted all possible channels giving all possible models. \\\\ This will also what i will be using for the bonus to implement the solution using Z3.
+        \newpage
+        \textbf{Bonus:} Implement your solution to the previous question in a SAT-solver to show that in any model satisfying the requirements, Alpha and Charlie use the same channel. Either include a link to your solution or provide the code so it can be easily copy-pasted and run. \moveToRight{10* marks}\\\\
+        Solution:\\
+        \z3{
+            (assert)
+        }
         
 \end{enumerate}
 
