@@ -169,7 +169,7 @@ general setting: i.e. with more than two channels and a wider variety of proximi
         \item Networks within close proximity cannot both use the same channel.
         \item “Close proximity” is an anti-reflexive, symmetric relation.
     \end{enumerate}
-
+Please see the appendix for the full java code that can be copied and pasted and run to display the model. the code that was used inside this question is a bit too split up and cannot be easily copied and pasted but do give a good view of what i am trying to say.
 \begin{enumerate}[(a)]
         \item Carefully define a specification language (that is, a vocabulary or set of propositional variables) necessary to formally specify the requirements laid out above. You may:
         \begin{itemize}
@@ -656,9 +656,67 @@ public class test {
         \textbf{Bonus:} Implement your solution to the previous question in a SAT-solver to show that in any model satisfying the requirements, Alpha and Charlie use the same channel. Either include a link to your solution or provide the code so it can be easily copy-pasted and run. \moveToRight{10* marks}\\\\
         Solution:\\
         \lstinputlisting[language=z3,firstnumber=1]{z3.txt}
-        As can be seen in the following output from the SAT solver Z3, all models that solve the configuration in Figure 3 have alpha and charlie using the same channel.
-
-        
+        As can be seen in the following output from the SAT solver Z3, all models that solve the configuration in Figure 3 have alpha and charlie using the same channel as alpha and charlie have the same value, and bravo and delta use different channels to alpha and charlie and each other.
 \end{enumerate}
 
+\newpage
+\section{Problem 3}
+Recall the Fibonacci sequence defined as:
+\begin{itemize}
+    \item F(0) = 0
+    \item F(1) = 1
+    \item F(n + 2) = F(n + 1) + F(n) for n $\geq$ 0
+\end{itemize}
+\begin{enumerate}[(a)]
+    \item Write a program FIB in $\mathcal{L}$ that computes the n-th Fibonacci number (for n $\geq$ 1). That is, if n $\geq$ 1 at the start of execution, then variable r has value F(n) at the end of execution (if Fib terminates). \moveToRight{12 marks}\\\\
+    Solution:\\
+    we will use the variable r to store our fib(z) the variable r will have the value f(z) on each line of code after assignment (r := 1 assuming n $\geq$ 1). we will use the variable x to keep the value of f(n - 1) on each line of code after assignment. note counting starts from 0 since we are also considering fib(0) = 0, the 0th Fibonacci number is 0, the first Fibonacci number is 1, the second Fibonacci number is 1, the third Fibonacci number is 2 and so on.
+    \begin{lstlisting}[language=Maple,mathescape=true]
+{n $\geq$ 1 $\land$ z $\leq$ n}
+//variable that holds the previous value of f(z) -> (f(z - 1)) this is f(0)
+x := 0;
+//variable that holds f(z)  ->  (note this is (f(1))
+r := 1;
+//counter for loop
+z := 1;
+//while the counter is less than our value n
+//note on each iteration (loop invariant we have)
+//x = fib(z - 1)
+//r = fib(z)
+while z < n do
+    //set f(z) = f(z - 2) + f(z - 1)
+    //this is because we are using assignment and we increment z to z + 1
+    //old r becomes f(z - 1) and old x becomes fib(z - 2)
+    r := r + x;
+    //update x to be f(z - 1) for next iteration
+    //since r is updated to f(z) we have f(z) - f(z - 2)
+    //giving f(z - 1) e.g. 1, 1 , 2 ,3, 5
+    //if we have f(z) as 5, then f(z - 1) is 3
+    //f(z - 2) is 2
+    //and 5 - 2 = 3 which is f(z - 1) correctly updating for next iteration
+    x := r - x;
+    //increment loop counter
+    z := z + 1;
+od
+//this is because r = f(z) throughout each iteration of the loop, and since our exit condition is when z $\geq$ n, we can also have another condition that z $\leq$ n as one of our preconditions forcing z = n.
+{r = f(n)}
+    \end{lstlisting}
+Note fib(n) = fib(n - 1) + fib(n - 2) is also equivalent to \\fib(n + 2) = fib(n + 1) + fib(n). this is because fib(1) and fib(0) is already defined for us so we don't end up with negative fib numbers, we exit the loop with our invariant being r = f(z) and z $\leq$ n and our exit condition is when z $\geq$ n, that means z = n, giving us r = f(n)
+
+\item Prove, using Hoare Logic, that $\vdash$ \{n $\geq$ 1\} Fib \{r = F(n)\} \moveToRight{10 marks}\\\\
+Soltuion:\\
+for this solution:\\ \{init\} = \{n $\geq$ 1\}
+\\\{invariant\} = \{r = f(z) $\land$ z $\leq$ n $\land$ \{init\}\}
+\begin{enumerate}[1.            ]
+    \item \{init\} \moveToRight{premise}
+    \item \{f(0) = 0\} x := 0 \{x = f(0)\} \moveToRight{assignment inference rule}
+    \item \{f(1) = 1\} r := 1 \{r = f(1)\} \moveToRight{assignment inference rule}
+    \item \{r = f(1)\} z := 1 \{r = f(z)\} \moveToRight{assignment inference rule}
+    \item \{f(1) = 1\} r := 1; z := 1 \{r = f(z)\} \moveToRight{sequence inference rule: 3, 4}
+    \item \{f(z) = r + x\} r := r + x \{invariant\} \moveToRight{assignment inference rule}
+    \item \{f(z - 1) = r - x\} 
+\end{enumerate}
+\end{enumerate}
+
+\section{appendix}
 \end{document}
