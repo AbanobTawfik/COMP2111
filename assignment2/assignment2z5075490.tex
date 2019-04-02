@@ -670,123 +670,424 @@ Recall the Fibonacci sequence defined as:
     \begin{enumerate}[(a)]
         \item Write a program FIB in $\mathcal{L}$ that computes the n-th Fibonacci number (for n $\geq$ 1). That is, if n $\geq$ 1 at the start of execution, then variable r has value F(n) at the end of execution (if Fib terminates). \moveToRight{12 marks}\\\\
         Solution:\\
-        we will use the variable r to store our fib(z) the variable r will have the value f(z) on each line of code after assignment (r := 1 assuming n $\geq$ 1). we will use the variable x to keep the value of f(n - 1) on each line of code after assignment. note counting starts from 0 since we are also considering fib(0) = 0, the 0th Fibonacci number is 0, the first Fibonacci number is 1, the second Fibonacci number is 1, the third Fibonacci number is 2 and so on.
-        \begin{lstlisting}[language=Maple,mathescape=true]
-    {n $\geq$ 1 $\land$ z $\leq$ n}
-    //variable that holds the previous value of f(z) -> (f(z - 1)) this is f(0)
-    x := 0;
-    //variable that holds f(z)  ->  (note this is (f(1))
-    r := 1;
-    //counter for loop
-    z := 1;
-    //while the counter is less than our value n
-    //note on each iteration (loop invariant we have)
-    //x = fib(z - 1)
-    //r = fib(z)
-    while z < n do
-        //set f(z) = f(z - 2) + f(z - 1)
-        //this is because we are using assignment and we increment z to z + 1
-        //old r becomes f(z - 1) and old x becomes fib(z - 2)
-        r := r + x;
-        //update x to be f(z - 1) for next iteration
-        //since r is updated to f(z) we have f(z) - f(z - 2)
-        //giving f(z - 1) e.g. 1, 1 , 2 ,3, 5
-        //if we have f(z) as 5, then f(z - 1) is 3
-        //f(z - 2) is 2
-        //and 5 - 2 = 3 which is f(z - 1) correctly updating for next iteration
-        x := r - x;
-        //increment loop counter
-        z := z + 1;
-    od
-    //this is because r = f(z) throughout each iteration of the loop, and since our exit condition is when z $\geq$ n, we can also have another condition that z $\leq$ n as one of our preconditions forcing z = n.
-    {r = f(n)}
-        \end{lstlisting}
-    Note fib(n) = fib(n - 1) + fib(n - 2) is also equivalent to \\fib(n + 2) = fib(n + 1) + fib(n). this is because fib(1) and fib(0) is already defined for us so we don't end up with negative fib numbers, we exit the loop with our invariant being r = f(z) and z $\leq$ n and our exit condition is when z $\geq$ n, that means z = n, giving us r = f(n)
+        we will use the variable r to store our fib(i) and i will be equal to n assuming the program terminates. We will use the variable x to keep the value of f(i - 1). Note counting starts from 0 since we are also considering fib(0) = 0, the 0th Fibonacci number is 0, the first Fibonacci number is 1, the second Fibonacci number is 1, the third Fibonacci number is 2 and so on.
+    \begin{lstlisting}[language=Maple,mathescape=true]
+//variable that holds the previous value of f(i) -> (f(i - 1)) this is f(0)
+x := 0;
+//variable that holds f(i)  ->  (note this is (f(1))
+r := 1;
+//counter for loop
+i := 1;
+//while the counter is less than our value n
+//note on each iteration (loop invariant we have)
+//x = fib(i - 1)
+//r = fib(i)
+while i < n do
+    //set f(i) = f(i - 2) + f(i - 1)
+    //this is because we are using assignment and we increment i to i + 1
+    //old r becomes f(i - 1) and old x becomes fib(i - 2)
+    r := r + x;
+    //update x to be f(i - 1) for next iteration
+    //since r is updated to f(i) we have f(i) - f(i - 2)
+    //giving f(i - 1) e.g. 1, 1 , 2 ,3, 5
+    //if we have f(i) as 5, then f(i - 1) is 3
+    //f(i - 2) is 2
+    //and 5 - 2 = 3 which is f(i - 1) correctly updating for next iteration
+    x := r - x;
+    //increment loop counter
+    i := i + 1;
+od
+    \end{lstlisting}
+    Note fib(n) = fib(n - 1) + fib(n - 2) is also equivalent to \\fib(n + 2) = fib(n + 1) + fib(n). this is because fib(1) and fib(0) is already defined for us so we don't end up with negative fib numbers, we exit the loop with our invariant being r = f(i) and i $\leq$ n and our exit condition is when i $\geq$ n, that means i = n, giving us r = f(n)\\
     
     \item Prove, using Hoare Logic, that $\vdash$ \{n $\geq$ 1\} Fib \{r = F(n)\} \moveToRight{10 marks}\\\\
     Soltuion:\\
     for this solution:\\ \{init\} = \{n $\geq$ 1\}\\
-    \{invariant\} = \{(r = f(z)) $\land$ (x = f(z - 1)) $\land$ (z $\leq$ n) $\land$ (\{init\})\}\\
-    \{updateRpre\} = \{f(z + 1) = r + x $\land$ f(z) = x $\land$ z $\leq$ n $\land$ n $\geq$ 1\}\\
-    \{updateRpost\} =  \{r = f(z + 1) $\land$ r - x = f(z) $\land$ z  $\leq$ n $\land$ n $\geq$ 1\}\\
-    \{updateXpost\} =  \{x = f(z) $\land$ r = f(z + 1) $\land$ z $\leq$ n $\land$ n $\geq$ 1\}\\    
-    Below the proof i will also prove my proof obligations. The invariant is very similair to the one given in the lecture for the power program example. The overall proof is a mix between the lecture example for factorial and power function.
+    \{invariant\} = \{(f(i) = r) $\land$ (f(i - 1) = x) $\land$ i $\leq$ n $\land$ (\{init\})\}\\
+    \{updateRpre\} = \{f(i + 1) = r + x $\land$ f(i) = r $\land$ i $\leq$ n $\land$ n $\geq$ 1\} note f(i) = (r + x) - x\\
+    \{updateRpost\} =  \{f(i + 1) = r $\land$ f(i) = r - x $\land$ y  $\leq$ n $\land$ n $\geq$ 1\}\\
+    \{updateXpost\} =  \{f(i + 1) = r $\land$ f(i) = x $\land$  i $\leq$ n $\land$ n $\geq$ 1\}\\    
+    Below this proof i will also prove my proof obligations. The invariant is very similair to the one given in the lecture for the power program example. The overall proof is a mix between the lecture example for factorial and power function.\\
     \begin{enumerate}[1. ]
         \item \{init\} \moveToRight{premise}
         \item \{f(0) = 0\} x := 0 \{x = f(0)\} \moveToRight{assignment inference rule}
         \item \{f(1) = 1\} r := 1 \{r = f(1)\} \moveToRight{assignment inference rule}
-        \item \{r = f(1)\} z := 1 \{r = f(z)\} \moveToRight{assignment inference rule}
-        \item \{f(1) = 1\} r := 1; z := 1 \{r = f(z)\} \moveToRight{sequence inference rule: 3, 4}\\
-        
-        \item 
-        \{f(z + 1) = r + x $\land$ f(z) = x $\land$ z $\leq$ n $\land$ n $\geq$ 1\}\\
-        \hspace*{30pt}r := r + x \\
-        \{r = f(z + 1) $\land$ r - x = f(z) $\land$ z  $\leq$ n $\land$ n $\geq$ 1\} \moveToRight{assignment inference rule}
-        \item     
-        \{f(z + 1) = r + x $\land$ f(z) = x $\land$ z $\leq$ n $\land$ n $\geq$ 1\}\\
-        \hspace*{30pt}x := r - x \\
-        \{x = f(z) $\land$ r = f(z + 1) $\land$ z $\leq$ n $\land$ n $\geq$ 1\} \moveToRight{assignment inference rule}
-        \item 
-        \{r = f(z + 1) $\land$ x = f(z) $\land$ z  $\leq$ n $\land$ n $\geq$ 1\}\\ 
-        \hspace*{30pt}z := z + 1\\ 
-        \{invariant\} \moveToRight{assignment inference rule}
-        \item     
-        \{f(z + 1) = r + x $\land$ f(z) = x $\land$ z $\leq$ n $\land$ n $\geq$ 1\}\\ 
-        \hspace*{30pt}r := r + x; x := r - x\\
-        \{x = f(z) $\land$ r = f(z + 1) $\land$ z $\leq$ n $\land$ n $\geq$ 1\} \moveToRight{sequence inference rule:  6, 7}
-        \item 
-        \{f(z + 1) = r + x $\land$ f(z) = x $\land$ z $\leq$ n $\land$ n $\geq$ 1\}\\ 
-        \hspace*{30pt}r := r + x; x := r - x; z := z + 1\\
-        \{invariant\} \moveToRight{sequence inference rule: 9, 8}
-        
-        \item (invariant $\land$ z $<$ n) $\to$ (f(z + 1) = r + x $\land$ f(z) = x $\land$ z $\leq$ n $\land$ n $\geq$ 1) \\\moveToRight{proof obligation, definition of Fibonacci}
-        \item 
-        \{invariant $\land$ z $<$ n\} r := r + x; x := r - x; z := z + 1\{invariant\}\\ \moveToRight{consequence inference rule: 10, 11}
-        
-        \item \{invariant $\land$ z $<$ n\} while ... od \{invariant $\land$ r = f(z) $\land$ z $\geq$ n\} \moveToRight{loop inference rule: 12}
-        \item \{0 = f(0) $\land$ 1 = f(1) $\land$ init\} Fib \{invariant $\land$ r = f(z) $\land$ z $\geq$ n\} \moveToRight{seq}
+        \item \{r = f(1)\} i := 1 \{r = f(i)\} \moveToRight{assignment inference rule}
+        \item \{f(1) = 1\} r := 1; i := 1 \{r = f(i)\} \moveToRight{sequence inference rule: 3, 4}
+        \item \{updateRpre\} r := r + x \{updateRpost\} \moveToRight{assignment inference rule}
+        \item \{updateRpost\} x := r - x \{updateXpost\} \moveToRight{assignment inference rule}
+        \item \{updateXpost\} i := i + 1 \{invariant\} \moveToRight{assignment inference rule}
+        \item \{updateRpre\} r := r + x; x := r - x \{updateXpost\} \moveToRight{sequence inference rule:  6, 7}
+        \item \{updateRpre\} r := r + x; x := r - x; i := i + 1 \{invariant\} \moveToRight{sequence inference rule: 9, 8}
+        \item (invariant $\land$ i $<$ n) $\to$ (updateRpre) \moveToRight{proof obligation, definition of Fibonacci}
+        \item \{invariant $\land$ i $<$ n\} r := r + x; x := r - x; i := i + 1\{invariant\}\\ \moveToRight{consequence inference rule: 10, 11}
+        \item \{invariant $\land$ i $<$ n\} while ... od \{invariant $\land$ r = f(i) $\land$ i $\geq$ n\} \moveToRight{loop inference rule: 12}
+        \item \{0 = f(0) $\land$ 1 = f(1) $\land$ init\} Fib \{invariant $\land$ r = f(i) $\land$ i $\geq$ n\} \moveToRight{seq}
         \item (TRUE $\land$ n $\geq$ 1) $\to$ (init $\land$ 1 = f(1) $\land$ 0 = f(0)) \moveToRight{proof obligation}
-        \item \{TRUE $\land$ n $\geq$ 1\} FIB \{invariant $\land$ r = f(z) $\land$ z $\geq$n\}\moveToRight{consequence inference rule: 14, 15}
-        \item (invariant $\land$ r = f(z) $\land$ z $\geq$ n) $\to$ r = f(n) \moveToRight{proof obligation} 
+        \item \{TRUE $\land$ n $\geq$ 1\} FIB \{invariant $\land$ r = f(i) $\land$ i $\geq$ n\}\moveToRight{consequence inference rule: 14, 15}
+        \item (invariant $\land$ r = f(i) $\land$ i $\geq$ n) $\to$ r = f(n) \moveToRight{proof obligation} 
         \item \{TRUE $\land$ n $\geq$ 1\} Fib \{r = f(n)\} \moveToRight{consequence inference rule: 16, 17}
     \end{enumerate}
     
     \newpage 
     Proof obligations used in the Hoare logic derivation:\\\\
+    note our substitutions are the following:\\
+    \{init\} = \{n $\geq$ 1\}\\
+    \{invariant\} = \{(f(i) = r) $\land$ (f(i - 1) = x) $\land$ i $\leq$ n $\land$ (\{init\})\}\\
+    \{updateRpre\} = \{f(i + 1) = r + x $\land$ f(i) = r $\land$ i $\leq$ n $\land$ n $\geq$ 1\}\\\\
     \begin{list}
-        \item {Proof for Line 11} 
-            (invariant $\land$ z $<$ n) $\to$ (f(z + 1) = r + x $\land$     f(z) = x $\land$ z $\leq$ n $\land$ n $\geq$ 1)\\
-            note invariant = (r = f(z)) $\land$ (x = f(z - 1)) $\land$ (z $\leq$ n) $\land$ (init) and\\
-            init = (n $\geq$ 1)\\
+        \item {Proof for Line 11 - (invariant $\land$ i $<$ n) $\to$ (updateRpre)} 
+            (invariant $\land$ i $<$ n) $\to$ \{f(i + 1) = r + x $\land$ f(i) = r $\land$ i $\leq$ n $\land$ n $\geq$ 1\}\\
             So our proof becomes:\\
-            (r = f(z) $\land$ z $<$ n $\land$ x = f(z -1) $\land$ z $\leq$ n) $\land$ n $\geq$ 1) $\to$ (f(z + 1) = r + x $\land$ f(z) = x $\land$ z $\leq$ n $\land$ n $\geq$ 1)\\
-            with the overlap z $<$ n and z $\leq$ n we can simplify that to z $<$ n because z $<$ n $\to$ z $\leq$ n. allowing us only needing to prove:\\
-            (r = f(z) $\land$ x = f(z -1) $\land$ z $<$ n $\land$) $\land$ n $\geq$ 1) $\to$ (f(z + 1) = r + x $\land$ f(z) = x $\land$ z $\leq$ n $\land$ n $\geq$ 1)\\    
+            (r = f(i) $\land$ i $<$ n $\land$ x = f(i -1) $\land$ i $\leq$ n) $\land$ n $\geq$ 1) $\to$ (f(i + 1) = r + x $\land$ f(i) = x $\land$ i $\leq$ n $\land$ n $\geq$ 1)\\
+            with the overlap i $<$ n and i $\leq$ n we can simplify that to i $<$ n because i $<$ n $\to$ i $\leq$ n. allowing us only needing to prove:\\
+            (r = f(i) $\land$ x = f(i -1) $\land$ i $<$ n $\land$ n $\geq$ 1) $\to$ (f(i + 1) = r + x $\land$ f(i) = x $\land$ i $\leq$ n $\land$ n $\geq$ 1)\\    
             To prove this we essentially need a proof that in the Fibonacci sequence:\\
-            if r = f(z) and x = f(z - 1) then that means f(z + 1) = r + x for all Fibonacci numbers greater than or equal to 1.\\
-            Essentially we are proving f(z + 1) = f(z) + f(z - 1) however, since z $<$ n and f(0) is defined aswell as f(1) we can substitute z - 1 into the expression to achieve\\
-            f(z) = f(z- 1) + f(z - 2) which is our definition of the Fibonacci sequence.\\\\ Please note that f(z) = f(z - 1) + f(z - 2) is also the same as f(z + 2) = f(z + 1) + f(z) since we have f(0) and f(1) defined we never run into negative Fibonacci numbers and we can substitute z = z - 2 since z $\geq$ 1.
+            if r = f(i) and x = f(i - 1) then that means f(i + 1) = r + x for all Fibonacci numbers greater than or equal to 1.\\
+            Essentially we are proving f(i + 1) = f(i) + f(i - 1) however, since i $<$ n and f(0) is defined aswell as f(1) we can substitute i - 1 into the expression to achieve\\
+            f(i) = f(i - 1) + f(i - 2) which is our definition of the Fibonacci sequence.\\\\ Please note that f(i) = f(i - 1) + f(i - 2) is also the same as f(i + 2) = f(i + 1) + f(i) since we have f(0) and f(1) defined we never run into negative Fibonacci numbers and we can substitute i = i - 2 since i $\geq$ 1.
     \end{list}
     
     \begin{list}
-        \item {Proof for Line 15}
+        \item {Proof for Line 15 - (TRUE $\land$ n $\geq$ 1) $\to$ (init $\land$ 1 = f(1) $\land$ 0 = f(0))}
         (TRUE $\land$ n $\geq$ 1) $\to$ (init $\land$ 1 = f(1) $\land$ 0 = f(0))\\
-        note init = (n $\geq$ 1) \\
         So our proof becomes:\\
         show 1 = f(1) and 0 = f(0) is true. and as can be seen init and n $\geq$ 1 are equivalent. From our definition of the Fibonacci sequence, f(0) = 0 and f(1) = 1. So as can be seen this is true.
     \end{list}
     
     \begin{list}
-        \item {Proof for Line 17}
-        (invariant $\land$ r = f(z) $\land$ z $\geq$ n) $\to$ r = f(n)\\
-        note invariant = (r = f(z)) $\land$ (x = f(z - 1)) $\land$ (z $\leq$ n) $\land$ (init) and\\
-        init = (n $\geq$ 1)\\
+        \item {Proof for Line 17 - (invariant $\land$ r = f(i) $\land$ i $\geq$ n) $\to$ r = f(n)}
+        (invariant $\land$ r = f(i) $\land$ i $\geq$ n) $\to$ r = f(n)\\
         So our proof becomes:\\
-        show that z = n by the end of the loop to get f(n) by doing a substitution. we have z $\geq$ n and our invariant states that r = f(z) and x = f(z - 1) and z $\leq$ n. by combining the fact that z $\leq$ n and that z $\geq$ n in our first part of the implication, using a variation of squeezes theorem, if n $\geq$ z $\leq$ n. in a less formal way to put it, z is less than or equal to a number and greater than or equal to the same number, then z is that number. This gives us z = n, and r = f(n), allowing for post condition weakening. 
-    \end{list}    
-
+        show that i = n by the end of the loop to get f(n) by doing a substitution. we have i $\geq$ n and our invariant states that r = f(i) and x = f(i - 1) and i $\leq$ n. by combining the fact that i $\leq$ n and that i $\geq$ n in our first part of the implication, using a variation of squeezes theorem, if n $\geq$ i $\leq$ n. in a less formal way to put it, i is less than or equal to a number and greater than or equal to the same number, then i is that number. This gives us i = n, and r = f(n), allowing for post condition weakening. 
+    \end{list}
+    Therefore our proof is complete, since we have come with {T} \{TRUE $\land$ n $\geq$ 1\} Fib \{r = f(n)\}, then assuming our program Fib terminates we get the following deduction:\\ Since this was deduced with no presumptions that means everything deduces that if n $\geq$ 1 then if we run our Fib program and it terminates, then r = f(n).\\
+    \hspace*{150pt}$\vdash$ \{n $\geq$ 1\} Fib \{r = F(n)\}
+    \newpage
+    \item Annotate your code with the necessary assertions so that your proof can be reconstructed. \moveToRight{3 marks}\\\\
+    Solution:\\
+    for this solution:\\ \{init\} = \{n $\geq$ 1\}\\
+    \{invariant\} = \{(f(i) = r) $\land$ (f(i - 1) = x) $\land$ i $\leq$ n $\land$ (\{init\})\}\\
+    \{updateRpre\} = \{f(i + 1) = r + x $\land$ f(i) = r $\land$ i $\leq$ n $\land$ n $\geq$ 1\} note f(i) = (r + x) - x\\
+    \{updateRpost\} =  \{f(i + 1) = r $\land$ f(i) = r - x $\land$ i  $\leq$ n $\land$ n $\geq$ 1\}\\
+    \{updateXpost\} =  \{f(i + 1) = r $\land$ f(i) = x $\land$  i $\leq$ n $\land$ n $\geq$ 1\}\\\\  
+    Using our derivation from our Hoare logic above we can annotate the code in the following (without the comments from above):\\
+\begin{lstlisting}[language=Maple,mathescape=true]
+                    //{True n $\geq$ 1}
+x := 0;             //{f(0) = 0}
+r := 1;             //{f(1) = 1}
+i := 1;             //{r = f(i)}
+while y < n do      //{invariant}
+                    //{updateRpre}
+    r := r + x;     //{updateRpost}
+    x := r - x;     //{updateXpost} 
+    i := i + 1;     //{invariant}
+od                  //{r = f(i) $\land$ invariant $\land$ i $\geq$ n}
+                    //{r = f(n)}
+    \end{lstlisting}
+    \textbf{Bonus:} Adjust your proof to show that your code terminates. \moveToRight{3* marks}\\\\
+    Solution:\\
+    To show that the code terminates we can use a variant V which is a formula that computes to a value that begins as positive, and we need to show that this value keeps decreasing on each iteration of the loop. a suitable variant to achieve this would be\\ V =: (n - i). using this we can change the annotations on the code above to prove termination (note that since the annotated code is a direct application of the Hoare logic derivation, this can also be applied to the Hoare logic proof.)
+\begin{lstlisting}[language=Maple,mathescape=true]
+                    //{True n $\geq$ 1}
+x := 0;             //{f(0) = 0}
+r := 1;             //{f(1) = 1}
+i := 1;             //{r = f(i)}
+while i < n do      //{invariant $\land$ V = (n - i)}
+                    //{updateRpre $\land$ V = (n - i)}
+    r := r + x;     //{updateRpost $\land$ V = (n - i)}
+    x := r - x;     //{updateXpost $\land$ V = (n - i)} 
+    i := y + 1;     //{invariant $\land$ V < (n - i)}
+od                  //{r = f(i) $\land$ invariant $\land$ i $\geq$ n}
+                    //{r = f(n)}
+\end{lstlisting}
+However we have two proof obligations before this proof can be complete\\ 
+ \begin{list}
+        \item {show  (V := (n - i)) $>$ 0 before entering loop}
+        Given that n $\geq$ 1 from our initial conditions and that i $\leq$ n from our loop invariant then (n - i) $\geq$ 0 since n is larger than i, and n is also positive.  
+    \end{list}
+ \begin{list}
+        \item {show [V := n - i] i = i + 1 [(V :=  $<$ (n - i)]}
+        on the precondition we get [v := n - (i + 1)]. Expanding out we get [v := (n - i - 1)]. as can be seen (n - i - i)  $<$ (n - i)   
+    \end{list}
+Another way to phrase our variant, is that since v := n - i and our value i increments by one on each loop iteration, we reach a state where v = 0 after i iterations. This completes the proof showing in fact our program Fib will terminate if n $\geq$ 1.
 \end{enumerate}
 
-
+\newpage
 \section{appendix}
+To run this code used in Section 2 
+\begin{enumerate}[1. ]
+    \item copy and paste all the code into files an editor of choice using the same class names
+    \item make sure all files are in the same directory!
+    \item javac *.java
+    \item java Test
+\end{enumerate}
+
+Channel.java (name the file Channel.java)
+\begin{lstlisting}
+public class Channel{
+
+    public int id;
+
+    public Channel(int ID){
+        this.id = ID;
+    }
+
+    public int get_Id(){
+        return this.id;
+    }
+}
+\end{lstlisting}
+
+Network.java (name the file Network.java)
+\begin{lstlisting}
+import java.util.*;
+
+public class Network {
+
+    public String name;
+    public Channel connected;
+    public ArrayList<String> close_proximity_networks;
+
+    public Network(String name, Channel connected, ArrayList<String> close_proximity_networks) {
+        this.name = name;
+        this.connected = connected;
+        this.close_proximity_networks = close_proximity_networks;
+    }
+
+    public String get_name() {
+        return this.name;
+    }
+
+    public Channel get_channel() {
+        return this.connected;
+    }
+
+    public ArrayList<String> get_close_proximity_networks() {
+        return this.close_proximity_networks;
+    }
+}
+\end{lstlisting}
+Predicate.java (name the file Predicate.java)
+\begin{lstlisting}
+import java.util.*;
+
+public class Predicates{
+
+    public Network connected_to_all1 = null;
+    public Network connected_to_all2 = null;
+    public Network unique1 = null;
+    public Network unique2 = null;
+    public ArrayList<Network> all_networks;
+    public ArrayList<Channel> all_channels;
+    public Predicates(ArrayList<Network> networks, ArrayList<Channel> channels){
+        this.all_networks = networks;
+        this.all_channels = channels;
+    }
+
+    public boolean is_close_proximity(Network n1, Network n2){
+        //anti-reflexive property by not letting n1 = n2 be true
+        //i.e. if the two networks are the same return false!
+        if(n1 == n2){
+            return false;
+        }
+        //adding the symmetric relation by making n1 close proximity to n2
+        if(n2.get_close_proximity_networks().contains(n1.get_name())){
+            return true;
+        }
+        //if the network name is apart of the other networks close proximity network list then return true
+        if(n1.get_close_proximity_networks().contains(n2.get_name())){
+            return true;
+        }
+        //return false otherwise
+        return false;
+    }
+
+    public boolean valid_configuration(Network n1, Network n2){
+        //if the two networks are in close proximity then we check the channels are different to return true
+        if(is_close_proximity(n1, n2)){
+            //both networks use different channels
+            return n1.get_channel().get_Id() != n2.get_channel().get_Id();
+        }
+        //if the channels are not in close proximity then it is valid eitherway
+        return true;
+    }
+
+    //this allows use to now modify all_valid configuration to the following
+    //since we now have anti-reflexive inside our close proximity rather than in the predicate all_configurations_valid we can just simply call valid_configuration(n1,n2)
+    public boolean all_configurations_valid(){
+        //we want to check all possible configurations
+        for(Network n1 : all_networks){
+            for(Network n2 : all_networks){
+                //if ANY configuration is invalid we return false as the setup is invalid
+                if(!valid_configuration(n1, n2)){
+                    return false;
+                }
+            }
+        }
+        //return true if it does not exit the loop with return false
+        return correct_sizes() && two_connected_to_all() && two_unique_connected();
+    }
+
+    //our predicate to make sure we have the correct amount of networks and channels
+    public boolean correct_sizes(){
+        return (all_networks.size() == 4 && all_channels.size() == 3);
+    }
+
+    //our predicate to make sure we have only two networks which are in close proximity to all other networks
+    public boolean two_connected_to_all(){
+        //this flag will be used to be a check if the network is
+        //in close proximity to all other networks
+        //if a network is not in close proximity to any network we want to go to the next
+        //network as this one is not connected to ALL networks. we reset the flag at each iteration
+        //if the flag is false.
+        boolean flag = true;
+        //count how many networks are connected to ALL networks
+        int count = 0;
+        //scan through all combinations of the networks
+        for(Network n1 : all_networks){
+            for(Network n2 : all_networks){
+                //if n1 is not in close proximity to all other networks we want to set flag as false
+                //and go to the next network
+                if(!is_close_proximity(n1, n2) && n1 != n2){
+                    flag = false;
+                    break;
+                }
+            }
+            //if the flag is false that means we dont want to increase the counter or update
+            //our class vairables
+            if(flag == false){
+                flag = true;
+                continue;
+            }
+            //otherwise we want to set the class variables in order
+            if(connected_to_all2 == null && connected_to_all1 != null){
+                connected_to_all2 = n1;
+            }
+
+            if(connected_to_all1 == null){
+                connected_to_all1 = n1;
+            }
+            //and increment the count
+            count++;
+        }
+        //return the statement that the count must be exactly 2
+        //and that the two networks connected to all the other networks
+        //are not the same network
+        return (count == 2) && (connected_to_all1 != connected_to_all2);
+    }
+
+    //our predicate to make sure that the other two networks are also connected to the other networks
+    //that connect to everything and are not connected to any other node
+    public boolean two_unique_connected(){
+        //if we don't have two networks which are connected to all other networks
+        if(null == connected_to_all1 || null == connected_to_all2) {
+            return false;
+        }
+        //otherwise we want to isolate the other 2 networks and make sure they are
+        //1. connected to the connected_to_all networks AND
+        //2. those two networks are not connected to each other
+        //3. those two networks are not the same network
+        Network n1 = null;
+        Network n2 = null;
+        //find the two networks which are not the ones connected to the rest of the networks
+        for(Network n : all_networks){
+            if(n1 != null && (n != connected_to_all1 && n != connected_to_all2) && n2 == null){
+                n2 = n;
+            }
+            if((n != connected_to_all1 || n != connected_to_all2) && n1 == null){
+                n1 = n;
+            }
+        }
+        //if those two networks are NOT in close proximity with ONLY the two networks that are connected
+        //to the rest, we return false
+        if(n1.get_close_proximity_networks().size() != 2 && n2.get_close_proximity_networks().size() != 2){
+            return false;
+        }
+        //if those two networks are in close proximity to each other
+        //return false
+        if(is_close_proximity(n1, n2)){
+            return false;
+        }
+        //if the network is not in close proximity with the two networks
+        //connected to the all networks, return false
+        if(!n1.get_close_proximity_networks().contains(connected_to_all2.get_name()) &&
+                !n1.get_close_proximity_networks().contains(connected_to_all1.get_name())){
+            return false;
+        }
+        if(!n2.get_close_proximity_networks().contains(connected_to_all2.get_name()) &&
+                !n2.get_close_proximity_networks().contains(connected_to_all1.get_name())) {
+            return false;
+        }
+        //otherwise return true since it has passed all checks
+        unique1 = n1;
+        unique2 = n2;
+        return true;
+    }
+
+}
+\end{lstlisting}
+
+Test.java (name the file Test.java)
+\begin{lstlisting}
+import java.util.*;
+
+public class Test {
+    public static void main(String args[]) {
+        Channel low = new Channel(0);
+        Channel medium = new Channel(1);
+        Channel high = new Channel(2);
+
+        ArrayList<String> close_proximity_to_a = new ArrayList<String>();
+        close_proximity_to_a.add("B");
+        close_proximity_to_a.add("D");
+        Network A = new Network("A", medium, close_proximity_to_a);
+
+        ArrayList<String> close_proximity_to_b = new ArrayList<String>();
+        close_proximity_to_b.add("A");
+        close_proximity_to_b.add("C");
+        close_proximity_to_b.add("D");
+        Network B = new Network("B", high, close_proximity_to_b);
+
+        ArrayList<String> close_proximity_to_c = new ArrayList<String>();
+        close_proximity_to_c.add("B");
+        close_proximity_to_c.add("D");
+        Network C = new Network("C", medium, close_proximity_to_c);
+
+        ArrayList<String> close_proximity_to_d = new ArrayList<String>();
+        close_proximity_to_d.add("A");
+        close_proximity_to_d.add("B");
+        close_proximity_to_d.add("C");
+        Network D = new Network("D", low, close_proximity_to_d);
+
+        ArrayList<Channel> channels = new ArrayList<Channel>();
+        channels.add(low);
+        channels.add(medium);
+        channels.add(high);
+
+        ArrayList<Network> networks = new ArrayList<Network>();
+        networks.add(A);
+        networks.add(B);
+        networks.add(C);
+        networks.add(D);
+
+        Predicates check = new Predicates(networks, channels);
+        System.out.println("Correct size of configuration 4 networks 3 channels : " + check.correct_sizes());
+        System.out.println("Only two networks connected to all other networks: " + check.two_connected_to_all());
+        System.out.println("Two networks connected to the ones above but not to each other: " + check.two_unique_connected());
+        System.out.println("Final valid configuration (main requirements): " + check.all_configurations_valid());
+        System.out.println("A connected to : " + A.get_close_proximity_networks());
+        System.out.println("B connected to : " + B.get_close_proximity_networks());
+        System.out.println("C connected to : " + C.get_close_proximity_networks());
+        System.out.println("D connected to : " + D.get_close_proximity_networks());
+        System.out.println("The two channels which were connected to all other channels satisfying psi_6 are : "
+                + check.connected_to_all1.get_name() + " and "
+                + check.connected_to_all2.get_name());
+        System.out.println("The two channels which are unique satisfying psi_7 are : "
+                + check.unique1.get_name() + " and " + check.unique2.get_name());
+    }
+}
+
+\end{lstlisting}
+
 \end{document}
