@@ -761,7 +761,7 @@ od
         \item {Proof for Line 17 - (invariant $\land$ (r = f(i)) $\land$ (i $\geq$ n)) $\to$ r = f(n)}
         (invariant $\land$ (r = f(i)) $\land$ (i $\geq$ n)) $\to$ r = f(n)\\
         So our proof becomes:\\
-        Show that i = n by the end of the loop to get f(n) by substitution. We have i $\geq$ n and our invariant states that r = f(i) and x = f(i - 1) and i $\leq$ n. By combining the fact that i $\leq$ n and that i $\geq$ n in our first part of the implication this can be shown to be true. Using a variation of squeezes theorem, if n $\geq$ i $\leq$ n then i = n. in a less formal way to put it, i is less than or equal to a number and greater than or equal to the same number, then i is that number. This gives us i = n, and r = f(n), allowing for post condition weakening. 
+        Show that i = n by the end of the loop to get f(n) by substitution. We have i $\geq$ n and our invariant states that r = f(i) and x = f(i - 1) and i $\leq$ n. By combining the fact that i $\leq$ n and that i $\geq$ n in our first part of the implication this can be shown to be true. Using a variation of squeezes theorem, if n $\leq$ i $\leq$ n then i = n. in a less formal way to put it, i is less than or equal to a number and greater than or equal to the same number, then i is that number. This gives us i = n, and r = f(n), allowing for post condition weakening. 
     \end{list}
     Therefore our proof is complete, since we have derived\{TRUE $\land$ n $\geq$ 1\} Fib \{r = f(n)\}. Assuming our program Fib terminates we get the following deduction:\\ Since this was deduced with no presumptions that means everything deduces to the following\\
     \hspace*{150pt}$\vdash$ \{n $\geq$ 1\} Fib \{r = F(n)\}
@@ -869,7 +869,7 @@ public class Network {
     }
 }
 \end{lstlisting}
-Predicate.java (name the file Predicate.java)
+Predicates.java (name the file Predicates.java)
 \begin{lstlisting}
 import java.util.*;
 
