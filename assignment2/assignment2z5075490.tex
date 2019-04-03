@@ -161,6 +161,7 @@ Below is the image showing the proof for the derived rule DNE which states that 
 \end{flushleft}
 \newpage
 \section{Problem 2}
+\textbf{Please see the appendix for the full java code that can be copied and pasted and run to display the model. the code that was used inside this question is a bit too split up and cannot be easily copied and pasted however do give a good view of what i am trying to say.}\\\\
 Recall from Assignment 1 the problem of assigning channels to wifi networks to avoid interference. The
 task in this assignment is to set up a logical framework that can handle the same problem in a more
 general setting: i.e. with more than two channels and a wider variety of proximity topologies. As before we have some standard requirements:
@@ -169,7 +170,6 @@ general setting: i.e. with more than two channels and a wider variety of proximi
         \item Networks within close proximity cannot both use the same channel.
         \item “Close proximity” is an anti-reflexive, symmetric relation.
     \end{enumerate}
-Please see the appendix for the full java code that can be copied and pasted and run to display the model. the code that was used inside this question is a bit too split up and cannot be easily copied and pasted but do give a good view of what i am trying to say.
 \begin{enumerate}[(a)]
         \item Carefully define a specification language (that is, a vocabulary or set of propositional variables) necessary to formally specify the requirements laid out above. You may:
         \begin{itemize}
@@ -178,13 +178,13 @@ Please see the appendix for the full java code that can be copied and pasted and
         \end{itemize}
         \textbf{However}, you will be assessed on how extensible your definitions are – in other words, how easy it is to extend the specification language to cover more general settings (e.g. more channels and/or more networks). \moveToRight{4 marks}\\\\
         Solution: \\
-        For this problem i will be defining a specification language in the form of a vocabulary to satisfy the above requirements. To define a vocabulary we need to first define our domain of discourse and our set of: 
+        For this problem we will be defining a specification language in the form of a vocabulary to satisfy the above requirements. To define a vocabulary we need to first define our domain of discourse and our set of: 
         \begin{itemize}
             \item Predicate symbols 
             \item Function symbols
             \item Constant symbols
         \end{itemize}
-        our two objects inside our domain of discourse are channels and networks which can be viewed as the following:\\
+        Our two objects inside our domain of discourse are channels and networks which can be viewed as the following:\\
         Channel:
         \begin{itemize}
             \item Integer id (represents the channel state e.g, 0 = low, 1 = medium, 2 = high)  
@@ -197,53 +197,53 @@ Please see the appendix for the full java code that can be copied and pasted and
         \end{itemize}
         Using these definitions we can construct the following predicates for our vocabulary:
         
-        Network(name, channel,close\_proximity\_networks) which will be used to return true if the tuple values match the entry for the network i.e if the list of close proximity network and channel number match.\fixindent{}
+        Network(name, channel,close\_proximity\_networks) which will be used to return true if the tuple values match the entry for the network.\fixindent{}
         
         Channel(id) which will be our unary predicate that returns true if the channel with the corresponding id exists, otherwise false.\fixindent{}
         
-        is\_close\_proximity(network1, network2) which resolves to true if the two networks are close (the networks are in each others close proximity list) or false if otherwise.\fixindent{}
+        is\_close\_proximity(network1, network2) which resolves to true if the two networks are in close proximity (the networks are in each others close proximity list) or false if otherwise.\fixindent{}
         
-        valid\_channel\_configuration(network1, network2) which will resolves to true if the networks are on different channels (network 1's channel is different to network 2's channel).\\\fixindent{}
-        is\_connected(network) which will resolve to true if the network is connected (we can have the channel connected to be -1 before assignment to indicate it is yet to be assigned to a channel.
+        valid\_channel\_configuration(network1, network2) which will resolves to true if the networks have no interference (network 1's channel is different to network 2's channel).\\\fixindent{}
+        is\_connected(network, channel) which will resolve to true if the network is connected to that channel (we can have the channel connected to be -1 before assignment to indicate it is yet to be assigned to a channel.
         
         \fixindent{} Some other unary predicates to restrict our domain of discourse would include:\fixindent{}is\_integer(value) which will be used to make sure valid entries for channel ids.\\is\_String(value) which will be used to make sure valid entries for Network names.\fixindent{}
         
-        For this problem it is mostly relational and predicate based so there are no function symbols and constant symbols so these can be considered an empty set so our vocabulary V can be seen as:\\
+        For this problem it is mostly relational and predicate based so there are no function symbols and constant symbols and these can be considered an empty set. Our vocabulary V can be seen as:\\
         V = \{Network, Channel, is\_close\_proximity, valid\_channel\_configuration, is\_connected, is\_integer, is\_String\}\\\fixindent{}
-        With this vocabulary we are able to setup a solution to any configuration (if there is one) with n networks and m channels by making sure each network is connected, and making sure each network in close proximity are on different channels.    
+        With this vocabulary we are able to setup a solution to any configuration (if there is one) with n networks and m channels by making sure each network is connected, and making sure that each network in close proximity are on different channels.    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
         \item In your specification language, and subject to the assumptions you have made, define the requirements with logical formulas:
         
-        please note for this question i will use the variable X to represent all networks and x to represent individual networks. similarly i will be using the variable Y to represent all channels and y to represent individual networks. a quick explanation of the predicate will also be provided with a quick example aswell for all predicates!
+        Please note for this question i will use the variable X to represent all networks and x to represent individual networks. similarly i will be using the variable Y to represent all channels and y to represent individual channels. A quick explanation of the predicate formulas will also be provided in code and in propositional logic aswell.!
         \begin{enumerate}[(i)]
             \item A network uses one, and only one channel. \moveToRight{2 marks}\\\\
             Solution: \\
-            $\psi_1 = \forall x \in X (is\_connected(x))$ \moveToRight{all networks satisfy is\_connected}\\
-    
-            the following predicate is\_connected(x) can be seen in propositional logic as the following:\\ Assuming there are n channels and $A_x$ represents the proposition that network A is connected to channel x, then we can construct the proposition that a network uses one and only channel in the following:\\
+            $\psi_1 = \exists x_1 \in X, \exists y_1 \in Y (P(x_1,y_1) \land \forall y_2 \in Y (is\_connected(x_1, y_2)) \to y_2 = y_1)$\\\\
+            Essentially what we are saying is that a network is connected to a channel, and  if any other channel satisfies that connection, than the channels are equivalent.\\
+            The following predicate can be seen in propositional logic as the following:\\ Assuming there are n channels and $A_i$ represents the proposition that network A is connected to channel i, then we can construct the proposition that a network uses one and only channel in the following:\\
             $\sigma = A_1 \lor A_2 \lor A_3 \lor A_4 \lor ... \lor A_n$ (network is connected to any channel)\\ 
-            $\phi_1 = \neg(A_1 \land A_2) \land \neg(A_1 \land A_3) \land ... \land \neg(A_1 \land A_n)$ (no collision on channel 1 but this needs to be done for all combinations) 
+            $\phi_1 = \neg(A_1 \land A_2) \land \neg(A_1 \land A_3) \land ... \land \neg(A_1 \land A_n)$ (no multiple connections on channel 1 but this needs to be done for all channels) 
             $\phi = \phi_1 \land \phi_2 \land \phi_3 \land ... \land \phi_{n-1}$\\
-            so our proposition is\_connected is $\sigma \land \phi$\\\\
+            so our proposition is $\sigma \land \phi$\\\\
             Essentially $\phi$ says that for all possible combinations of connections with collisions we make sure that none of these are true, for example if there were three channels we would say 
             $\phi_1 = \neg(A_1 \land A_2) \land \neg(A_1 \land A_3)$\\
             $\phi_2 = \neg(A_2 \land A_3)$ \moveToRight{note $A_2 \land A_1$ is captured in $\phi_1$}\\
             $\phi = \phi_1 \land \phi_2$\\
             \hspace*{5pt} $= \neg(A_1 \land A_2) \land \neg(A_1 \land A_3) \land \neg(A_2 \land A_3)$\\
             $\sigma$ says that we are connected to any network, so we must be connected to one network, for example if there were three channels we would say\\
-            $\sigma = A_1 \lor A_2 \lor A_3$\\ Putting these together we have the predicate function for 3 channels (note this can be extended to m amount of channels\\ $is\_connected(channel) = (channel_1 \lor channel_2 \lor channel_3) \land \neg(channel_1 \land channel_2) \land \neg(channel_1 \land channel_3) \land \neg(channel_2 \land channel_3)$\\\\
+            $\sigma = A_1 \lor A_2 \lor A_3$\\ Putting these together we have the predicate function for 3 channels (note this can be extended to any amount of channels\\ $is\_connected(network, channel) = (channel_1 \lor channel_2 \lor channel_3) \land \neg(channel_1 \land channel_2) \land \neg(channel_1 \land channel_3) \land \neg(channel_2 \land channel_3)$\\\\
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             \item Networks within close proximity cannot both use the same channel. \moveToRight{2 marks}\\\\
             Solution: \\
             $\psi_2 = \forall x_1 \in X(\forall x_2 \in X(is\_close\_proximity(x1, x2) \to valid\_configuration(x1, x2)))$\\\\
-            We are saying that we will check every network with every other network and for all combinations (nested for loop style) and if two networks are in close proximity that means they are in a valid configuration. by using the same amount of channels as the question above and this time using channel A and channel B which are in close proximity we can set up the propositional formula that if two channels A and B are in close proximity they are on different channels in the following:\\
+            We are saying that we will check each network with every other network and for all combinations (nested for loop style) if two networks are in close proximity that implies they are in a valid configuration (using different channels). By using the same amount of channels as the question above and this time using channel A and channel B in close proximity we can set up the propositional formula, that if the channels A and B are in close proximity they are on different channels in the following way:\\
             $\phi_1 = is\_close\_proximity(A, B)$\\
             let $\phi_2$ be the propositional statement that close proximity networks don't use the same channel. For n amount of networks this can be represented as:\\
             $\phi_2 = \neg(A_1 \land B_1) \land \neg(A_2 \land B_2) \land \neg(A_3 \land B_3) \land ... \land \neg(A_n \land b_n)$\\
             so our requirement $\psi_2$ becomes the following:\\
             $\psi_2 = \phi_1 \to \phi_2$ or in expanded form\\
             $\psi_2 = (is\_close\_proximity(A,B)) \to (\neg(A_1 \land B_1) \land \neg(A_2 \land B_2) \land \neg(A_3 \land B_3) \land ... \land \neg(A_n \land b_n))$\\
-            Note is\_close\_proximity(A, B) is simply a predicate which will check if the two networks are close. This predicate formula can also be displayed in code in the following way (Java see next page).\\
+            Note is\_close\_proximity(A, B) is simply a predicate which will check if the two networks are close. This predicate formula can also be displayed in code in the following way.\\
             
             \newpage
             Class for channel
@@ -293,7 +293,7 @@ public class Network{
             \end{lstlisting}
             
             \newpage
-            general solution for this problem and my predicates in code!
+            General solution for this problem and the predicates in code!
             \begin{lstlisting}
 import java.util.*;
 
@@ -345,12 +345,12 @@ public class Predicates{
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             \item “Close proximity” is an anti-reflexive, symmetric relation. \moveToRight{2 marks}\\\\
             Solution: \\
-            $\psi_3 = \forall x1 \in X(\forall x2 \in X(\neg is\_close\_proximity(x1,x1))$\\
+            $\psi_3 = \forall x1 \in X(\neg is\_close\_proximity(x1,x1))$\\
             $\psi_4 = \forall x1 \in X(\forall x2 \in X(is\_close\_proximity(x1,x2) \to is\_close\_proximity(x2,x1))$\\\\
             $\psi_3$ is the logical formula which states for all networks inside our network domain, they cannot be in close proximity with themselves which is an anti-reflexive relation.\\\\
             $\psi_4$ is the logical formula which states for all networks if network A is in close proximity to network B, then that also implies network B is in close proximity with network A which a symmetric relation.\\\\
-            "Close proximity" must be an anti-reflexive and symmetric relation in order for valid configurations. This is because if a Network can be in close proximity with itself that means the valid\_configuration would return false since it will show up as both networks using the same channel even though its the same network. "close proximity" must also be a symmetric relation, since if A is in close proximity with B, that means B must be in close proximity with A. The above formulas slightly modify the code we have written above the following\\
-            re-defining the code to allow close\_proximity to be an anti-reflexive and symmetric. Please also anti-reflexive was implemented in the above code in the all\_valid\_
+            "Close proximity" must be an anti-reflexive and symmetric relation in order for valid configurations. This is because if a Network can be in close proximity with itself that means the valid\_configuration would return false since it will show up as both networks using the same channel even though its the same network. "Close proximity" must also be a symmetric relation, since if A is in close proximity with B, that means B must be in close proximity with A. The above formulas slightly modify the code we have written above the following\\
+            re-defining the code to allow close\_proximity to be an anti-reflexive and symmetric. 
             \begin{lstlisting}
 public boolean is_close_proximity(Network n1, Network n2){
     //anti-reflexive property by not letting n1 = n2 be true
@@ -374,6 +374,9 @@ public boolean is_close_proximity(Network n1, Network n2){
             
             
             
+            
+            
+            
 //this allows use to now modify all_valid configuration to the following
 //since we now have anti-reflexive inside our close proximity rather than in the predicate all_configurations_valid we can just simply call valid_configuration(n1,n2)
 public boolean all_configurations_valid(){
@@ -390,9 +393,7 @@ public boolean all_configurations_valid(){
         return true;
 }
             \end{lstlisting}
-            
-        \end{enumerate}
-        Note that since we have "close proximity" as a symmetric relation, that means if network A is inside of network B's close proximity list, that also means that network B is also inside of network A's close proximity list, this can be shown in code with the following to truly show the symmetric property.
+             Note that since we have "close proximity" as a symmetric relation, that means if network A is inside of network B's close proximity list, that also means that network B is also inside of network A's close proximity list, this can be shown in code with the following.
         
         \begin{lstlisting}
 //suppose this is the method for making two networks within close proximity
@@ -404,6 +405,8 @@ public void make_close_proximity(Network A, Network B){
     B.get_close_proximity_networks().add(A.get_name());
 }
         \end{lstlisting}.
+        \end{enumerate}
+       
         \newpage
         \begin{flushleft}
             Consider the following set-up: we have exactly three channels: hi, med, lo; and (at least) four networks Alpha, Bravo, Charlie, Delta with close proximity as defined in the following diagram:
@@ -414,7 +417,7 @@ public void make_close_proximity(Network A, Network B){
         
         \item  Extending your specification language if necessary, provide a set of requirements which, together with your answer to (b), ensures any satisfying model has the structure detailed here. \moveToRight{10 marks}\\\\
         Solution: \\
-        Since in part (b) we gave requirements for a more general solution which will solve for any configuration (if there is a solution) we simply have to just add requirements so that all models have the structure shown in Figure 3. The following extra requirements can be added to achieve this:
+        Since in part (b) we gave requirements for a more general solution which will solve for any configuration (if there is a solution) we simply just have to add requirements so that all models have the structure shown in Figure 3. The following extra requirements can be added to achieve this:
         \begin{enumerate}[(1)]
             \item we have 4 networks and 3 channels
             \item two UNIQUE networks are in "close proximity" to every other network
@@ -425,15 +428,15 @@ public void make_close_proximity(Network A, Network B){
                 \begin{enumerate}[(1)]
             \item $\psi_5 = (|X| = 4) \land (|Y| = 3)$\\
             This essentially says that the size of our network set is 4 and the size of our channel set is 3
-            \item $\psi_6 = (x1,n1 \exists X(\forall x2 \in X (is\_close\_proximity(x1, x2) \land (is\_close\_proximity(n1,x2)))  \land \\\neg(x1 = x2)$\\
+            \item $\psi_6 = (x1,x2 \exists X(\forall n1 \in X (is\_close\_proximity(x1, n1) \land (is\_close\_proximity(x2,n1)))  \land \\\neg(x1 = x2)$\\
             This essentially says that there exists two networks x1 and x2 in the set of networks which is in close proximity to ALL other networks and those two networks are not the same network. 
-            \item $\psi_7 = (x1,n1 \exists X(\forall x2 \in X (is\_close\_proximity(x1, x2) \land (is\_close\_proximity(n1,x2)))  \land \\\neg(x1 = x2) (u1, u2 \exists X(is\_close\_proximity(u1, x1) \land is\_close\_proximity(u1, n1) \land \\ is\_close\_proximity(u2, x1) \land is\_close\_proximity(u2, n1) \land \\\neg is\_close\_proximity(u1, u2) \land \neg(u1 = u2)$\\
-            This seems like a much more complicated predicate formula, however this is because we needed to write out $\psi_6$ to reference the networks x1 and n1, essentially it states that two networks are in close proximity to all other networks and that there are two distinct networks u1 and u2 that are in close proximity to those networks and not in close proximity to each other and they are not the same network.
+            \item $\psi_7 = (x1,x2 \exists X(\forall n1 \in X (is\_close\_proximity(x1, n1) \land (is\_close\_proximity(x2,n1)))  \land \\\neg(x1 = x2) \land \\  (u1, u2 \exists X(is\_close\_proximity(u1, x1) \land is\_close\_proximity(u1, x2) \land \\ is\_close\_proximity(u2, x1) \land is\_close\_proximity(u2, x2) \land \\\neg is\_close\_proximity(u1, u2) \land \neg(u1 = u2) \land \neg (u1 = x1) \land \\\neg(u1 = x2) \land \neg (u2 = x1) \land \neg (u2 = x2))$\\
+            This seems like a much more complicated predicate formula, however this is because we needed to write out $\psi_6$ to reference the networks x1 and x2, essentially it states that two networks, x1 and x2, are in close proximity to all other networks and that there are two distinct networks u1 and u2 that are in close proximity to those networks and not in close proximity to each other and they are not the same network.
         \end{enumerate}
-        \\We will name our predicates $\psi_5$ $\psi_6$ $\psi_7$ as correct\_sizes, two\_connected\_to\_all and two\_unique\_connected respectively
+        \\We will name our following predicates $\psi_5$ $\psi_6$ $\psi_7$ as correct\_sizes, two\_connected\_to\_all and two\_unique\_connected respectively
         These new requirements can also be added to the previous predicates $\psi_{1-4}$ to give us our final requirement $\psi$ as:\\
         $\psi = \psi_1 \land \psi_2 \land \psi_3 \land \psi_4 \land \psi_5 \land \psi_6 \land \psi_7$\\
-        This can also be shown in the code above in part (b) along with the following additions below to introduce our new requirements note all this code is being added to the Predicates class in the code.
+        This can also be shown in the code above in part (b) along with the following additions below to introduce our new requirements.
         \begin{lstlisting}
 //we will also be adding new class variables
 public Network connected_to_all1 = null;
@@ -560,7 +563,7 @@ public boolean all_configurations_valid(){
             \item D = channel low
         \end{enumerate}
         \newpage
-        When this is run with the following test code giving the same configuration, we receive the following output
+        When this is run with the following test code given the same configuration, we receive the following output
         \begin{lstlisting}
 import java.util.*;
 
@@ -623,14 +626,13 @@ public class test {
 }
 
         \end{lstlisting}
-        when the above code is run we get the following output
+        When the above code is run we get the following output
         \begin{centering}\hspace*{1pt}\\\includegraphics[width=400px, height = 200px]{output3.png}\captionof{figure}{code output with the configuration above with same structure in Figure 3}\end{centering}
-        
-        Note this code produces the correct output and can be copied and pasted from above, and tested with different values, i did not use the predicate make\_close\_proximity in my testing as i already made close proximity with the symmetric nature by adding both networks in close proximity to each other's close proximity list.
+        Note this code produces the correct output and can be copied and pasted from the appendix, and tested with different models. I did not use the predicate make\_close\_proximity in my testing as i already implemented close proximity with the symmetric nature of adding both networks to each other's close proximity list.
         \newpage
         \item How would you use a SAT-solver (for First Order Logic) such as Z3 or IDP to show that in any model satisfying your requirements, Alpha and Charlie use the same channel? \moveToRight{5 marks}\\\\
         Solution:\\
-        Similair to the lecture example for solving a simpler version of the zebra puzzle, i would load each of my variables in, so each channel will be loaded in as integers, and i would set these channels to set values, so high = 2, medium = 1 and low = 0. Then i would load in my Networks as integers which range from 0-2 (indicating their channels). Then i would assert the conditions that for my defined close proximity networks that they cannot have equal values. So in the defined model above, we have the following:\\
+        Similar to the lecture example for solving a simpler version of the zebra puzzle, we would load each of our variables in so that each channel will be loaded in as an integer, and we would set these channels to constant values. So high = 2, medium = 1 and low = 0. Then we would load in our Networks as integers which range from 0-2 (indicating their channels). Next we would assert the conditions that our defined close proximity networks cannot have equal values. So in the defined model above, we have the following:\\
         \begin{itemize}
             \item Alpha != Bravo
             \item Alpha != Delta
@@ -651,12 +653,12 @@ public class test {
             \item Delta is in close proximity to Alpha, Bravo and Charlie
         \end{itemize}
         which follows our structure in Figure 3 as we are also using 3 channels low, medium and high. 
-        after we would try to get all models by adding more conditions and exhausting all possibilities to verify that all satisfying models have Alpha and Charlie on the same Network.\\\\ to get all models i would first run it with those conditions in place, then after i check satisfiability and get the model, we will now make it so alpha cannot be channel 0 and repeat till we have exhausted all possible channels giving all possible models. \\\\ This will also what i will be using for the bonus to implement the solution using Z3.
+        Next we would try to get all models by adding more conditions and exhausting all possibilities to verify that all satisfying models have Alpha and Charlie on the same Network.\\\\ to get all models we would first run it with those conditions in place, then after we check satisfiability and get the model, we will now make it so alpha cannot be channel 0 and repeat till we have exhausted all possible channels giving all possible models. \\\\ This will also what we will be using for the bonus to implement the solution using Z3.
         \newpage
         \textbf{Bonus:} Implement your solution to the previous question in a SAT-solver to show that in any model satisfying the requirements, Alpha and Charlie use the same channel. Either include a link to your solution or provide the code so it can be easily copy-pasted and run. \moveToRight{10* marks}\\\\
         Solution:\\
         \lstinputlisting[language=z3,firstnumber=1]{z3.txt}
-        As can be seen in the following output from the SAT solver Z3, all models that solve the configuration in Figure 3 have alpha and charlie using the same channel as alpha and charlie have the same value, and bravo and delta use different channels to alpha and charlie and each other.
+        As can be seen in the following output from the SAT solver Z3, all models that solve the configuration in Figure 3 have alpha and charlie using the same channel, because alpha and charlie have the same value, and bravo and delta use different channels to alpha and charlie and each other.
 \end{enumerate}
 
 \newpage
@@ -670,7 +672,7 @@ Recall the Fibonacci sequence defined as:
     \begin{enumerate}[(a)]
         \item Write a program FIB in $\mathcal{L}$ that computes the n-th Fibonacci number (for n $\geq$ 1). That is, if n $\geq$ 1 at the start of execution, then variable r has value F(n) at the end of execution (if Fib terminates). \moveToRight{12 marks}\\\\
         Solution:\\
-        we will use the variable r to store our fib(i) and i will be equal to n assuming the program terminates. We will use the variable x to keep the value of f(i - 1). Note counting starts from 0 since we are also considering fib(0) = 0, the 0th Fibonacci number is 0, the first Fibonacci number is 1, the second Fibonacci number is 1, the third Fibonacci number is 2 and so on.
+        We will use the variable r to store our fib(i) and i will eventually be equal to n assuming the program terminates. We will use the variable x to keep the value of f(i - 1). Note counting starts from 0 since we are also considering fib(0) = 0, the 0th Fibonacci number is 0, the first Fibonacci number is 1, the second Fibonacci number is 1, the third Fibonacci number is 2 and so on.
     \begin{lstlisting}[language=Maple,mathescape=true]
 //variable that holds the previous value of f(i) -> (f(i - 1)) this is f(0)
 x := 0;
@@ -698,16 +700,16 @@ while i < n do
     i := i + 1;
 od
     \end{lstlisting}
-    Note fib(n) = fib(n - 1) + fib(n - 2) is also equivalent to \\fib(n + 2) = fib(n + 1) + fib(n). this is because fib(1) and fib(0) is already defined for us so we don't end up with negative fib numbers, we exit the loop with our invariant being r = f(i) and i $\leq$ n and our exit condition is when i $\geq$ n, that means i = n, giving us r = f(n)\\
+    Note that fib(n) = fib(n - 1) + fib(n - 2) is also equivalent to fib(n + 2) = fib(n + 1) + fib(n). This is because fib(1) and fib(0) is already defined for us so we don't end up with negative fib numbers and undefined behaviour. We exit the loop with our invariant being r = f(i) and i $\leq$ n. Our exit condition is when i $\geq$ n, that means i = n, giving us r = f(n)\\
     
     \item Prove, using Hoare Logic, that $\vdash$ \{n $\geq$ 1\} Fib \{r = F(n)\} \moveToRight{10 marks}\\\\
-    Soltuion:\\
-    for this solution:\\ \{init\} = \{n $\geq$ 1\}\\
-    \{invariant\} = \{(f(i) = r) $\land$ (f(i - 1) = x) $\land$ i $\leq$ n $\land$ (\{init\})\}\\
-    \{updateRpre\} = \{f(i + 1) = r + x $\land$ f(i) = r $\land$ i $\leq$ n $\land$ n $\geq$ 1\} note f(i) = (r + x) - x\\
-    \{updateRpost\} =  \{f(i + 1) = r $\land$ f(i) = r - x $\land$ y  $\leq$ n $\land$ n $\geq$ 1\}\\
-    \{updateXpost\} =  \{f(i + 1) = r $\land$ f(i) = x $\land$  i $\leq$ n $\land$ n $\geq$ 1\}\\    
-    Below this proof i will also prove my proof obligations. The invariant is very similair to the one given in the lecture for the power program example. The overall proof is a mix between the lecture example for factorial and power function.\\
+    Solution:\\
+    For this solution conditions have been compacted in the following:\\ \{init\} = \{n $\geq$ 1\}\\
+    \{invariant\} = \{(f(i) = r) $\land$ (f(i - 1) = x) $\land$ (i $\leq$ n) $\land$ (\{init\})\}\\
+    \{updateRpre\} = \{(f(i + 1) = r + x) $\land$ (f(i) = r) $\land$ (i $\leq$ n) $\land$ (n $\geq$ 1)\} note f(i) = (r + x) - x\\
+    \{updateRpost\} =  \{(f(i + 1) = r) $\land$ (f(i) = r - x) $\land$ (i  $\leq$ n) $\land$ (n $\geq$ 1)\}\\
+    \{updateXpost\} =  \{(f(i + 1) = r) $\land$ (f(i) = x) $\land$  (i $\leq$ n) $\land$ (n $\geq$ 1)\}\\    
+    Below this proof we will also prove our proof obligations. The invariant is very similair to the one given in the lecture for the power program example. The overall proof is a mix between the lecture example for factorial and power function.\\
     \begin{enumerate}[1. ]
         \item \{init\} \moveToRight{premise}
         \item \{f(0) = 0\} x := 0 \{x = f(0)\} \moveToRight{assignment inference rule}
@@ -719,59 +721,58 @@ od
         \item \{updateXpost\} i := i + 1 \{invariant\} \moveToRight{assignment inference rule}
         \item \{updateRpre\} r := r + x; x := r - x \{updateXpost\} \moveToRight{sequence inference rule:  6, 7}
         \item \{updateRpre\} r := r + x; x := r - x; i := i + 1 \{invariant\} \moveToRight{sequence inference rule: 9, 8}
-        \item (invariant $\land$ i $<$ n) $\to$ (updateRpre) \moveToRight{proof obligation, definition of Fibonacci}
-        \item \{invariant $\land$ i $<$ n\} r := r + x; x := r - x; i := i + 1\{invariant\}\\ \moveToRight{consequence inference rule: 10, 11}
-        \item \{invariant $\land$ i $<$ n\} while ... od \{invariant $\land$ r = f(i) $\land$ i $\geq$ n\} \moveToRight{loop inference rule: 12}
-        \item \{0 = f(0) $\land$ 1 = f(1) $\land$ init\} Fib \{invariant $\land$ r = f(i) $\land$ i $\geq$ n\} \moveToRight{seq}
-        \item (TRUE $\land$ n $\geq$ 1) $\to$ (init $\land$ 1 = f(1) $\land$ 0 = f(0)) \moveToRight{proof obligation}
-        \item \{TRUE $\land$ n $\geq$ 1\} FIB \{invariant $\land$ r = f(i) $\land$ i $\geq$ n\}\moveToRight{consequence inference rule: 14, 15}
-        \item (invariant $\land$ r = f(i) $\land$ i $\geq$ n) $\to$ r = f(n) \moveToRight{proof obligation} 
-        \item \{TRUE $\land$ n $\geq$ 1\} Fib \{r = f(n)\} \moveToRight{consequence inference rule: 16, 17}
+        \item (invariant $\land$ (i $<$ n)) $\to$ (updateRpre) \moveToRight{proof obligation, definition of Fibonacci}
+        \item \{invariant $\land$ (i $<$ n)\} r := r + x; x := r - x; i := i + 1\{invariant\}\\ \moveToRight{consequence inference rule: 10, 11}
+        \item \{invariant $\land$ (i $<$ n)\} while ... od \{invariant $\land$ (r = f(i)) $\land$ (i $\geq$ n)\} \moveToRight{loop inference rule: 12}
+        \item \{(0 = f(0)) $\land$ (1 = f(1)) $\land$ (init)\} Fib \{invariant $\land$ (r = f(i)) $\land$ (i $\geq$ n)\} \moveToRight{seq}
+        \item (TRUE $\land$ (n $\geq$ 1)) $\to$ (init $\land$ 1 = f(1) $\land$ 0 = f(0)) \moveToRight{proof obligation}
+        \item \{TRUE $\land$ (n $\geq$ 1)\} FIB \{invariant $\land$ (r = f(i)) $\land$ (i $\geq$ n)\}\moveToRight{consequence inference rule: 14, 15}
+        \item (invariant $\land$ (r = f(i)) $\land$ (i $\geq$ n)) $\to$ r = f(n) \moveToRight{proof obligation} 
+        \item \{TRUE $\land$ (n $\geq$ 1)\} Fib \{r = f(n)\} \moveToRight{consequence inference rule: 16, 17}
     \end{enumerate}
     
     \newpage 
     Proof obligations used in the Hoare logic derivation:\\\\
-    note our substitutions are the following:\\
+    Note our substitutions are the following:\\
     \{init\} = \{n $\geq$ 1\}\\
-    \{invariant\} = \{(f(i) = r) $\land$ (f(i - 1) = x) $\land$ i $\leq$ n $\land$ (\{init\})\}\\
-    \{updateRpre\} = \{f(i + 1) = r + x $\land$ f(i) = r $\land$ i $\leq$ n $\land$ n $\geq$ 1\}\\\\
+    \{invariant\} = \{(f(i) = r) $\land$ (f(i - 1) = x) $\land$ (i $\leq$ n) $\land$ (\{init\})\}\\
+    \{updateRpre\} = \{(f(i + 1) = r + x) $\land$ (f(i) = r) $\land$ (i $\leq$ n) $\land$ (n $\geq$ 1)\}\\\\
     \begin{list}
-        \item {Proof for Line 11 - (invariant $\land$ i $<$ n) $\to$ (updateRpre)} 
-            (invariant $\land$ i $<$ n) $\to$ \{f(i + 1) = r + x $\land$ f(i) = r $\land$ i $\leq$ n $\land$ n $\geq$ 1\}\\
+        \item {Proof for Line 11 - (invariant $\land$ (i $<$ n)) $\to$ (updateRpre)} 
+            (invariant $\land$ (i $<$ n)) $\to$ ((f(i + 1) = r + x) $\land$ (f(i) = r) $\land$ (i $\leq$ n) $\land$ (n $\geq$ 1))\\
             So our proof becomes:\\
-            (r = f(i) $\land$ i $<$ n $\land$ x = f(i -1) $\land$ i $\leq$ n) $\land$ n $\geq$ 1) $\to$ (f(i + 1) = r + x $\land$ f(i) = x $\land$ i $\leq$ n $\land$ n $\geq$ 1)\\
-            with the overlap i $<$ n and i $\leq$ n we can simplify that to i $<$ n because i $<$ n $\to$ i $\leq$ n. allowing us only needing to prove:\\
-            (r = f(i) $\land$ x = f(i -1) $\land$ i $<$ n $\land$ n $\geq$ 1) $\to$ (f(i + 1) = r + x $\land$ f(i) = x $\land$ i $\leq$ n $\land$ n $\geq$ 1)\\    
+            (f(i) = r) $\land$ (f(i - 1) = x) $\land$ (i $\leq$ n) $\land$ (n $\geq$ 1)) $\to$ ((f(i + 1) = r + x) $\land$ (f(i) = r) $\land$ (i $\leq$ n) $\land$ (n $\geq$ 1))\\
+            with the overlap i $<$ n and i $\leq$ n we can simplify that to i $<$ n because (i $<$ n) $\to$ (i $\leq$ n). allowing us only needing to prove:\\
+            ((r = f(i)) $\land$ (x = f(i -1)) $\land$ (i $<$ n) $\land$ (n $\geq$ 1)) $\to$ ((f(i + 1) = r + x) $\land$ (f(i) = x) $\land$ (i $\leq$ n) $\land$ (n $\geq$ 1))\\    
             To prove this we essentially need a proof that in the Fibonacci sequence:\\
-            if r = f(i) and x = f(i - 1) then that means f(i + 1) = r + x for all Fibonacci numbers greater than or equal to 1.\\
+            If f(i) = r and f(i - 1) = x then that means f(i + 1) = r + x for all Fibonacci numbers greater than or equal to 1.\\
             Essentially we are proving f(i + 1) = f(i) + f(i - 1) however, since i $<$ n and f(0) is defined aswell as f(1) we can substitute i - 1 into the expression to achieve\\
-            f(i) = f(i - 1) + f(i - 2) which is our definition of the Fibonacci sequence.\\\\ Please note that f(i) = f(i - 1) + f(i - 2) is also the same as f(i + 2) = f(i + 1) + f(i) since we have f(0) and f(1) defined we never run into negative Fibonacci numbers and we can substitute i = i - 2 since i $\geq$ 1.
+            f(i) = f(i - 1) + f(i - 2) which is our definition of the Fibonacci sequence.
     \end{list}
     
     \begin{list}
-        \item {Proof for Line 15 - (TRUE $\land$ n $\geq$ 1) $\to$ (init $\land$ 1 = f(1) $\land$ 0 = f(0))}
-        (TRUE $\land$ n $\geq$ 1) $\to$ (init $\land$ 1 = f(1) $\land$ 0 = f(0))\\
+        \item {Proof for Line 15 - (TRUE $\land$ (n $\geq$ 1)) $\to$ (init $\land$ (1 = f(1)) $\land$ (0 = f(0)))}
+        (TRUE $\land$ (n $\geq$ 1)) $\to$ (init $\land$ (1 = f(1)) $\land$ (0 = f(0)))\\
         So our proof becomes:\\
-        show 1 = f(1) and 0 = f(0) is true. and as can be seen init and n $\geq$ 1 are equivalent. From our definition of the Fibonacci sequence, f(0) = 0 and f(1) = 1. So as can be seen this is true.
+        show 1 = f(1) and 0 = f(0) is true. As can be seen init and n $\geq$ 1 are equivalent. From our definition of the Fibonacci sequence, f(0) = 0 and f(1) = 1. So this is true.
     \end{list}
     
     \begin{list}
-        \item {Proof for Line 17 - (invariant $\land$ r = f(i) $\land$ i $\geq$ n) $\to$ r = f(n)}
-        (invariant $\land$ r = f(i) $\land$ i $\geq$ n) $\to$ r = f(n)\\
+        \item {Proof for Line 17 - (invariant $\land$ (r = f(i)) $\land$ (i $\geq$ n)) $\to$ r = f(n)}
+        (invariant $\land$ (r = f(i)) $\land$ (i $\geq$ n)) $\to$ r = f(n)\\
         So our proof becomes:\\
-        show that i = n by the end of the loop to get f(n) by doing a substitution. we have i $\geq$ n and our invariant states that r = f(i) and x = f(i - 1) and i $\leq$ n. by combining the fact that i $\leq$ n and that i $\geq$ n in our first part of the implication, using a variation of squeezes theorem, if n $\geq$ i $\leq$ n. in a less formal way to put it, i is less than or equal to a number and greater than or equal to the same number, then i is that number. This gives us i = n, and r = f(n), allowing for post condition weakening. 
+        Show that i = n by the end of the loop to get f(n) by substitution. We have i $\geq$ n and our invariant states that r = f(i) and x = f(i - 1) and i $\leq$ n. By combining the fact that i $\leq$ n and that i $\geq$ n in our first part of the implication this can be shown to be true. Using a variation of squeezes theorem, if n $\geq$ i $\leq$ n then i = n. in a less formal way to put it, i is less than or equal to a number and greater than or equal to the same number, then i is that number. This gives us i = n, and r = f(n), allowing for post condition weakening. 
     \end{list}
-    Therefore our proof is complete, since we have come with {T} \{TRUE $\land$ n $\geq$ 1\} Fib \{r = f(n)\}, then assuming our program Fib terminates we get the following deduction:\\ Since this was deduced with no presumptions that means everything deduces that if n $\geq$ 1 then if we run our Fib program and it terminates, then r = f(n).\\
+    Therefore our proof is complete, since we have derived\{TRUE $\land$ n $\geq$ 1\} Fib \{r = f(n)\}. Assuming our program Fib terminates we get the following deduction:\\ Since this was deduced with no presumptions that means everything deduces to the following\\
     \hspace*{150pt}$\vdash$ \{n $\geq$ 1\} Fib \{r = F(n)\}
     \newpage
     \item Annotate your code with the necessary assertions so that your proof can be reconstructed. \moveToRight{3 marks}\\\\
-    Solution:\\
-    for this solution:\\ \{init\} = \{n $\geq$ 1\}\\
-    \{invariant\} = \{(f(i) = r) $\land$ (f(i - 1) = x) $\land$ i $\leq$ n $\land$ (\{init\})\}\\
-    \{updateRpre\} = \{f(i + 1) = r + x $\land$ f(i) = r $\land$ i $\leq$ n $\land$ n $\geq$ 1\} note f(i) = (r + x) - x\\
-    \{updateRpost\} =  \{f(i + 1) = r $\land$ f(i) = r - x $\land$ i  $\leq$ n $\land$ n $\geq$ 1\}\\
-    \{updateXpost\} =  \{f(i + 1) = r $\land$ f(i) = x $\land$  i $\leq$ n $\land$ n $\geq$ 1\}\\\\  
-    Using our derivation from our Hoare logic above we can annotate the code in the following (without the comments from above):\\
+   For this solution conditions have been compacted in the following:\\ \{init\} = \{n $\geq$ 1\}\\
+    \{invariant\} = \{(f(i) = r) $\land$ (f(i - 1) = x) $\land$ (i $\leq$ n) $\land$ (\{init\})\}\\
+    \{updateRpre\} = \{(f(i + 1) = r + x) $\land$ (f(i) = r) $\land$ (i $\leq$ n) $\land$ (n $\geq$ 1)\} note f(i) = (r + x) - x\\
+    \{updateRpost\} =  \{(f(i + 1) = r) $\land$ (f(i) = r - x) $\land$ (i  $\leq$ n) $\land$ (n $\geq$ 1)\}\\
+    \{updateXpost\} =  \{(f(i + 1) = r) $\land$ (f(i) = x) $\land$  (i $\leq$ n) $\land$ (n $\geq$ 1)\}\\\\  
+    Using our derivation from our Hoare logic above we can annotate the code in the following (without the comments from (a)):\\
 \begin{lstlisting}[language=Maple,mathescape=true]
                     //{True n $\geq$ 1}
 x := 0;             //{f(0) = 0}
@@ -787,7 +788,7 @@ od                  //{r = f(i) $\land$ invariant $\land$ i $\geq$ n}
     \end{lstlisting}
     \textbf{Bonus:} Adjust your proof to show that your code terminates. \moveToRight{3* marks}\\\\
     Solution:\\
-    To show that the code terminates we can use a variant V which is a formula that computes to a value that begins as positive, and we need to show that this value keeps decreasing on each iteration of the loop. a suitable variant to achieve this would be\\ V =: (n - i). using this we can change the annotations on the code above to prove termination (note that since the annotated code is a direct application of the Hoare logic derivation, this can also be applied to the Hoare logic proof.)
+    To show that the code terminates we can use a variant V which is a formula that computes to a value that begins as positive, and we need to show that this value keeps decreasing on each iteration of the loop. a suitable variant to achieve this would be V := (n - i). By using this we can change the annotations on the code above to prove termination (note that since the annotated code is a direct application of the Hoare logic derivation, this can also be applied to the Hoare logic proof).
 \begin{lstlisting}[language=Maple,mathescape=true]
                     //{True n $\geq$ 1}
 x := 0;             //{f(0) = 0}
@@ -801,24 +802,24 @@ while i < n do      //{invariant $\land$ V = (n - i)}
 od                  //{r = f(i) $\land$ invariant $\land$ i $\geq$ n}
                     //{r = f(n)}
 \end{lstlisting}
-However we have two proof obligations before this proof can be complete\\ 
+However we have two proof obligations before this proof can be complete\\\\
  \begin{list}
         \item {show  (V := (n - i)) $>$ 0 before entering loop}
         Given that n $\geq$ 1 from our initial conditions and that i $\leq$ n from our loop invariant then (n - i) $\geq$ 0 since n is larger than i, and n is also positive.  
     \end{list}
  \begin{list}
         \item {show [V := n - i] i = i + 1 [(V :=  $<$ (n - i)]}
-        on the precondition we get [v := n - (i + 1)]. Expanding out we get [v := (n - i - 1)]. as can be seen (n - i - i)  $<$ (n - i)   
+        on the precondition we get [v := n - (i + 1)]. Expanding out we get [v := (n - i - 1)]. as can be seen (n - i - 1)  $<$ (n - i)   
     \end{list}
-Another way to phrase our variant, is that since v := n - i and our value i increments by one on each loop iteration, we reach a state where v = 0 after i iterations. This completes the proof showing in fact our program Fib will terminate if n $\geq$ 1.
+Another way to phrase our variant, is that since v := n - i and our value i increments by one on each loop iteration, i $<$ n and n does not change, we reach a state where v = 0 after i iterations. This completes the proof showing in fact our program Fib will terminate if n $\geq$ 1.
 \end{enumerate}
 
 \newpage
 \section{appendix}
 To run this code used in Section 2 
 \begin{enumerate}[1. ]
-    \item copy and paste all the code into files an editor of choice using the same class names
-    \item make sure all files are in the same directory!
+    \item Copy and paste all the code into files an editor of choice using the same class names
+    \item Make sure all files are in the same directory!
     \item javac *.java
     \item java Test
 \end{enumerate}
