@@ -1,0 +1,124 @@
+;declaring our channels as integers
+(declare-const low Int)
+(declare-const medium Int)
+(declare-const high Int)
+
+;set low = 0, medium = 1, high = 2
+(assert (= low 0))
+(assert (= medium 1))
+(assert (= high 2))
+
+;now we want to declare our networks as integers
+;showing which channel they are connected to by their integer value
+(declare-const alpha Int)
+(declare-const bravo Int)
+(declare-const charlie Int)
+(declare-const delta Int)
+
+;assert the range of values, so all networks are connected from 0-2
+;which is our range of channels 0, 1 and 2
+(assert (and (< -1 alpha)(< alpha 3)))
+(assert (and (< -1 bravo)(< bravo 3)))
+(assert (and (< -1 charlie)(< charlie 3)))
+(assert (and (< -1 delta)(< delta 3)))
+
+
+;now we want to add our close proximity AND the rule that close proximity
+;networks cannot use the same channel. note close proximity is anti-reflexive and symmetric!
+
+;alpha is in close proximity to bravo and delta
+(assert (not(= alpha bravo)))
+(assert (not(= alpha delta)))
+
+;bravo is in close proximity to alpha, charlie and delta
+(assert (not(= bravo alpha)))
+(assert (not(= bravo charlie)))
+(assert (not(= bravo delta)))
+
+;charlie is in close proximity to bravo and delta
+(assert (not(= charlie bravo)))
+(assert (not(= charlie delta)))
+
+;delta is in close proximity to alpha, bravo and charlie
+(assert (not(= delta alpha)))
+(assert (not(= delta bravo)))
+(assert (not(= delta charlie)))
+
+;now we want to get any model satisfying this
+(check-sat)
+(get-model)
+
+;to get all models we need to add restrictions by exhausting all possible channels alpha
+;can be connected to. since alpha MUST be connected to a network, if we keep removing options
+;e.g. if we say alpha can't connect to 0, then it cant connect to 1 then it cant connect to 2, then we have 
+;exhausted all options and gotten every model that satisfies this configuration
+
+;restrict alpha so it cannot be on channel 1 and get the model
+(assert (not(= alpha 1)))
+(check-sat)
+(get-model)
+
+;restrict alpha so it cannot be on channel 0 and get the model
+(assert (not(= alpha 0)))
+(check-sat)
+(get-model)
+
+;restrict alpha so it cannot be on channel 2 and get the model
+
+(assert (not(= alpha 2)))
+(check-sat)
+(get-model)
+;at this point we have gotten all output possible so the output is the following
+;sat
+;(model 
+;  (define-fun bravo () Int
+;    0)
+;  (define-fun charlie () Int
+;    1)
+;  (define-fun alpha () Int
+;    1)
+;  (define-fun delta () Int
+;    2)
+;  (define-fun high () Int
+;    2)
+;  (define-fun medium () Int
+;    1)
+;  (define-fun low () Int
+;    0)
+;)
+;sat
+;(model 
+;  (define-fun bravo () Int
+;    1)
+;  (define-fun delta () Int
+;    2)
+;  (define-fun medium () Int
+;    1)
+;  (define-fun high () Int
+;    2)
+;  (define-fun charlie () Int
+;    0)
+;  (define-fun alpha () Int
+;    0)
+;  (define-fun low () Int
+;    0)
+;)
+;sat
+;(model 
+;  (define-fun bravo () Int
+;    1)
+;  (define-fun delta () Int
+;    0)
+;  (define-fun medium () Int
+;    1)
+;  (define-fun high () Int
+;    2)
+;  (define-fun charlie () Int
+;    2)
+;  (define-fun alpha () Int
+;    2)
+;  (define-fun low () Int
+;    0)
+;)
+;unsat
+;Z3(47, 10): ERROR: model is not available
