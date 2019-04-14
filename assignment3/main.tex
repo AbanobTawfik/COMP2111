@@ -1,0 +1,161 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs} % for "\midrule" macro
+\usepackage{lipsum} % for filler text
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{lplfitch}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{bbm}
+%note this LaTeX package was not written by me and taken from stackexchange forums to be used to write java code formatted
+%link to original page https://stackoverflow.com/questions/3175105/inserting-code-in-this-latex-document-with-indentation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%note this LaTeX package was not written by me and taken from stackexchange forums to be used to write z3 code formatted
+%link to original page https://github.com/mewmew/latex/blob/master/z3/lang.sty
+\lstdefinelanguage{z3}{
+	sensitive=true,
+	alsoletter={\-},
+	% comments.
+	%    ; line comment
+	comment=[l]{;},
+	% Z3 keywords.
+	keywords=[1]{
+apply, assert, assert-soft, check-sat, check-sat-using, compute-interpolant,
+declare-const, declare-datatypes, declare-fun, declare-map, declare-rel,
+declare-sort, declare-tactic, define-sort, display, echo, eval, exit,
+fixedpoint-pop, fixedpoint-push, get-assertions, get-assignment, get-info, get-
+interpolant, get-model, get-option, get-proof, get-unsat-core, get-user-tactics,
+get-value, help, help-tactic, labels, maximize, minimize, pop, push, query,
+reset, rule, set-info, set-logic, set-option, simplify
+	},
+	% Z3 built-ins
+	morekeywords=[2]{
+check-sat-using, declare-var, declare-rel, rule, query, set-predicate-
+representation, maximize, minimize, assert-soft, assert-weighted, compute-
+interpolant
+	},
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand*\moveToRight[1]{\hspace*{0em plus 1fill}\makebox{(#1)}}
+\newcommand*\fixindent{ \hspace{1pt}\\}
+%this command below is not my work was used for quality of life
+%link to original post 
+%https://tex.stackexchange.com/questions/330588/how-to-produce-given-number-of-quad-in-math
+\newcommand{\myquad}[1][1]{\hspace*{#1em}\ignorespaces}
+\title{Assignment Two}
+\author{Abanob Tawfik\\z5075490}
+\date{March 2019}
+
+\begin{document}
+\maketitle
+\section{Problem 1}
+The skip command is an $\mathcal{L}$  program that has the effect of “do nothing”. That is, skip; P has the same behaviour as P;skip and the same behaviour as P.
+\begin{enumerate}[(a)]
+    \item Define skip using the default $\mathcal{L}$ commands – that is, write an $\mathcal{L}$ program for skip. \moveToRight{3 marks}
+    
+    \item Based on your definition and the rules of denotational semantics discussed in lectures, determine the semantic object $[\![$skip$]\!]$. \moveToRight{4 marks}
+    
+    \item Suppose skip was a default command in L. Propose a suitable rule for Hoare Logic that handles skip. \moveToRight{3 marks}
+\end{enumerate}
+
+\newpage
+\section{Problem 2}
+Recall the diagonally-moving robot example from the lectures: from position (x, y) the robot can move to\\
+any of: (x + 1, y + 1), (x + 1, y - 1), (x - 1, y + 1), (x - 1, y - 1).
+\begin{enumerate}[(a)]
+    \item Write a program in $\mathcal{L}^{+}$ that, on termination, will confirm that a location (m, n) is reachable by the robot starting at (0, 0). That is, the program Reach should be such that the Hoare triple
+    \begin{center}\{(x = 0) $\land$ (y = 0)\} REACH \{(x = m) $\land$ (y = n)\}\end{center}
+    is valid if and only if (m, n) is reachable from (0, 0). Note: your program does not have to terminate.\moveToRight{14 marks}
+    
+    \item Prove that your program is correct (i.e. show the validity of the above Hoare triple). Annotating your code with appropriate assertions, as long as the proof is recoverable, is sufficient. \moveToRight{6 marks}
+\end{enumerate}
+
+\newpage
+\section{Problem 3}
+Suppose you have ten coins arranged in a line. A move consists of taking any three adjacent coins and turning them over (changing heads to tails and vice-versa). For example, if the coins were arranged as:
+\begin{center}\textit{HHTTHTHTHT}\end{center}
+one move could be to flip the second, third and fourth coins to get the arrangement:
+\begin{center}\textit{HTHHHTHTHT}\end{center}
+\begin{enumerate}[(a)]
+    \item Model this situation as a transition system, carefully defining your states and the transition relation. \moveToRight{4 marks}
+    
+    \item By considering the coins in positions 1,2,4,5,7,8, and 10 (i.e. positions not divisible by 3) find a preserved invariant of this system. \moveToRight{4 marks}
+    
+    \item Show that the arrangement \textit{TTTTTTTTTT} is not reachable from the arrangement \\\texit{HHHHHHHHHH}. \moveToRight{2 marks}
+
+\end{enumerate}
+
+\newpage
+\section{Problem 4}
+Let $\Sigma$ = \{0,1\}$^3$, so each element of $\Sigma$ is a triple of symbols that are either 0 or 1.\\ Let $f, s, t : \Sigma^* \to \{0, 1\}^*$ be the functions that take a word from $\Sigma^*$ and return the word of \{0,1\}$^*$ that is defined by considering only the symbols in the first, second or third (respectively) component. So if w = 
+$\bigl(\begin{smallmatrix}
+    0\\
+    0\\
+    0\\
+\end{smallmatrix}\bigr)
+\bigl(\begin{smallmatrix}
+    1\\
+    1\\
+    0\\
+\end{smallmatrix}\bigr)
+\bigl(\begin{smallmatrix}
+    1\\
+    0\\
+    1\\
+\end{smallmatrix}\bigr)
+\bigl(\begin{smallmatrix}
+    0\\
+    1\\
+    0\\
+\end{smallmatrix}\bigr)$, then $f(w)$ = 0110, $s(w)$ = 0101 and $t(w)$ = 0010. Finally let \\$bin$ : \{0,1\}$^*$ $\to$ $\mathbbm{N}$ be the function that treats a word of \{0,1\}$^*$ as the binary representation of a non-negative integer, with the last symbol being the least-significant.\\ So $bin$(110) = $bin$(00110) = 6 and $bin$($\lambda$) = 0.\\
+Design a DFA that accepters the following language:
+\begin{center}
+\{w $\in$ $\Sigma^*$ : $bin$($t$(w)) = $bin$($f$(w)) + $bin$($s$(w))\}.\\ \moveToRight{10 marks}\\    
+\end{center}
+
+\newpage
+\section{Problem 5}
+Let $\L \subseteq \Sigma^*$ be a language over $\Sigma$. Recall the definition of $\equiv_L \subseteq \Sigma^* \times \Sigma^*:$
+\begin{center}
+    $w \equiv_L v$  iff  $\forall z \in \Sigma^* : wz \in \L \Leftrightarrow vz \in \L$
+\end{center}
+\begin{enumerate}[(a)]
+    \item Show that $\equiv_L$ is an equivalence relation. \moveToRight{6 marks}
+    \item if $\L$ is regular, show that for any word w, [w] (the equivalence class of w under ≡L) is also regular. \moveToRight{4 marks}\\
+    Solution:\\
+    pppp
+    
+\end{enumerate}
+\end{document}
