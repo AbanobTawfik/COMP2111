@@ -385,15 +385,30 @@ The way we will be representing the input will be through a three digit integer 
     1\\
     0\\
 \end{smallmatrix}\bigr)$.\\
+\textbf{PLEASE NOTE I COULD NOT FIT ALL POSSIBLE STATES SO ANY INPUT WHICH DOES NOT FOLLOW A TRANSITION WILL BE ASSUMED TO BE TAKEN TO A ERROR STATE (a non-final state) LOOPING TO ITSELF ON WHATEVER INPUT IT GETS.}\\
 The DFA is on the next page, below this will be a quick explanation of the DFA.\\
 when we begin processing input we can have 3 possible transitions. we can move to final state from 101 since 1 + 0 = 1 with no carry over, we can move to final state from 011 since 0 + 1 = 1 with no carry over, and we can move to a state which checks if the carry over was from a previous result. Since input is taken left to right and binary is read from right to left, we have to proccess the carry over first. if we have 001 (indicating 0 + 0 = 1) we will check if our next input has 110 (1 + 1 = 0 carry 1). from all these final states we can then add links to each other and loop 000 on all except the carry over state. we can also add loops to states that have 101 and 011 since they will always be true and have no carry over.
 Some example runthroughs with simple accepted and non-accepted words.
 \begin{enumerate}[1.]
-    \item word =
+    \item accepted word =
     $\bigl(\begin{smallmatrix}0\\0\\1\\ \end{smallmatrix}\bigr)$
     $\bigl(\begin{smallmatrix}1\\1\\0\\ \end{smallmatrix}\bigr)$
     $\bigl(\begin{smallmatrix}0\\0\\0\\ \end{smallmatrix}\bigr)$
     $\bigl(\begin{smallmatrix}1\\0\\1\\ \end{smallmatrix}\bigr)$.\\
+    from our DFA we begin at q0 and transition to q1 from 001, next we transition to q2 from 110. we stay at q2 from self loop from 000, and transition to final state q4 from 101. since we finish at a final state this sequence of input is accepted and to further prove it is:\\
+    $bin$($t$(w)) = 1001 = 9, 
+    $bin$($f$(w)) = 0101 = 5 and
+    $bin$($s$(w)) = 0100 = 4.\\
+    as can be seen $bin$($t$(w)) = $bin$($f$(w)) + $bin$($s$(w)) since 9 = 5+ 4.\\
+    \item rejected word =     $\bigl(\begin{smallmatrix}0\\0\\1\\ \end{smallmatrix}\bigr)$
+    $\bigl(\begin{smallmatrix}1\\1\\1\\ \end{smallmatrix}\bigr)$
+    $\bigl(\begin{smallmatrix}0\\0\\0\\ \end{smallmatrix}\bigr)$
+    $\bigl(\begin{smallmatrix}1\\0\\1\\ \end{smallmatrix}\bigr)$.\\
+    from our DFA we begin at q0 and transition to q1 from 001, next we transition to our error state where all inputs loop to the same state which is not a final state. since we finish at the error state this input is rejected. To further prove this is: \\
+    $bin$($t$(w)) = 1101 = 13, 
+    $bin$($f$(w)) = 0101 = 5 and
+    $bin$($s$(w)) = 0100 = 4.
+    as can be seen this is not true and rejected since 13 != 5 + 4 and our property does not hold.\\
 \end{enumerate}
 
 \begin{tikzpicture}[shorten >=1pt,node distance=7cm,on grid,auto] 
@@ -422,16 +437,6 @@ Some example runthroughs with simple accepted and non-accepted words.
           edge [loop right] node {101} (q_4);
     
 \end{tikzpicture}
-
-
-
-
-
-
-
-
-
-
 
 \newpage
 \section{Problem 5}
