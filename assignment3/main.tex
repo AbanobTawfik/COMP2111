@@ -13,6 +13,8 @@
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{bbm}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
 %note this LaTeX package was not written by me and taken from stackexchange forums to be used to write java code formatted
 %link to original page https://stackoverflow.com/questions/3175105/inserting-code-in-this-latex-document-with-indentation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -152,7 +154,7 @@ od;
     \item Prove that your program is correct (i.e. show the validity of the above Hoare triple). Annotating your code with appropriate assertions, as long as the proof is recoverable, is sufficient. \moveToRight{6 marks}\\\\
     Solution:\\
     To perform this proof we will first acquire our Hoare logic derivation, and use this annotation to annotate the programs. For this solution conditions have been compacted in the following:\\
-    \{invariant\} = \{(x + y) \% 2 = 0\}\\
+    \{invariant\} = \{(x + y) $\mod$ 2 = 0\}\\
     NE = (x := x + 1; y := y + 1;)\\
     SE = (x := x + 1; y := y - 1;)\\
     NW = (x := x - 1; y := y + 1;)\\
@@ -162,26 +164,26 @@ od;
         \item \{0 = 0\} x := 0 \{x = 0\} \moveToRight{assignment inference rule}
         \item \{0 = 0\} y := 0 \{y = 0\} \moveToRight{assignment inference rule}
         \item \{0 = 0\} x := 0; y := 0 \{x = 0 $\land$ y = 0\} \moveToRight{sequence inference rule: 1,2}
-        \item \{invariant\} x := x + 1; \{$\neg$((x + y) \% 2 = 0)\} \moveToRight{proof obligation}
-        \item \{$\neg$((x + y) \% 2 = 0)\} y := y + 1; \{invariant\}
+        \item \{invariant\} x := x + 1; \{$\neg$((x + y) $\mod$ 2 = 0)\} \moveToRight{proof obligation}
+        \item \{$\neg$((x + y) $\mod$ 2 = 0)\} y := y + 1; \{invariant\}
         \moveToRight{proof obligation}
         \item \{invariant\} x := x + 1; y := y + 1; \{invariant\}
         \moveToRight{sequence inference rule: 4, 5}
         \item \{invariant\} NE \{invariant\} \moveToRight{substitution}
-        \item \{invariant\} x := x + 1; \{$\neg$((x + y) \% 2 = 0)\} \moveToRight{proof obligation}
-        \item \{$\neg$((x + y) \% 2 = 0)\} y := y - 1; \{invariant\}
+        \item \{invariant\} x := x + 1; \{$\neg$((x + y) $\mod$ 2 = 0)\} \moveToRight{proof obligation}
+        \item \{$\neg$((x + y) $\mod$ 2 = 0)\} y := y - 1; \{invariant\}
         \moveToRight{proof obligation}
         \item \{invariant\} x := x + 1; y := y - 1; \{invariant\}
         \moveToRight{sequence inference rule: 8, 9}
         \item \{invariant\} SE \{invariant\} \moveToRight{substitution}
-        \item \{invariant\} x := x - 1; \{$\neg$((x + y) \% 2 = 0)\} \moveToRight{proof obligation}
-        \item \{$\neg$((x + y) \% 2 = 0)\} y := y + 1; \{invariant\}
+        \item \{invariant\} x := x - 1; \{$\neg$((x + y) $\mod$ 2 = 0)\} \moveToRight{proof obligation}
+        \item \{$\neg$((x + y) $\mod$ 2 = 0)\} y := y + 1; \{invariant\}
         \moveToRight{proof obligation}
         \item \{invariant\} x := x - 1; y := y + 1; \{invariant\}
         \moveToRight{sequence inference rule: 12, 13}
         \item \{invariant\} NW \{invariant\} \moveToRight{substitution}
-        \item \{invariant\} x := x - 1; \{$\neg$((x + y) \% 2 = 0)\} \moveToRight{proof obligation}
-        \item \{$\neg$((x + y) \% 2 = 0)\} y := y - 1; \{invariant\}
+        \item \{invariant\} x := x - 1; \{$\neg$((x + y) $\mod$ 2 = 0)\} \moveToRight{proof obligation}
+        \item \{$\neg$((x + y) $\mod$ 2 = 0)\} y := y - 1; \{invariant\}
         \moveToRight{proof obligation}
         \item \{invariant\} x := x - 1; y := y - 1; \{invariant\}
         \moveToRight{sequence inference rule: 16, 17}
@@ -196,9 +198,9 @@ od;
         \item \{x = 0 $\land$ y = 0\} REACH \{x = m $\land$ y = n\} \moveToRight{consequence inference rule: 25, 26}        
     \end{enumerate}
     Proof obligations used in the Hoare logic derivation:
-    In the Hoare logic we assume our invariant holds before the loop begins, since x + y = 0 + 0 = 0 which is also even! 0 \% 2 = 0.
+    In the Hoare logic we assume our invariant holds before the loop begins, since x + y = 0 + 0 = 0 which is also even! 0 $\mod$ 2 = 0.
     Note our substitutions are the following:\\
-    \{invariant\} = \{(x + y) \% 2 = 0\}\\
+    \{invariant\} = \{(x + y) $\mod$ 2 = 0\}\\
     NE = (x := x + 1; y := y + 1;)\\
     SE = (x := x + 1; y := y - 1;)\\
     NW = (x := x - 1; y := y + 1;)\\
@@ -207,16 +209,16 @@ od;
     
     \begin{list}
         \item {Proof for Line 4 and line 5}
-        Line 4 - \{invariant\} x := x + 1; \{$\neg$((x + y) \% 2 = 0)\}\\
+        Line 4 - \{invariant\} x := x + 1; \{$\neg$((x + y) $\mod$ 2 = 0)\}\\
         And\\
-        Line 5 - \{$\neg$((x + y) \% 2 = 0)\} y := y + 1; \{invariant\}\\
+        Line 5 - \{$\neg$((x + y) $\mod$ 2 = 0)\} y := y + 1; \{invariant\}\\
         An informal way for the proof obligation:\\
        On line 4 before execution we have x + y is even, then when we add 1 to x, and x + y is no longer even. This is because adding 1 to an even number will make it odd. after we add 1 to y on line 5, we get x + y is even again because when we add 1 to an odd number we get an even number. More formally this can be shown as:\\\\
-        Line 4 - \{invariant\} x := x + 1; \{$\neg$((x + y) \% 2 = 0)\}\\
-        initially we have our invariant (x + y) \% 2 = 0.
-        Then we add 1 to x, so if we add 1 on both sides we get (x + y) \% 2 = 1 (note x = x + 1 after x := x + 1 execution). Since (x + y) \% 2 = 1, this also implies $\neg$((x + y) \% 2 = 0).\\\\
-        Line 5 - \{$\neg$((x + y) \% 2 = 0)\} y := y + 1; \{invariant\}\\
-        initially we have $\neg$((x + y) \% 2 = 0) which also as shown above is equivalent to (x + y) \% 2 = 1, since any number mod 2 can only be 0 or 1. after execution of y := y + 1, if we add 1 to both sides we get (x + y) \% 2 = 0 which is also our invariant.
+        Line 4 - \{invariant\} x := x + 1; \{$\neg$((x + y) $\mod$ 2 = 0)\}\\
+        initially we have our invariant (x + y) $\mod$ 2 = 0.
+        Then we add 1 to x, so if we add 1 on both sides we get (x + y) $\mod$ 2 = 1 (note x = x + 1 after x := x + 1 execution). Since (x + y) $\mod$ 2 = 1, this also implies $\neg$((x + y) $\mod$ 2 = 0).\\\\
+        Line 5 - \{$\neg$((x + y) $\mod$ 2 = 0)\} y := y + 1; \{invariant\}\\
+        initially we have $\neg$((x + y) $\mod$ 2 = 0) which also as shown above is equivalent to (x + y) $\mod$ 2 = 1, since any number mod 2 can only be 0 or 1. after execution of y := y + 1, if we add 1 to both sides we get (x + y) $\mod$ 2 = 0 which is also our invariant.
     \end{list}
     The proof method above is used for the following proof obligations:
     \begin{itemize}
@@ -232,13 +234,13 @@ od;
         \item (x - 1, y + 1) NW change = 1 - 1 = 0 (even)
         \item (x - 1, y - 1) SW change = -1 - 1 = -2 (even)
     \end{itemize}
-    Also note the definition of an even is (even number) \% 2 = 0.
+    Also note the definition of an even is (even number) $\mod$ 2 = 0.
     
      \begin{list}
         \item {proof for line 26}
         Line 26 - (invariant $\land$ $\neg$guard)$\to$(x = m $\land$ y = n)\\
         using our substitution we can get\\
-        (((x + y) \% 2 = 0) $\land \neg$($\neg$(x = m $\land$ y = n))) $\to$ (x = m $\land$ y = n).\\ We can use and elimination to simplify down to\\
+        (((x + y) $\mod$ 2 = 0) $\land \neg$($\neg$(x = m $\land$ y = n))) $\to$ (x = m $\land$ y = n).\\ We can use and elimination to simplify down to\\
         ($\neg$($\neg$(x = m $\land$ y = n)) $\to$ (x = m $\land$ y = n)\\
         This is simply just a proof of double negation elimination which is done by natural \\deduction.\\
         \fitchprf{\pline[1.]{$\neg\neg \psi$}}{
@@ -255,7 +257,7 @@ The proof will be performed in the next page so it is not split between pages.
 \newpage
 ALSO NOTE i will be expanding out my substitutions NE, SE, NW, SW for this proof, and the following will be substituted for the proof:\\
     guard = $\neg$((x = m) $\land$ (y = n))\\
-    invariant = (x + y) \% 2 = 0.\\
+    invariant = (x + y) $\mod$ 2 = 0.\\
     \begin{lstlisting}[language=Maple,mathescape=true]
                                         //{0 = 0}
 x := 0;                                 //{x = 0}
@@ -331,11 +333,24 @@ one move could be to flip the second, third and fourth coins to get the arrangem
     
     
     
-    \item By considering the coins in positions 1,2,4,5,7,8, and 10 (i.e. positions not divisible by 3) find a preserved invariant of this system. \moveToRight{4 marks}
-    A preserved invariant of this system would be that the coins in position 1, 2, 4, 5, 7, 8, 10 (positions not divisible by 3) reserve the parity for head and tails. for example is position 1, 2, 4, 5, 7, 8 and 10 have an even number of heads and an odd number of tails 
-    
-    \item Show that the arrangement \textit{TTTTTTTTTT} is not reachable from the arrangement \\\texit{HHHHHHHHHH}. \moveToRight{2 marks}
-    
+    \item By considering the coins in positions 1,2,4,5,7,8, and 10 (i.e. positions not divisible by 3) find a preserved invariant of this system. \moveToRight{4 marks}\\\\
+    Solution:\\
+    A preserved invariant of this system would be that the coins in position 1, 2, 4, 5, 7, 8, 10 (positions not divisible by 3) preserve the parity for head and tails regardless of state change. For example is position 1, 2, 4, 5, 7, 8 and 10 have an even number of heads and an odd number of tails, then regardless of state change this will always remain true. Also note that heads and tails cannot have the same parity for these positions since there are 7 positions. 
+    A formal way to put this is:\\
+    let parity\_of\_heads be the variable that has the parity of the number of heads at the initial state in position 1, 2, 4, 5, 7, 8, 10.\\\\
+    let parity\_of\_tails be the variable that has the parity of the number of tails at the initial state in position 1, 2, 4, 5, 7, 8, 10.\\
+    let $\psi_1$ be the proposition that parity\_of\_heads remains the same on each transition.\\
+    let $\psi_2$ be the proposition that parity\_of\_tails remains the same on each transition. \\
+    Our invariant is $\psi$ = $\psi_1$ $\land$ $\psi_2$.
+    This is because on each move, we will always modify 2 of the coins in the position 1, 2, 4, 5, 7, 8 and 10. This can be seen in each transition in part (a). Since we always modify 2 of the coins we can check each combination of HH, TT, HT/TH to verify that this property will always remain true.\\
+    If we have HH, if we swap to TT, the parity will stay the same as a subtraction of 2 for T and addition of 2 to H will have no effect on parity because 2 $\mod$ 2 = 0. 
+    If we have TT, if we swap to HH, the parity will stay the same as a subtration of 2 will have no effect on parity, similair to the reason above
+    If we have HT/TH, if we swap the parity to TH/HT this will also have no effect on the parity as our net change will be 0, we are simply swapping Heads to tails and tails to head so our number of heads and tails in those position stay the same and our parity remains the same.\\
+    Therefore our invariant is true, and was proven using proof of cases.
+        
+    \item Show that the arrangement \textit{TTTTTTTTTT} is not reachable from the arrangement \\\texit{HHHHHHHHHH}. \moveToRight{2 marks}\\\\
+    Solution:\\
+    The arrangement \textit{TTTTTTTTTT} is not reachable from \texit{HHHHHHHHHH}. This is because in our initial arrangement \texit{HHHHHHHHHH}, The number of heads in position 1, 2, 4, 5, 7, 8, 10 is 7, 7$\mod$2 = 1 so the parity of our heads is odd. The number of tails in those positions is also 0 which is even. Due to our invariant $\psi$ which states that the parity of heads and parity of tails in those positions remain the same on each move, we can never reach the state \textit{TTTTTTTTTT}, because in that state, the number of tails in those position is 7 which is odd, however our number of tails in those position MUST BE EVEN due to our invariant $\psi$.
 \end{enumerate}
 
 \newpage
@@ -361,10 +376,62 @@ $\bigl(\begin{smallmatrix}
     1\\
     0\\
 \end{smallmatrix}\bigr)$, then $f(w)$ = 0110, $s(w)$ = 0101 and $t(w)$ = 0010. Finally let \\$bin$ : \{0,1\}$^*$ $\to$ $\mathbbm{N}$ be the function that treats a word of \{0,1\}$^*$ as the binary representation of a non-negative integer, with the last symbol being the least-significant.\\ So $bin$(110) = $bin$(00110) = 6 and $bin$($\lambda$) = 0.\\
-Design a DFA that accepters the following language:
+Design a DFA that acceptes the following language:
 \begin{center}
 \{w $\in$ $\Sigma^*$ : $bin$($t$(w)) = $bin$($f$(w)) + $bin$($s$(w))\}.\\ \moveToRight{10 marks}\\    
-\end{center}
+\end{center}\\Solution:\\
+The way we will be representing the input will be through a three digit integer (eg.) 010 represents $\bigl(\begin{smallmatrix}
+    0\\
+    1\\
+    0\\
+\end{smallmatrix}\bigr)$.\\
+The DFA is on the next page, below this will be a quick explanation of the DFA.\\
+when we begin processing input we can have 3 possible transitions. we can move to final state from 101 since 1 + 0 = 1 with no carry over, we can move to final state from 011 since 0 + 1 = 1 with no carry over, and we can move to a state which checks if the carry over was from a previous result. Since input is taken left to right and binary is read from right to left, we have to proccess the carry over first. if we have 001 (indicating 0 + 0 = 1) we will check if our next input has 110 (1 + 1 = 0 carry 1). from all these final states we can then add links to each other and loop 000 on all except the carry over state. we can also add loops to states that have 101 and 011 since they will always be true and have no carry over.
+Some example runthroughs with simple accepted and non-accepted words.
+\begin{enumerate}[1.]
+    \item word =
+    $\bigl(\begin{smallmatrix}0\\0\\1\\ \end{smallmatrix}\bigr)$
+    $\bigl(\begin{smallmatrix}1\\1\\0\\ \end{smallmatrix}\bigr)$
+    $\bigl(\begin{smallmatrix}0\\0\\0\\ \end{smallmatrix}\bigr)$
+    $\bigl(\begin{smallmatrix}1\\0\\1\\ \end{smallmatrix}\bigr)$.\\
+\end{enumerate}
+
+\begin{tikzpicture}[shorten >=1pt,node distance=7cm,on grid,auto] 
+   \node[state,initial, accepting] (q_0)   {$q_0$}; 
+   \node[state] [below=of q_0] (q_1) {$q_1$};
+  \node[state,accepting] [below right=of q_1] (q_2) {$q_2$};
+   \node[state,accepting] [above right=of q_0] (q_3) {$q_3$};
+      \node[state,accepting] [right=of q_0] (q_4) {$q_4$};
+    \path[->] 
+    (q_0) edge  [loop above] node {000}(q_0)
+          edge [swap] node {001} (q_1)
+          edge [swap above] node {011} (q_3)
+          edge [swap above] node {101} (q_4)
+    (q_1) edge [bend left] node {110}(q_2)
+    (q_2) edge [bend left] node {001} (q_1)
+          edge [bend right = 20] node {101} (q_4)
+          edge [bend right = 90] node {011} (q_3)
+          edge [loop below] node {000} (q_2)
+    (q_3) edge [bend left] node {101} (q_4)
+          edge [bend left, above] node {001} (q_1)
+          edge [loop above] node {011} (q_3)
+          edge [loop left] node {000} (q_3)
+    (q_4) edge [bend left] node {011} (q_3)
+          edge [bend left] node {001} (q_1)
+          edge [loop below] node {000} (q_4)
+          edge [loop right] node {101} (q_4);
+    
+\end{tikzpicture}
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 \section{Problem 5}
@@ -375,8 +442,7 @@ Let $\L \subseteq \Sigma^*$ be a language over $\Sigma$. Recall the definition o
 \begin{enumerate}[(a)]
     \item Show that $\equiv_L$ is an equivalence relation. \moveToRight{6 marks}
     \item if $\L$ is regular, show that for any word w, [w] (the equivalence class of w under ≡L) is also regular. \moveToRight{4 marks}\\
-    Solution:\\
-    pppp
+
     
 \end{enumerate}
 \end{document}
