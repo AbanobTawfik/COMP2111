@@ -83,11 +83,30 @@ interpolant
 \section{Problem 1}
 The skip command is an $\mathcal{L}$  program that has the effect of “do nothing”. That is, skip; P has the same behaviour as P;skip and the same behaviour as P.
 \begin{enumerate}[(a)]
-    \item Define skip using the default $\mathcal{L}$ commands – that is, write an $\mathcal{L}$ program for skip. \moveToRight{3 marks}
+    \item Define skip using the default $\mathcal{L}$ commands – that is, write an $\mathcal{L}$ program for skip. \moveToRight{3 marks}\\\\
+    Solution: \\
+    A very simple and short program to achieve this could be assigning a variable to itself, in turn having no effect on the current state of the program.
+    \begin{lstlisting}[language=Maple,mathescape=true]
+x := x;
+    \end{lstlisting}
+    by setting the variable to itself when the following program is executed we have not modified our state and this has no effect. 
     
-    \item Based on your definition and the rules of denotational semantics discussed in lectures, determine the semantic object $[\![$skip$]\!]$. \moveToRight{4 marks}
+    \item Based on your definition and the rules of denotational semantics discussed in lectures, determine the semantic object $[\![$skip$]\!]$. \moveToRight{4 marks}\\\\
+    Solution: \\
+    The semantic object $[\![$skip$]\!]$ can be given the following model:\\
+    $[\![$skip$]\!]$ = TRUE if in our environment the value x = x.
+    This can be simplified to $[\![$skip$]\!]$ = TRUE.
+    the statement "in our enviornment the value x = x" corresponds to:\\
+    $[\![$skip$]\!]^\eta_x$ = $[\![$skip$]\!]^\eta_x$ which will always be true.
     
-    \item Suppose skip was a default command in L. Propose a suitable rule for Hoare Logic that handles skip. \moveToRight{3 marks}
+    
+    \item Suppose skip was a default command in L. Propose a suitable rule for Hoare Logic that handles skip. \moveToRight{3 marks}\\\\
+    Solution: \\
+    Since our program skip has the effect of doing nothing, we can define our program skip in the following:\\
+    Suppose our program is in the state $\psi$, then our skip program can be given the Hoare Logic rule
+    \begin{center}
+        \{$\psi$\} skip \{$\psi$\}.\\
+    \end{center}
 \end{enumerate}
 
 \newpage
@@ -97,9 +116,190 @@ any of: (x + 1, y + 1), (x + 1, y - 1), (x - 1, y + 1), (x - 1, y - 1).
 \begin{enumerate}[(a)]
     \item Write a program in $\mathcal{L}^{+}$ that, on termination, will confirm that a location (m, n) is reachable by the robot starting at (0, 0). That is, the program Reach should be such that the Hoare triple
     \begin{center}\{(x = 0) $\land$ (y = 0)\} REACH \{(x = m) $\land$ (y = n)\}\end{center}
-    is valid if and only if (m, n) is reachable from (0, 0). Note: your program does not have to terminate.\moveToRight{14 marks}
+    is valid if and only if (m, n) is reachable from (0, 0). Note: your program does not have to terminate.\moveToRight{14 marks}\\\\
+    Solution:\\
+    For this solution to save space i will use labels for each transition in the following:\\
+    NE = (x := x + 1; y := y + 1;)\\
+    SE = (x := x + 1; y := y - 1;)\\
+    NW = (x := x - 1; y := y + 1;)\\
+    SW = (x := x - 1; y := y = 1;)\\
+    guard = $\neg$((x = m) $\land$ (y = n))
+    \begin{lstlisting}[language=Maple,mathescape=true]
+x := 0;
+y := 0;
+// program for reach starts here!!!
+// if this program were to be written in $\mathcal{L}$ then we would have a loop
+// which exits when x = m and y = n, and on each iteration we would check that 
+// our transition for x and y gets us closer to the goal, however since $\mathcal{L}^{+}$
+// is non-deterministic we can make our program choose between all transitions
+(guard;NE + SE + NW + SW)*;$\neg$guard;
+    \end{lstlisting}    
+The above program was written purely in $\mathcal{L}^{+}$, however it can also be written below using a while loop to make it more clear what is going on. I will not be using this program below for the Hoare logic derivation, i will be using the above which was written purely in $\mathcal{L}^{+}$.
+    \begin{lstlisting}[language=Maple,mathescape=true]
+x := 0;
+y := 0;
+// program for reach starts here!!!
+while guard do
+// non deterministically choose our next transition
+    (NE + SE + NW + SW);
+od;
+    \end{lstlisting}   
     
-    \item Prove that your program is correct (i.e. show the validity of the above Hoare triple). Annotating your code with appropriate assertions, as long as the proof is recoverable, is sufficient. \moveToRight{6 marks}
+    A quick explanation of the program:\\
+    Since the program is written in $\mathcal{L}^{+}$, we can utilise non-determinism to choose the transition that optimally reaches the goal state. We create a loop which has the guard x is not equal to m and y is not equal to n, and within the loop we will constantly perform transitions non-deterministically. IF the program terminates (successful exit of while loop) then we have the statement $\neg$guard, which ends up being $\neg\neg$((x = m) $\land$ (y = n)). By using double negation elimination, we end up with x = m $\land$ y = n if and only if the program terminates. The first program was written purely in  $\mathcal{L}^{+}$, however the second program was written using the while rule from  $\mathcal{L}$ and the remaining written in $\mathcal{L}^{+}$. This was done because in the second program it is clearer to see how the transitions occur within the loop where it may not be as obvious in the first program. Note that also termination will only occur when m + n is even. Due to the nature of movement, we begin on tile 0 + 0 which is even. Movement in transition x + 1; y + 1, we get a total change of 2 which is also even. Movement in transition x - 1; y - 1, we get a total change of -2 which is also even. Movement in transition x + 1; y - 1, we get a total change of 0 which is also even. Movement in transition x - 1; y + 1, we get a total change of 0 which is also even. Since our initial state (0, 0) has x + y = 0, and all transitions have an even net change (0, 2, -2) this means we can only move to states where x + y is even. 
+
+
+    \item Prove that your program is correct (i.e. show the validity of the above Hoare triple). Annotating your code with appropriate assertions, as long as the proof is recoverable, is sufficient. \moveToRight{6 marks}\\\\
+    Solution:\\
+    To perform this proof we will first acquire our Hoare logic derivation, and use this annotation to annotate the programs. For this solution conditions have been compacted in the following:\\
+    \{invariant\} = \{(x + y) \% 2 = 0\}\\
+    NE = (x := x + 1; y := y + 1;)\\
+    SE = (x := x + 1; y := y - 1;)\\
+    NW = (x := x - 1; y := y + 1;)\\
+    SW = (x := x - 1; y := y = 1;)\\
+    guard = $\neg$((x = m) $\land$ (y = n))
+    \begin{enumerate}[1. ]
+        \item \{0 = 0\} x := 0 \{x = 0\} \moveToRight{assignment inference rule}
+        \item \{0 = 0\} y := 0 \{y = 0\} \moveToRight{assignment inference rule}
+        \item \{0 = 0\} x := 0; y := 0 \{x = 0 $\land$ y = 0\} \moveToRight{sequence inference rule: 1,2}
+        \item \{invariant\} x := x + 1; \{$\neg$((x + y) \% 2 = 0)\} \moveToRight{proof obligation}
+        \item \{$\neg$((x + y) \% 2 = 0)\} y := y + 1; \{invariant\}
+        \moveToRight{proof obligation}
+        \item \{invariant\} x := x + 1; y := y + 1; \{invariant\}
+        \moveToRight{sequence inference rule: 4, 5}
+        \item \{invariant\} NE \{invariant\} \moveToRight{substitution}
+        \item \{invariant\} x := x + 1; \{$\neg$((x + y) \% 2 = 0)\} \moveToRight{proof obligation}
+        \item \{$\neg$((x + y) \% 2 = 0)\} y := y - 1; \{invariant\}
+        \moveToRight{proof obligation}
+        \item \{invariant\} x := x + 1; y := y - 1; \{invariant\}
+        \moveToRight{sequence inference rule: 8, 9}
+        \item \{invariant\} SE \{invariant\} \moveToRight{substitution}
+        \item \{invariant\} x := x - 1; \{$\neg$((x + y) \% 2 = 0)\} \moveToRight{proof obligation}
+        \item \{$\neg$((x + y) \% 2 = 0)\} y := y + 1; \{invariant\}
+        \moveToRight{proof obligation}
+        \item \{invariant\} x := x - 1; y := y + 1; \{invariant\}
+        \moveToRight{sequence inference rule: 12, 13}
+        \item \{invariant\} NW \{invariant\} \moveToRight{substitution}
+        \item \{invariant\} x := x - 1; \{$\neg$((x + y) \% 2 = 0)\} \moveToRight{proof obligation}
+        \item \{$\neg$((x + y) \% 2 = 0)\} y := y - 1; \{invariant\}
+        \moveToRight{proof obligation}
+        \item \{invariant\} x := x - 1; y := y - 1; \{invariant\}
+        \moveToRight{sequence inference rule: 16, 17}
+        \item \{invariant\} SW \{invariant\} \moveToRight{substitution}
+        \item \{invariant\} NE + SE \{invariant\} \moveToRight{choice inference rule: 7, 11}
+        \item \{invariant\} NE + SE + NW\{invariant\} \moveToRight{choice inference rule: 20, 15}
+        \item \{invariant\} NE + SE + NW + SW\{invariant\} \moveToRight{choice inference rule: 21, 19}
+        \item \{invariant $\land$ guard\} (NE + SE + NW + SW)* \{invariant $\land$ guard\} \moveToRight{Loop inference rule: 22}
+        \item \{invariant $\land$ guard\} LOOP \{invariant $\land$ $\neg$guard\} \moveToRight{Loop sequence in $\mathcal{L}^{+}$: 23}
+        \item \{x = 0 $\land$ y = 0\} REACH \{invariant $\land$ $\neg$ guard\} \moveToRight{seq}
+        \item (invariant $\land$ $\neg$guard)$\to$(x = m $\land$ y = n) \moveToRight{proof obligation}
+        \item \{x = 0 $\land$ y = 0\} REACH \{x = m $\land$ y = n\} \moveToRight{consequence inference rule: 25, 26}        
+    \end{enumerate}
+    Proof obligations used in the Hoare logic derivation:
+    In the Hoare logic we assume our invariant holds before the loop begins, since x + y = 0 + 0 = 0 which is also even! 0 \% 2 = 0.
+    Note our substitutions are the following:\\
+    \{invariant\} = \{(x + y) \% 2 = 0\}\\
+    NE = (x := x + 1; y := y + 1;)\\
+    SE = (x := x + 1; y := y - 1;)\\
+    NW = (x := x - 1; y := y + 1;)\\
+    SW = (x := x - 1; y := y = 1;)\\
+    guard = $\neg$((x = m) $\land$ (y = n))\\
+    
+    \begin{list}
+        \item {Proof for Line 4 and line 5}
+        Line 4 - \{invariant\} x := x + 1; \{$\neg$((x + y) \% 2 = 0)\}\\
+        And\\
+        Line 5 - \{$\neg$((x + y) \% 2 = 0)\} y := y + 1; \{invariant\}\\
+        An informal way for the proof obligation:\\
+       On line 4 before execution we have x + y is even, then when we add 1 to x, and x + y is no longer even. This is because adding 1 to an even number will make it odd. after we add 1 to y on line 5, we get x + y is even again because when we add 1 to an odd number we get an even number. More formally this can be shown as:\\\\
+        Line 4 - \{invariant\} x := x + 1; \{$\neg$((x + y) \% 2 = 0)\}\\
+        initially we have our invariant (x + y) \% 2 = 0.
+        Then we add 1 to x, so if we add 1 on both sides we get (x + y) \% 2 = 1 (note x = x + 1 after x := x + 1 execution). Since (x + y) \% 2 = 1, this also implies $\neg$((x + y) \% 2 = 0).\\\\
+        Line 5 - \{$\neg$((x + y) \% 2 = 0)\} y := y + 1; \{invariant\}\\
+        initially we have $\neg$((x + y) \% 2 = 0) which also as shown above is equivalent to (x + y) \% 2 = 1, since any number mod 2 can only be 0 or 1. after execution of y := y + 1, if we add 1 to both sides we get (x + y) \% 2 = 0 which is also our invariant.
+    \end{list}
+    The proof method above is used for the following proof obligations:
+    \begin{itemize}
+        \item Line 8 and Line 9
+        \item Line 12 and Line 13
+        \item Line 17 and Line 18
+    \end{itemize}
+    \newpage
+    Since each transition follows the same manner, where the total distance changed is either $\pm$ 2 or 0 the change can be seen in the following for all transitions:
+    \begin{itemize}
+        \item (x + 1, y + 1) NE change = 1 + 1 = 2 (even)
+        \item (x + 1, y - 1) SE change = 1 - 1 = 0 (even)
+        \item (x - 1, y + 1) NW change = 1 - 1 = 0 (even)
+        \item (x - 1, y - 1) SW change = -1 - 1 = -2 (even)
+    \end{itemize}
+    Also note the definition of an even is (even number) \% 2 = 0.
+    
+     \begin{list}
+        \item {proof for line 26}
+        Line 26 - (invariant $\land$ $\neg$guard)$\to$(x = m $\land$ y = n)\\
+        using our substitution we can get\\
+        (((x + y) \% 2 = 0) $\land \neg$($\neg$(x = m $\land$ y = n))) $\to$ (x = m $\land$ y = n).\\ We can use and elimination to simplify down to\\
+        ($\neg$($\neg$(x = m $\land$ y = n)) $\to$ (x = m $\land$ y = n)\\
+        This is simply just a proof of double negation elimination which is done by natural \\deduction.\\
+        \fitchprf{\pline[1.]{$\neg\neg \psi$}}{
+            \subproof{\pline[2.]{$\neg \psi$}}{
+                \pline[3.]{$\bot$}\lfalsei{1}{2}
+            }
+            \pline[4.]{\psi}[IP: 1-3]
+        }\\
+        As shown by natural deduction $\neg\neg$(x = m $\land$ y = n) $\to$ (x = m $\land$ y = n).
+        (note our loop will never terminate if our invariant doesn't hold (if m + n is not even it will never terminate).
+    \end{list}
+By using our Hoare logic deduction for our program in $\mathcal{L}^{+}$ we can annotate our program in the following: (please note our program will not terminate if m + n is not even as it will never be able to transition to a tile on those coordinates, we can add a if statement if need be to assure termination is always possible).\\
+The proof will be performed in the next page so it is not split between pages.
+\newpage
+ALSO NOTE i will be expanding out my substitutions NE, SE, NW, SW for this proof, and the following will be substituted for the proof:\\
+    guard = $\neg$((x = m) $\land$ (y = n))\\
+    invariant = (x + y) \% 2 = 0.\\
+    \begin{lstlisting}[language=Maple,mathescape=true]
+                                        //{0 = 0}
+x := 0;                                 //{x = 0}
+y := 0;                                 //{y = 0}
+// program for reach starts here!!!
+                                        //{x = 0 $\land$ y = 0}
+(guard;
+                                        //{invariant}
+(x := x + 1;                            //{$\neg$((x + y) % 2 = 0)}
+y := y + 1);                            //{invariant}
++                                       //{invariant} 
+(x := x + 1;                            //{$\neg$((x + y) % 2 = 0)}
+y := y - 1);                            //{invariant}
++                                       //{invariant}
+(x := x - 1;                            //{$\neg$((x + y) % 2 = 0)}
+y := y + 1);                            //{invariant}          
++                                       //{invariant}
+(x := x - 1;                            //{$\neg$((x + y) % 2 = 0)}
+y := y - 1);)*;                         //{invariant}
+$\neg$guard;                                  //{x = m $\land$ y = n}
+
+    \end{lstlisting} 
+using our substitutions NE, SE, NW, SW we cans imply further to get the exact same proof
+    \begin{lstlisting}[language=Maple,mathescape=true]
+                                        //{0 = 0}
+x := 0;                                 //{x = 0}
+y := 0;                                 //{y = 0}
+// program for reach starts here!!!
+                                        //{x = 0 $\land$ y = 0}
+(guard;
+                                        //{invariant}
+NE                                      //{invariant}
++                                        
+                                        //{invariant}
+SE                                      //{invariant}
++                                       
+                                        //{invariant}
+NW                                      //{invariant}
++       
+                                        //{invariant}
+SW);)*;                                 //{invariant}
+$\neg$guard;                                  //{x = m $\land$ y = n}
+
+    \end{lstlisting}
 \end{enumerate}
 
 \newpage
@@ -109,12 +309,33 @@ Suppose you have ten coins arranged in a line. A move consists of taking any thr
 one move could be to flip the second, third and fourth coins to get the arrangement:
 \begin{center}\textit{HTHHHTHTHT}\end{center}
 \begin{enumerate}[(a)]
-    \item Model this situation as a transition system, carefully defining your states and the transition relation. \moveToRight{4 marks}
+    \item Model this situation as a transition system, carefully defining your states and the transition relation. \moveToRight{4 marks}\\\\
+    Solution:\\
+    To model this problem, we can use a Boolean form representation of the coins, true = heads, false = tails and have 10 Boolean values cross product with the integers 1-10 for position, so each element of our set is a boolean for head/tails and a integer for position 0-9
+    \\for our transition system
+    $S$ = \{a, b, c, d, e, f, g, h, i, j\} where a, b, c, d, e, f, g $\in \mathbb{B}\times[1,10]$ 
+    for example the initial state above could be the following:\\
+    \{(true,1), (true,2), (false,3), (false,4), (true,5), (false,6), (true,7), (false,8), (true,9), (false,10)\}
+    Our transition relation $\rightarrow$ can be defined as taking three adjacent elements of our set and flipping the Boolean expression using !.\\
+    $\rightarrow$ is given by
+    \begin{itemize}
+        \item (a = (!bool), 1)) $\land$ (b = (!bool, 2)) $\land$ (c = (!bool), 3))
+        \item (b = (!bool), 2)) $\land$ (c = (!bool, 3)) $\land$ (d = (!bool), 4))
+        \item (c = (!bool), 3)) $\land$ (d = (!bool, 4)) $\land$ (e = (!bool), 5))
+        \item (d = (!bool), 4)) $\land$ (e = (!bool, 5)) $\land$ (f = (!bool), 6))
+        \item (e = (!bool), 5)) $\land$ (f = (!bool, 6)) $\land$ (g = (!bool), 7))
+        \item (f = (!bool), 6)) $\land$ (g = (!bool, 7)) $\land$ (h = (!bool), 8))
+        \item (g = (!bool), 7)) $\land$ (h = (!bool, 8)) $\land$ (i = (!bool), 9))
+        \item (h = (!bool), 8)) $\land$ (i = (!bool, 9)) $\land$ (j = (!bool), 10))
+    \end{itemize}
+    
+    
     
     \item By considering the coins in positions 1,2,4,5,7,8, and 10 (i.e. positions not divisible by 3) find a preserved invariant of this system. \moveToRight{4 marks}
+    A preserved invariant of this system would be that the coins in position 1, 2, 4, 5, 7, 8, 10 (positions not divisible by 3) reserve the parity for head and tails. for example is position 1, 2, 4, 5, 7, 8 and 10 have an even number of heads and an odd number of tails 
     
     \item Show that the arrangement \textit{TTTTTTTTTT} is not reachable from the arrangement \\\texit{HHHHHHHHHH}. \moveToRight{2 marks}
-
+    
 \end{enumerate}
 
 \newpage
