@@ -95,16 +95,14 @@ x := x;
     
     \item Based on your definition and the rules of denotational semantics discussed in lectures, determine the semantic object $[\![$skip$]\!]$. \moveToRight{4 marks}\\\\
     Solution: \\
-    The semantic object $[\![$skip$]\!]$ can be given the following model:\\
-    $[\![$skip$]\!]$ = TRUE if in our environment the value x = x.
-    This can be simplified to $[\![$skip$]\!]$ = TRUE.
-    the statement "in our enviornment the value x = x" corresponds to:\\
-    $[\![$skip$]\!]^\eta_x$ = $[\![$skip$]\!]^\eta_x$ which will always be true.
+    The semantic object $[\![$skip$]\!]$ also defined as $[\![$x := x$]\!]$  can be defined by the following:\\
+    $[\![$skip$]\!]$ = \{($\eta$,$\eta'$) if and only if $\eta'$ = $\eta$[x$\mapsto$ $[\![x]\!]^\eta$\}].\\
+    The binary predicate for our semantic object $[\![$skip$]\!]$ will always be true in any state as this can simply be seen as a loop to the current state since we are not modifying our state.
     
     
     \item Suppose skip was a default command in L. Propose a suitable rule for Hoare Logic that handles skip. \moveToRight{3 marks}\\\\
     Solution: \\
-    Since our program skip has the effect of doing nothing, we can define our program skip in the following:\\
+    Since our program skip has the effect of doing nothing, we can define our program skip having the same pre and post condition in the following:\\
     Suppose our program is in the state $\psi$, then our skip program can be given the Hoare Logic rule
     \begin{center}
         \{$\psi$\} skip \{$\psi$\}.\\
@@ -163,7 +161,7 @@ od;
     \begin{enumerate}[1. ]
         \item \{0 = 0\} x := 0 \{x = 0\} \moveToRight{assignment inference rule}
         \item \{0 = 0\} y := 0 \{y = 0\} \moveToRight{assignment inference rule}
-        \item \{0 = 0\} x := 0; y := 0 \{x = 0 $\land$ y = 0\} \moveToRight{sequence inference rule: 1,2}
+        \item \{0 = 0 $\land$ 0 = 0\} x := 0; y := 0 \{x = 0 $\land$ y = 0\} \moveToRight{assignment inference rule}
         \item \{invariant\} x := x + 1; \{$\neg$((x + y) $\mod$ 2 = 0)\} \moveToRight{proof obligation}
         \item \{$\neg$((x + y) $\mod$ 2 = 0)\} y := y + 1; \{invariant\}
         \moveToRight{proof obligation}
@@ -266,21 +264,21 @@ y := 0;                                 //{y = 0}
                                         //{x = 0 $\land$ y = 0}
 (guard;
                                         //{invariant}
-(x := x + 1;                            //{$\neg$((x + y) % 2 = 0)}
+(x := x + 1;                            //{$\neg$((x + y) mod 2 = 0)}
 y := y + 1);                            //{invariant}
 +                                       //{invariant} 
-(x := x + 1;                            //{$\neg$((x + y) % 2 = 0)}
+(x := x + 1;                            //{$\neg$((x + y) mod 2 = 0)}
 y := y - 1);                            //{invariant}
 +                                       //{invariant}
-(x := x - 1;                            //{$\neg$((x + y) % 2 = 0)}
+(x := x - 1;                            //{$\neg$((x + y) mod 2 = 0)}
 y := y + 1);                            //{invariant}          
 +                                       //{invariant}
-(x := x - 1;                            //{$\neg$((x + y) % 2 = 0)}
+(x := x - 1;                            //{$\neg$((x + y) mod 2 = 0)}
 y := y - 1);)*;                         //{invariant}
 $\neg$guard;                                  //{x = m $\land$ y = n}
 
     \end{lstlisting} 
-using our substitutions NE, SE, NW, SW we cans imply further to get the exact same proof
+using our substitutions NE, SE, NW, SW we can simply further to get the exact same proof
     \begin{lstlisting}[language=Maple,mathescape=true]
                                         //{0 = 0}
 x := 0;                                 //{x = 0}
@@ -445,8 +443,30 @@ Let $\L \subseteq \Sigma^*$ be a language over $\Sigma$. Recall the definition o
     $w \equiv_L v$  iff  $\forall z \in \Sigma^* : wz \in \L \Leftrightarrow vz \in \L$
 \end{center}
 \begin{enumerate}[(a)]
-    \item Show that $\equiv_L$ is an equivalence relation. \moveToRight{6 marks}
-    \item if $\L$ is regular, show that for any word w, [w] (the equivalence class of w under ≡L) is also regular. \moveToRight{4 marks}\\
+    \item Show that $\equiv_L$ is an equivalence relation. \moveToRight{6 marks}\\\\Solution:\\
+    To prove that $\equiv_L$ is an equivalence relation we need to show that:
+    
+    \begin{enumerate} [1.]
+        \item $\equiv_L$ is symmetric\\
+        To show $\equiv_L$ is symmetric, we have to show:\\
+        a $\equiv_L$ b $\iff$ b $\equiv_L$ a, where a, b $\in \Sigma^*$.
+        \\
+        This is true from the definition of $\equiv_L$ since it is a bi-directional implication,\\ (iff  $\forall z \in \Sigma^* : az \in \L \Leftrightarrow bz \in \L$), $\equiv_L$ is symmetric.
+        
+        \item $\equiv_L$ is reflexive\\
+        To show $\equiv_L$ is reflexive, we have to show:\\
+        a $\equiv_L$ a where a $\in$ $\Sigma^*$.\\
+        since $\forall z \in \Sigma^* : az \in L \Leftrightarrow az \in L$, as a = a, then $\equiv_L$ is also reflexive.
+        
+        \item $\equiv_l$ is transitive\\
+        To show $\equiv_L$ is transitive, we have to show:\\
+        ((a $\equiv_L$ b) $\land$ (b $\equiv_L$ c)) $\to$ (a $\equiv_L$ c) where a, b, c $\in \Sigma^*$.\\
+        $\forall z \in \Sigma^* : az \in L \Leftrightarrow bz \in L.$ Since $bz \in L $ then $cz \in L (b \equiv_L c)$. This means that:\\ $\forall z \in \Sigma^* : az \in L \Leftrightarrow bz \in L \Leftrightarrow cz \in L$. Essentially what we are saying is that if az is in the language, then bz is in the language, this in turn means cz is in the language due to (a $\equiv_L$ b) and (b $\equiv_L$ c). This means that a $\equiv_L$ c, thus $\equiv_L$ is transitive
+    \end{enumerate}
+    Since $\equiv_L$ is symmetric, reflexive and transitive, then $\equiv_L$ is an equivalence relation.
+    \item if $\L$ is regular, show that for any word w, [w] (the equivalence class of w under $\equiv_L$) is also regular. \moveToRight{4 marks}\\\\
+    Solution:\\
+    to show that for any word w, [w] is regular under $\equiv_L$, we need to show that the equivalence class of [w] is finite. This will then allow us to use the Myhill-Nerode theorem to prove [w] is regular. given that L is regular there are a finite amount of [w] from Myhill-Nerode theorem. Since the equivalence class [w] can be seen as a subset of our language $\L$ which is finite (since it is regular); then [w] must also be finite since it is a subset of $\L$. Since [w] is finite then [w] is also regular.
 
     
 \end{enumerate}
