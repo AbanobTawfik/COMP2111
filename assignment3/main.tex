@@ -103,7 +103,7 @@ x := x;
     \item Suppose skip was a default command in L. Propose a suitable rule for Hoare Logic that handles skip. \moveToRight{3 marks}\\\\
     Solution: \\
     Since our program skip has the effect of doing nothing, we can define our program skip having the same pre and post condition in the following:\\
-    Suppose our program is in the state $\psi$, then our skip program can be given the Hoare Logic rule
+    Suppose our program is in the state $\psi$ before execution; then our skip program can be given the Hoare Logic rule
     \begin{center}
         \{$\psi$\} skip \{$\psi$\}.\\
     \end{center}
@@ -118,7 +118,7 @@ any of: (x + 1, y + 1), (x + 1, y - 1), (x - 1, y + 1), (x - 1, y - 1).
     \begin{center}\{(x = 0) $\land$ (y = 0)\} REACH \{(x = m) $\land$ (y = n)\}\end{center}
     is valid if and only if (m, n) is reachable from (0, 0). Note: your program does not have to terminate.\moveToRight{14 marks}\\\\
     Solution:\\
-    For this solution to save space i will use labels for each transition in the following:\\
+    For this solution to save space we will use labels for each transition in the following:\\
     NE = (x := x + 1; y := y + 1;)\\
     SE = (x := x + 1; y := y - 1;)\\
     NW = (x := x - 1; y := y + 1;)\\
@@ -131,10 +131,11 @@ y := 0;
 // if this program were to be written in $\mathcal{L}$ then we would have a loop
 // which exits when x = m and y = n, and on each iteration we would check that 
 // our transition for x and y gets us closer to the goal, however since $\mathcal{L}^{+}$
-// is non-deterministic we can make our program choose between all transitions
+// is non-deterministic we can make our program choose between all transitions for us
+// below is a while b do .. od loop in $\mathcal{L}^{+}$
 (guard;NE + SE + NW + SW)*;$\neg$guard;
     \end{lstlisting}    
-The above program was written purely in $\mathcal{L}^{+}$, however it can also be written below using a while loop to make it more clear what is going on. I will not be using this program below for the Hoare logic derivation, i will be using the above which was written purely in $\mathcal{L}^{+}$.
+The above program was written purely in $\mathcal{L}^{+}$, however it can also be written using a while loop to make it more clear what is going on. we will not be using this program below for the Hoare logic derivation, we will be using the program above which was written purely in $\mathcal{L}^{+}$.
     \begin{lstlisting}[language=Maple,mathescape=true]
 x := 0;
 y := 0;
@@ -146,12 +147,12 @@ od;
     \end{lstlisting}   
     
     A quick explanation of the program:\\
-    Since the program is written in $\mathcal{L}^{+}$, we can utilise non-determinism to choose the transition that optimally reaches the goal state. We create a loop which has the guard x is not equal to m and y is not equal to n, and within the loop we will constantly perform transitions non-deterministically. IF the program terminates (successful exit of while loop) then we have the statement $\neg$guard, which ends up being $\neg\neg$((x = m) $\land$ (y = n)). By using double negation elimination, we end up with x = m $\land$ y = n if and only if the program terminates. The first program was written purely in  $\mathcal{L}^{+}$, however the second program was written using the while rule from  $\mathcal{L}$ and the remaining written in $\mathcal{L}^{+}$. This was done because in the second program it is clearer to see how the transitions occur within the loop where it may not be as obvious in the first program. Note that also termination will only occur when m + n is even. Due to the nature of movement, we begin on tile 0 + 0 which is even. Movement in transition x + 1; y + 1, we get a total change of 2 which is also even. Movement in transition x - 1; y - 1, we get a total change of -2 which is also even. Movement in transition x + 1; y - 1, we get a total change of 0 which is also even. Movement in transition x - 1; y + 1, we get a total change of 0 which is also even. Since our initial state (0, 0) has x + y = 0, and all transitions have an even net change (0, 2, -2) this means we can only move to states where x + y is even. 
+    Since the program is written in $\mathcal{L}^{+}$, we can utilise non-determinism to choose the transition that optimally reaches the goal state. We create a loop which has the guard x is not equal to m and y is not equal to n, and within the loop we will constantly perform transitions non-deterministically. IF the program terminates (successful exit of while loop) then we have the statement $\neg$guard, which ends up being $\neg\neg$((x = m) $\land$ (y = n)). By using double negation elimination, we end up with x = m $\land$ y = n if and only if the program terminates. The first program was written purely in  $\mathcal{L}^{+}$, however the second program was written using the while rule from  $\mathcal{L}$ and the remaining written in $\mathcal{L}^{+}$. This was done because in the second program it is clearer to see how the transitions occur within the loop where it may not be as obvious in the first program. Note that also termination will only occur when m + n is even. Due to the nature of movement, we begin on tile (0, 0), and 0 + 0 is even. Movement in transition x + 1; y + 1, we get a total change of 2 which is also even. Movement in transition x - 1; y - 1, we get a total change of -2 which is also even. Movement in transition x + 1; y - 1, we get a total change of 0 which is also even. Movement in transition x - 1; y + 1, we get a total change of 0 which is also even. Since our initial state (0, 0) has x + y = 0, and all transitions have an even net change \{0, 2, -2\} this means we can only move to states where x + y is even. 
 
 
     \item Prove that your program is correct (i.e. show the validity of the above Hoare triple). Annotating your code with appropriate assertions, as long as the proof is recoverable, is sufficient. \moveToRight{6 marks}\\\\
     Solution:\\
-    To perform this proof we will first acquire our Hoare logic derivation, and use this annotation to annotate the programs. For this solution conditions have been compacted in the following:\\
+    To perform this proof we will first acquire our Hoare logic derivation, and use this to annotate the programs. For this solution conditions have been compacted in the following:\\
     \{invariant\} = \{(x + y) $\mod$ 2 = 0\}\\
     NE = (x := x + 1; y := y + 1;)\\
     SE = (x := x + 1; y := y - 1;)\\
@@ -196,7 +197,7 @@ od;
         \item \{x = 0 $\land$ y = 0\} REACH \{x = m $\land$ y = n\} \moveToRight{consequence inference rule: 25, 26}        
     \end{enumerate}
     Proof obligations used in the Hoare logic derivation:
-    In the Hoare logic we assume our invariant holds before the loop begins, since x + y = 0 + 0 = 0 which is also even! 0 $\mod$ 2 = 0.
+    In the Hoare logic we assume our invariant holds before the loop begins, since x + y = 0 + 0 = 0 which is even. 0 $\mod$ 2 = 0.
     Note our substitutions are the following:\\
     \{invariant\} = \{(x + y) $\mod$ 2 = 0\}\\
     NE = (x := x + 1; y := y + 1;)\\
@@ -211,12 +212,12 @@ od;
         And\\
         Line 5 - \{$\neg$((x + y) $\mod$ 2 = 0)\} y := y + 1; \{invariant\}\\
         An informal way for the proof obligation:\\
-       On line 4 before execution we have x + y is even, then when we add 1 to x, and x + y is no longer even. This is because adding 1 to an even number will make it odd. after we add 1 to y on line 5, we get x + y is even again because when we add 1 to an odd number we get an even number. More formally this can be shown as:\\\\
+       On line 4 before execution we have x + y is even, then when we add 1 to x, so x + y is no longer even. This is because adding 1 to an even number will make it odd. after we add 1 to y on line 5, we get x + y is even again because when we add 1 to an odd number we get an even number. More formally this can be shown as:\\\\
         Line 4 - \{invariant\} x := x + 1; \{$\neg$((x + y) $\mod$ 2 = 0)\}\\
         initially we have our invariant (x + y) $\mod$ 2 = 0.
         Then we add 1 to x, so if we add 1 on both sides we get (x + y) $\mod$ 2 = 1 (note x = x + 1 after x := x + 1 execution). Since (x + y) $\mod$ 2 = 1, this also implies $\neg$((x + y) $\mod$ 2 = 0).\\\\
         Line 5 - \{$\neg$((x + y) $\mod$ 2 = 0)\} y := y + 1; \{invariant\}\\
-        initially we have $\neg$((x + y) $\mod$ 2 = 0) which also as shown above is equivalent to (x + y) $\mod$ 2 = 1, since any number mod 2 can only be 0 or 1. after execution of y := y + 1, if we add 1 to both sides we get (x + y) $\mod$ 2 = 0 which is also our invariant.
+        initially we have $\neg$((x + y) $\mod$ 2 = 0) which is equivalent to (x + y) $\mod$ 2 = 1, since any number mod 2 can only be 0 or 1. After execution of y := y + 1, if we add 1 to both sides we get (x + y) $\mod$ 2 = 0 (note y = y + 1 after y := y + 1 execution) which is also our invariant.
     \end{list}
     The proof method above is used for the following proof obligations:
     \begin{itemize}
@@ -237,8 +238,8 @@ od;
      \begin{list}
         \item {proof for line 26}
         Line 26 - (invariant $\land$ $\neg$guard)$\to$(x = m $\land$ y = n)\\
-        using our substitution we can get\\
-        (((x + y) $\mod$ 2 = 0) $\land \neg$($\neg$(x = m $\land$ y = n))) $\to$ (x = m $\land$ y = n).\\ We can use and elimination to simplify down to\\
+        using our substitution we can get:\\
+        (((x + y) $\mod$ 2 = 0) $\land \neg$($\neg$(x = m $\land$ y = n))) $\to$ (x = m $\land$ y = n).\\ We can use and elimination to simplify down to:\\
         ($\neg$($\neg$(x = m $\land$ y = n)) $\to$ (x = m $\land$ y = n)\\
         This is simply just a proof of double negation elimination which is done by natural \\deduction.\\
         \fitchprf{\pline[1.]{$\neg\neg \psi$}}{
@@ -250,7 +251,7 @@ od;
         As shown by natural deduction $\neg\neg$(x = m $\land$ y = n) $\to$ (x = m $\land$ y = n).
         (note our loop will never terminate if our invariant doesn't hold (if m + n is not even it will never terminate).
     \end{list}
-By using our Hoare logic deduction for our program in $\mathcal{L}^{+}$ we can annotate our program in the following: (please note our program will not terminate if m + n is not even as it will never be able to transition to a tile on those coordinates, we can add a if statement if need be to assure termination is always possible).\\
+By using our Hoare logic deduction for our program in $\mathcal{L}^{+}$ we can annotate our program in the following. (please note our program will not terminate if m + n is not even as it will never be able to transition to a tile on those coordinates, we can add a if statement if need be to assure termination is always possible).\\
 The proof will be performed in the next page so it is not split between pages.
 \newpage
 ALSO NOTE i will be expanding out my substitutions NE, SE, NW, SW for this proof, and the following will be substituted for the proof:\\
@@ -278,7 +279,7 @@ y := y - 1);)*;                         //{invariant}
 $\neg$guard;                                  //{x = m $\land$ y = n}
 
     \end{lstlisting} 
-using our substitutions NE, SE, NW, SW we can simply further to get the exact same proof
+Using our substitutions NE, SE, NW, SW we can simply further to get the exact same proof.
     \begin{lstlisting}[language=Maple,mathescape=true]
                                         //{0 = 0}
 x := 0;                                 //{x = 0}
@@ -311,12 +312,12 @@ one move could be to flip the second, third and fourth coins to get the arrangem
 \begin{enumerate}[(a)]
     \item Model this situation as a transition system, carefully defining your states and the transition relation. \moveToRight{4 marks}\\\\
     Solution:\\
-    To model this problem, we can use a Boolean form representation of the coins, true = heads, false = tails and have 10 Boolean values cross product with the integers 1-10 for position, so each element of our set is a boolean for head/tails and a integer for position 0-9
-    \\for our transition system
+    To model this problem, we can use a Boolean form representation of the coins, true = heads, false = tails. We have 10 Boolean values and we take the  cross product with the integers 1-10 for position, so each element of our set is a Boolean for head/tails and a integer for position 1-10.
+    \\For our transition system, our set of states $S$ is given by the following:\\
     $S$ = \{a, b, c, d, e, f, g, h, i, j\} where a, b, c, d, e, f, g $\in \mathbb{B}\times[1,10]$ 
     for example the initial state above could be the following:\\
     \{(true,1), (true,2), (false,3), (false,4), (true,5), (false,6), (true,7), (false,8), (true,9), (false,10)\}
-    Our transition relation $\rightarrow$ can be defined as taking three adjacent elements of our set and flipping the Boolean expression using !.\\
+    Our transition relation $\rightarrow$ can be defined as taking three adjacent elements of our set and flipping the Boolean expression using the ! Boolean operator (!true = false and !false = true).\\
     $\rightarrow$ is given by
     \begin{itemize}
         \item (a = (!bool), 1)) $\land$ (b = (!bool, 2)) $\land$ (c = (!bool), 3))
@@ -333,22 +334,23 @@ one move could be to flip the second, third and fourth coins to get the arrangem
     
     \item By considering the coins in positions 1,2,4,5,7,8, and 10 (i.e. positions not divisible by 3) find a preserved invariant of this system. \moveToRight{4 marks}\\\\
     Solution:\\
-    A preserved invariant of this system would be that the coins in position 1, 2, 4, 5, 7, 8, 10 (positions not divisible by 3) preserve the parity for head and tails regardless of state change. For example is position 1, 2, 4, 5, 7, 8 and 10 have an even number of heads and an odd number of tails, then regardless of state change this will always remain true. Also note that heads and tails cannot have the same parity for these positions since there are 7 positions. 
-    A formal way to put this is:\\
-    let parity\_of\_heads be the variable that has the parity of the number of heads at the initial state in position 1, 2, 4, 5, 7, 8, 10.\\\\
-    let parity\_of\_tails be the variable that has the parity of the number of tails at the initial state in position 1, 2, 4, 5, 7, 8, 10.\\
+    A preserved invariant of this system would be that the coins in position 1, 2, 4, 5, 7, 8, 10 (positions not divisible by 3) preserve the parity for head and tails at their initial state, regardless of state change. For example if position 1, 2, 4, 5, 7, 8 and 10 initially has an even number of heads and an odd number of tails, then regardless of state change this will always remain true. Also note that heads and tails cannot have the same parity for these positions since there are 7 positions. 
+    A formal way to put this is:\\\\
+    Let parity\_of\_heads be the variable that has the parity of the number of heads at the initial state in position 1, 2, 4, 5, 7, 8, 10.\\
+    Let parity\_of\_tails be the variable that has the parity of the number of tails at the initial state in position 1, 2, 4, 5, 7, 8, 10.\\
     let $\psi_1$ be the proposition that parity\_of\_heads remains the same on each transition.\\
     let $\psi_2$ be the proposition that parity\_of\_tails remains the same on each transition. \\
-    Our invariant is $\psi$ = $\psi_1$ $\land$ $\psi_2$.
-    This is because on each move, we will always modify 2 of the coins in the position 1, 2, 4, 5, 7, 8 and 10. This can be seen in each transition in part (a). Since we always modify 2 of the coins we can check each combination of HH, TT, HT/TH to verify that this property will always remain true.\\
-    If we have HH, if we swap to TT, the parity will stay the same as a subtraction of 2 for T and addition of 2 to H will have no effect on parity because 2 $\mod$ 2 = 0. 
-    If we have TT, if we swap to HH, the parity will stay the same as a subtration of 2 will have no effect on parity, similair to the reason above
-    If we have HT/TH, if we swap the parity to TH/HT this will also have no effect on the parity as our net change will be 0, we are simply swapping Heads to tails and tails to head so our number of heads and tails in those position stay the same and our parity remains the same.\\
-    Therefore our invariant is true, and was proven using proof of cases.
+    Our invariant is $\psi$ = $\psi_1$ $\land$ $\psi_2$.\\
+    This is because on each move, we will always modify 2 of the coins in the position 1, 2, 4, 5, 7, 8 and 10. This can be seen in each transition in part (a). Since we always modify 2 of the coins we can check each combination of HH, TT, HT/TH to verify that this property will always remain true.\\\\
+    If we have HH, and we swap to TT, the parity will stay the same as a subtraction of 2 for T and addition of 2 to H will have no effect on parity because 2 $\mod$ 2 = 0.\\\\
+    If we have TT, and we swap to HH, the parity will stay the same as a subtration of 2 will have no effect on parity, similair to the reason above.\\\\
+    If we have HT/TH, if we swap to TH/HT this will also have no effect on the parity as our net change will be 0, we are simply swapping Heads to tails and tails to head so our number of heads and tails in those position stay the same and our parity remains the same.\\\\
+    The reason we only look at 2 coins, is that on each transition possible, we modify exactly 2 coins from the possible positions 1, 2, 4, 5, 7, 8, 10. This can be seen directly from (a).\\
+    Therefore our invariant is true, and was proven using proof by cases.
         
     \item Show that the arrangement \textit{TTTTTTTTTT} is not reachable from the arrangement \\\texit{HHHHHHHHHH}. \moveToRight{2 marks}\\\\
     Solution:\\
-    The arrangement \textit{TTTTTTTTTT} is not reachable from \texit{HHHHHHHHHH}. This is because in our initial arrangement \texit{HHHHHHHHHH}, The number of heads in position 1, 2, 4, 5, 7, 8, 10 is 7, 7$\mod$2 = 1 so the parity of our heads is odd. The number of tails in those positions is also 0 which is even. Due to our invariant $\psi$ which states that the parity of heads and parity of tails in those positions remain the same on each move, we can never reach the state \textit{TTTTTTTTTT}, because in that state, the number of tails in those position is 7 which is odd, however our number of tails in those position MUST BE EVEN due to our invariant $\psi$.
+    The arrangement \textit{TTTTTTTTTT} is not reachable from \texit{HHHHHHHHHH}. This is because in our initial arrangement \texit{HHHHHHHHHH}, The number of heads in position 1, 2, 4, 5, 7, 8, 10 is 7. 7$\mod$2 = 1 so the parity of our heads is odd. The number of tails in those positions however is 0 which is even. Due to our invariant $\psi$ which states that the parity of heads and parity of tails in those positions remain the same on each move, we can never reach the state \textit{TTTTTTTTTT}, because in that state, the number of tails in those position is 7 which is odd, however our number of tails in those position MUST BE EVEN due to our invariant $\psi$.
 \end{enumerate}
 
 \newpage
@@ -378,14 +380,15 @@ Design a DFA that acceptes the following language:
 \begin{center}
 \{w $\in$ $\Sigma^*$ : $bin$($t$(w)) = $bin$($f$(w)) + $bin$($s$(w))\}.\\ \moveToRight{10 marks}\\    
 \end{center}\\Solution:\\
-The way we will be representing the input will be through a three digit integer (eg.) 010 represents $\bigl(\begin{smallmatrix}
+The way we will represent the input will be through a three digit integer (e.g.) 010 represents $\bigl(\begin{smallmatrix}
     0\\
     1\\
     0\\
 \end{smallmatrix}\bigr)$.\\
 \textbf{PLEASE NOTE I COULD NOT FIT ALL POSSIBLE STATES SO ANY INPUT WHICH DOES NOT FOLLOW A TRANSITION WILL BE ASSUMED TO BE TAKEN TO A ERROR STATE (a non-final state) LOOPING TO ITSELF ON WHATEVER INPUT IT GETS.}\\
-The DFA is on the next page, below this will be a quick explanation of the DFA.\\
-when we begin processing input we can have 3 possible transitions. we can move to final state from 101 since 1 + 0 = 1 with no carry over, we can move to final state from 011 since 0 + 1 = 1 with no carry over, and we can move to a state which checks if the carry over was from a previous result. Since input is taken left to right and binary is read from right to left, we have to proccess the carry over first. if we have 001 (indicating 0 + 0 = 1) we will check if our next input has 110 (1 + 1 = 0 carry 1). from all these final states we can then add links to each other and loop 000 on all except the carry over state. we can also add loops to states that have 101 and 011 since they will always be true and have no carry over.
+The DFA is on the next page.\\
+Below this will be a quick explanation of the DFA.\\
+When we begin processing input we can have 3 possible transitions. We can move to a final state from 101 since 1 + 0 = 1 with no carry over. We can move to final state from 011 since 0 + 1 = 1 with no carry over. And we can move to a state which checks if the carry over was from a previous result. Since input is taken left to right and binary is read from right to left, we have to process the carry over first. If we have 001 (indicating 0 + 0 = 1) we will check if our next input has 110 (1 + 1 = 0 carry 1). From all these final states we can then add links to each other and loop 000 on all final states. We can also add loops to states that have 101 and 011 since they will always be true and have no carry over.
 Some example runthroughs with simple accepted and non-accepted words.
 \begin{enumerate}[1.]
     \item accepted word =
@@ -393,16 +396,16 @@ Some example runthroughs with simple accepted and non-accepted words.
     $\bigl(\begin{smallmatrix}1\\1\\0\\ \end{smallmatrix}\bigr)$
     $\bigl(\begin{smallmatrix}0\\0\\0\\ \end{smallmatrix}\bigr)$
     $\bigl(\begin{smallmatrix}1\\0\\1\\ \end{smallmatrix}\bigr)$.\\
-    from our DFA we begin at q0 and transition to q1 from 001, next we transition to q2 from 110. we stay at q2 from self loop from 000, and transition to final state q4 from 101. since we finish at a final state this sequence of input is accepted and to further prove it is:\\
+    from our DFA we begin at q0 and transition to q1 from 001, next we transition to q2 from 110. we stay at q2 from self loop from 000, and transition to final state q4 from 101. Since we finish at a final state this sequence of input is accepted and to further prove it we can show:\\
     $bin$($t$(w)) = 1001 = 9, 
     $bin$($f$(w)) = 0101 = 5 and
     $bin$($s$(w)) = 0100 = 4.\\
-    as can be seen $bin$($t$(w)) = $bin$($f$(w)) + $bin$($s$(w)) since 9 = 5+ 4.\\
+    as can be seen $bin$($t$(w)) = $bin$($f$(w)) + $bin$($s$(w)) since 9 = 5 + 4.\\
     \item rejected word =     $\bigl(\begin{smallmatrix}0\\0\\1\\ \end{smallmatrix}\bigr)$
     $\bigl(\begin{smallmatrix}1\\1\\1\\ \end{smallmatrix}\bigr)$
     $\bigl(\begin{smallmatrix}0\\0\\0\\ \end{smallmatrix}\bigr)$
     $\bigl(\begin{smallmatrix}1\\0\\1\\ \end{smallmatrix}\bigr)$.\\
-    from our DFA we begin at q0 and transition to q1 from 001, next we transition to our error state where all inputs loop to the same state which is not a final state. since we finish at the error state this input is rejected. To further prove this is: \\
+    from our DFA we begin at q0 and transition to q1 from 001, next we transition to our error state where all inputs loop to the same state which is not a final state. Since we finish at a non-final state this input is rejected. To further prove this is: \\
     $bin$($t$(w)) = 1101 = 13, 
     $bin$($f$(w)) = 0101 = 5 and
     $bin$($s$(w)) = 0100 = 4.
@@ -451,7 +454,7 @@ Let $\L \subseteq \Sigma^*$ be a language over $\Sigma$. Recall the definition o
         To show $\equiv_L$ is symmetric, we have to show:\\
         a $\equiv_L$ b $\iff$ b $\equiv_L$ a, where a, b $\in \Sigma^*$.
         \\
-        This is true from the definition of $\equiv_L$ since it is a bi-directional implication,\\ (iff  $\forall z \in \Sigma^* : az \in \L \Leftrightarrow bz \in \L$), $\equiv_L$ is symmetric.
+        This is true from the definition of $\equiv_L$ since it is a bi-directional implication,\\$\forall z \in \Sigma^* : az \in \L \Leftrightarrow bz \in \L$, $\equiv_L$ is symmetric.
         
         \item $\equiv_L$ is reflexive\\
         To show $\equiv_L$ is reflexive, we have to show:\\
@@ -461,13 +464,11 @@ Let $\L \subseteq \Sigma^*$ be a language over $\Sigma$. Recall the definition o
         \item $\equiv_l$ is transitive\\
         To show $\equiv_L$ is transitive, we have to show:\\
         ((a $\equiv_L$ b) $\land$ (b $\equiv_L$ c)) $\to$ (a $\equiv_L$ c) where a, b, c $\in \Sigma^*$.\\
-        $\forall z \in \Sigma^* : az \in L \Leftrightarrow bz \in L.$ Since $bz \in L $ then $cz \in L (b \equiv_L c)$. This means that:\\ $\forall z \in \Sigma^* : az \in L \Leftrightarrow bz \in L \Leftrightarrow cz \in L$. Essentially what we are saying is that if az is in the language, then bz is in the language, this in turn means cz is in the language due to (a $\equiv_L$ b) and (b $\equiv_L$ c). This means that a $\equiv_L$ c, thus $\equiv_L$ is transitive
+        $\forall z \in \Sigma^* : az \in L \Leftrightarrow bz \in L.$ Since $bz \in L $ then $cz \in L (b \equiv_L c)$. This means that:\\ $\forall z \in \Sigma^* : az \in L \Leftrightarrow bz \in L \Leftrightarrow cz \in L$. Essentially what we are saying is that if az is in the language, then bz is in the language, this in turn means cz is in the language due to (a $\equiv_L$ b) and (b $\equiv_L$ c). This means that a $\equiv_L$ c, thus $\equiv_L$ is transitive.
     \end{enumerate}
     Since $\equiv_L$ is symmetric, reflexive and transitive, then $\equiv_L$ is an equivalence relation.
     \item if $\L$ is regular, show that for any word w, [w] (the equivalence class of w under $\equiv_L$) is also regular. \moveToRight{4 marks}\\\\
     Solution:\\
-    to show that for any word w, [w] is regular under $\equiv_L$, we need to show that the equivalence class of [w] is finite. This will then allow us to use the Myhill-Nerode theorem to prove [w] is regular. given that L is regular there are a finite amount of [w] from Myhill-Nerode theorem. Since the equivalence class [w] can be seen as a subset of our language $\L$ which is finite (since it is regular); then [w] must also be finite since it is a subset of $\L$. Since [w] is finite then [w] is also regular.
-
-    
+    To show that for any word w, [w] is regular under $\equiv_L$, we need to show that the equivalence class of [w] is finite. This will then allow us to use the Myhill-Nerode theorem to prove [w] is regular. Given that L is regular there are a finite amount of [w] from Myhill-Nerode theorem. Since the equivalence class [w] can be seen as a subset of our language $\L$ which is finite (since it is regular); then [w] must also be finite since it is a subset of $\L$. Since [w] is finite then [w] is also regular.
 \end{enumerate}
 \end{document}
